@@ -121,6 +121,38 @@ class SSHDisciplineWrapper(MDODiscipline):
         Returns:
             The return code of the command run distantly.
         """
+        s = self._open_ssh_session()
+
+        timer = time.time()
+        LOGGER.debug("Data written on local disk in %s seconds.", time.time() - timer)
+
+        discipline_path, input_path = self._write_inputs_to_disk(current_workdir)
+        distant_workdir = self.__distant_workdir / Path(self._current_loc_id)
+
+        distant_workdir_root = str(self.__distant_workdir)
+        distant_workdir = distant_workdir.as_posix()
+        discipline_path = discipline_path.as_posix()
+        input_path = input_path.as_posix()
+
+        ftp_client = self._open_sftp_client(s, distant_workdir_root)
+        self._send_serialized_inputs(ftp_client, discipline_path, input_path)
+        return_code, stdout, stderr = self._run_distant_command(s, distant_workdir)
+        self._retrieve_serialized_outputs(ftp_client, current_workdir)
+
+        s.close()
+
+        LOGGER.debug("Job execution ended in %s", current_workdir)
+        return return_code
+
+    def _open_sftp_client(self, s, distant_workdir_root):
+        ftp_client = s.open_sftp()
+        ftp_client.chdir(distant_workdir_root)
+        ftp_client.mkdir(self._current_loc_id)
+        ftp_client.chdir(self._current_loc_id)
+        return ftp_client
+
+    def _open_ssh_session(self):
+        """Open a SSH session."""
         try:
             s = paramiko.SSHClient()
             s.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -146,81 +178,60 @@ class SSHDisciplineWrapper(MDODiscipline):
                 "The authentification failed. Check your password or your ssh key."
             )
 
-        try:
-            timer = time.time()
-            LOGGER.debug(
-                "Data writed to local disk in %s seconds.", time.time() - timer
-            )
+        return s
 
-            discipline_path, input_path = self._write_inputs_to_disk(current_workdir)
-            distant_workdir = self.__distant_workdir / Path(self._current_loc_id)
+    def _send_serialized_inputs(self, ftp_client, discipline_path, input_path):
+        timer = time.time()
+        ftp_client.put(
+            localpath=str(discipline_path),
+            remotepath=self.DISC_PICKLE_FILE_NAME,
+            confirm=True,
+        )
+        ftp_client.put(
+            localpath=str(input_path),
+            remotepath=self.DISC_INPUT_FILE_NAME,
+            confirm=True,
+        )
+        LOGGER.debug(
+            "Input data written on distant node in %s seconds.", time.time() - timer
+        )
 
-            distant_workdir_root = str(self.__distant_workdir)
-            distant_workdir = distant_workdir.as_posix()
-            discipline_path = discipline_path.as_posix()
-            input_path = input_path.as_posix()
-            command_separator = "&&"
+    def _retrieve_serialized_outputs(self, ftp_client, current_workdir):
+        timer = time.time()
+        local_output_path = current_workdir / Path(self.DISC_OUTPUT_FILE_NAME)
+        ftp_client.get(
+            remotepath=str(self.DISC_OUTPUT_FILE_NAME), localpath=local_output_path
+        )
+        LOGGER.debug(
+            "Copy of distant data to local node in %s seconds.", time.time() - timer
+        )
 
-            timer = time.time()
-            ftp_client = s.open_sftp()
-            ftp_client.chdir(distant_workdir_root)
-            ftp_client.mkdir(self._current_loc_id)
-            ftp_client.chdir(self._current_loc_id)
-            ftp_client.put(
-                localpath=str(discipline_path),
-                remotepath=self.DISC_PICKLE_FILE_NAME,
-                confirm=True,
+    def _run_distant_command(self, session, distant_workdir):
+        timer = time.time()
+        command_separator = "&&"
+        cmd_change_dir = f"cd {distant_workdir} {command_separator} "
+        cmd_run = (
+            f"gemseo-deserialize-run {distant_workdir}"
+            f" {self.DISC_PICKLE_FILE_NAME} {self.DISC_INPUT_FILE_NAME}"
+            f" {self.DISC_OUTPUT_FILE_NAME}"
+        )
+        cmd = cmd_change_dir
+        for command in self.pre_commands:
+            cmd += f"{command} {command_separator} "
+        cmd += cmd_run
+        stdin, f_stdout, f_stderr = session.exec_command(cmd)
+        return_code = f_stdout.channel.recv_exit_status()
+        stdout = " ".join(f_stdout.readlines())
+        stderr = " ".join(f_stderr.readlines())
+        if return_code != 0:
+            raise RuntimeError(
+                f"Remote execution failed.\n"
+                f"Return code is {return_code}.\n"
+                f"stdout is {stdout}.\n"
+                f"stderr is {stderr}."
             )
-            ftp_client.put(
-                localpath=str(input_path),
-                remotepath=self.DISC_INPUT_FILE_NAME,
-                confirm=True,
-            )
-            LOGGER.debug(
-                "Input data written on distant node in %s seconds.", time.time() - timer
-            )
-
-            timer = time.time()
-            cmd_change_dir = f"cd {distant_workdir} {command_separator} "
-            cmd_run = (
-                f"gemseo-deserialize-run {distant_workdir}"
-                f" {self.DISC_PICKLE_FILE_NAME} {self.DISC_INPUT_FILE_NAME}"
-                f" {self.DISC_OUTPUT_FILE_NAME}"
-            )
-            cmd = cmd_change_dir
-            for command in self.pre_commands:
-                cmd += f"{command} {command_separator} "
-            cmd += cmd_run
-            stdin, stdout, stderr = s.exec_command(cmd)
-            return_code = stdout.channel.recv_exit_status()
-            if return_code != 0:
-                raise RuntimeError(
-                    f"Remote execution reported return code {return_code}"
-                )
-            LOGGER.debug(
-                "Remote discipline execution in %s seconds.", time.time() - timer
-            )
-
-            timer = time.time()
-            local_output_path = current_workdir / Path(self.DISC_OUTPUT_FILE_NAME)
-            ftp_client.get(
-                remotepath=str(self.DISC_OUTPUT_FILE_NAME), localpath=local_output_path
-            )
-            LOGGER.debug(
-                "Copy of distant data to local node in %s seconds.", time.time() - timer
-            )
-            s.close()
-
-        except Exception:
-            LOGGER.error(
-                "Failed to call job command %s, for discipline %s in work directory %s",
-                cmd,
-                self.discipline.name,
-                current_workdir,
-            )
-            raise
-        LOGGER.debug("Job execution ended in %s", current_workdir)
-        return return_code
+        LOGGER.debug("Remote discipline execution in %s seconds.", time.time() - timer)
+        return return_code, stdout, stderr
 
     def _handle_outputs(self, outputs_path, current_workdir):
         if not outputs_path.exists():
