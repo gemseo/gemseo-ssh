@@ -1,22 +1,23 @@
 from __future__ import annotations
 
+import getpass
+import os
 from pathlib import Path
 
 from gemseo.api import create_discipline
 from gemseo_ssh.wrappers.ssh.api import wrap_discipline
 from gemseo_ssh.wrappers.ssh.ssh_wrapped_disc import SSHDisciplineWrapper
 from numpy import array
-import os
-import getpass
 
-USERNAME=getpass. getuser()
-HOME_DIR=Path(os.path.expanduser('~'))
+USERNAME = getpass.getuser()
+HOME_DIR = Path(os.path.expanduser("~"))
+
 
 def test_ssh_bliss(tmpdir):
     """Test the remote execution on a Linux env."""
     hostname = "bliss-2"
     port = 22
-    key = HOME_DIR/".ssh"/"id_rsa.pub"
+    key = HOME_DIR / ".ssh" / "id_rsa.pub"
     local_workdir = tmpdir
     distant_workdir = Path(f"/home/{USERNAME}").as_posix()
     authentification_method = SSHDisciplineWrapper.AUTHENTIFICATION_METHOD.public_key
