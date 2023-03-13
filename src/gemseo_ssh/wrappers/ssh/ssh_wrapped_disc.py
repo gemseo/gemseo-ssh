@@ -57,6 +57,8 @@ class SSHDisciplineWrapper(MDODiscipline):
         authentification_method=AUTHENTIFICATION_METHOD.password,
         distant_workdir=None,
         pre_commands=None,
+        transfer_inputs=None,
+        transfer_outputs=None,
     ):
         """Constructor.
 
@@ -66,6 +68,8 @@ class SSHDisciplineWrapper(MDODiscipline):
 
         Raises:
             OSError if job_template_path does not exist.
+            KeyError: if some data names in transfer_inputs or transfer_outputs are not
+                in the grammars.
         """
         super().__init__(discipline.name, grammar_type=discipline.grammar_type)
         self.discipline = discipline
@@ -86,6 +90,15 @@ class SSHDisciplineWrapper(MDODiscipline):
         self.__local_workdir = workdir_path
         self.__distant_workdir = distant_workdir
         self.__authentification_method = authentification_method
+
+        if not self.is_all_inputs_existing(transfer_inputs):
+            missing_in = set(transfer_inputs) - self.input_grammar
+            raise KeyError(f"Invalid transfer_inputs: {missing_in}")
+        if not self.is_all_outputs_existing(transfer_outputs):
+            missing_out = set(transfer_outputs) - self.output_grammar
+            raise KeyError(f"Invalid transfer_outputs: {missing_out}")
+        self.__transfer_inputs = transfer_inputs
+        self.__transfer_outputs = transfer_outputs
 
         self._check_authentification_method()
 
@@ -136,8 +149,10 @@ class SSHDisciplineWrapper(MDODiscipline):
 
         ftp_client = self._open_sftp_client(s, distant_workdir_root)
         self._send_serialized_inputs(ftp_client, discipline_path, input_path)
+        self._send_transfer_inputs(ftp_client, distant_workdir_root)
         return_code, stdout, stderr = self._run_distant_command(s, distant_workdir)
         self._retrieve_serialized_outputs(ftp_client, current_workdir)
+        self._retrieve_transfer_outputs(ftp_client, current_workdir)
 
         s.close()
 
@@ -196,6 +211,27 @@ class SSHDisciplineWrapper(MDODiscipline):
             "Input data written on distant node in %s seconds.", time.time() - timer
         )
 
+    def _send_transfer_inputs(self, ftp_client, distant_workdir_root):
+        if self.__transfer_inputs is None:
+            return
+
+        for data_name in self.__transfer_inputs:
+            timer = time.time()
+            local_path = Path(self.local_data[data_name])
+            if not local_path.exists():
+                raise OSError(
+                    f"Input to transfer {data_name} is not a file or does not exist!"
+                )
+            ftp_client.put(
+                localpath=str(local_path),
+                remotepath=str(distant_workdir_root / local_path.name),
+                confirm=True,
+            )
+            LOGGER.debug(
+                "Transfer data written on distant node in %s seconds.",
+                time.time() - timer,
+            )
+
     def _retrieve_serialized_outputs(self, ftp_client, current_workdir):
         timer = time.time()
         local_output_path = current_workdir / Path(self.DISC_OUTPUT_FILE_NAME)
@@ -205,6 +241,19 @@ class SSHDisciplineWrapper(MDODiscipline):
         LOGGER.debug(
             "Copy of distant data to local node in %s seconds.", time.time() - timer
         )
+
+    def _retrieve_transfer_outputs(self, ftp_client, current_workdir):
+        if self.__transfer_outputs is None:
+            return
+
+        for data_name in self.__transfer_outputs:
+            timer = time.time()
+            remotepath = Path(self.local_data[data_name])
+            local_output_path = current_workdir / remotepath.name
+            ftp_client.get(remotepath=str(remotepath), localpath=str(local_output_path))
+            LOGGER.debug(
+                "Transfer outputs to local node in %s seconds.", time.time() - timer
+            )
 
     def _run_distant_command(self, session, distant_workdir):
         timer = time.time()
