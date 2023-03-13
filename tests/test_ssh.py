@@ -17,9 +17,9 @@ def test_ssh_bliss(tmpdir):
     """Test the remote execution on a Linux env."""
     hostname = "bliss-2"
     port = 22
-    key = HOME_DIR / ".ssh" / "id_rsa.pub"
+    key = str(HOME_DIR / ".ssh" / "id_rsa.pub")
     local_workdir = tmpdir
-    distant_workdir = Path(f"/home/{USERNAME}").as_posix()
+    distant_workdir = Path(f"/home/{USERNAME}/test_ssh").as_posix()
     authentification_method = SSHDisciplineWrapper.AUTHENTIFICATION_METHOD.public_key
     expression = {"b": "2*a"}
     analytic_disc = create_discipline("AnalyticDiscipline", expressions=expression)
