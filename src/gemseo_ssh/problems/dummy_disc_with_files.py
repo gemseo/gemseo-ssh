@@ -38,6 +38,19 @@ class DiscWithFiles(MDODiscipline):
         self.output_grammar.update({"out_file": str, "out_val": int})
         self.workdir = workdir
 
+    def get_attributes_to_serialize(self) -> list[str]:  # pylint: disable=R0201
+        """Define the names of the attributes to be serialized.
+
+        Shall be overloaded by disciplines
+
+        Returns:
+            The names of the attributes to be serialized.
+        """
+        # pylint warning ==> method could be a function but when overridden,
+        # it is a function==> self is required
+        sup_attr = super().get_attributes_to_serialize()
+        return sup_attr + ["workdir"]
+
     def _run(self):
         with open(self.local_data["in_file"]) as inf:
             values = int(inf.read())

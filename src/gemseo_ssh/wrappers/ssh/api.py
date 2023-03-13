@@ -34,6 +34,8 @@ def wrap_discipline(
     authentification_method: Enum,
     distant_workdir_path: str | Path,
     pre_commands: Sequence[str],
+    transfer_inputs=None,
+    transfer_outputs=None,
 ):
     """Wrap the discipline within the SSH transfer discipline.
 
@@ -63,4 +65,6 @@ def wrap_discipline(
         authentification_method=authentification_method,
         distant_workdir=distant_workdir_path,
         pre_commands=pre_commands,
+        transfer_inputs=transfer_inputs,
+        transfer_outputs=transfer_outputs,
     )

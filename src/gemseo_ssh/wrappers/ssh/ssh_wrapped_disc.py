@@ -125,7 +125,7 @@ class SSHDisciplineWrapper(MDODiscipline):
                 " for SSH connection."
             )
 
-    def _run_command(self, current_workdir):
+    def _run_command(self, outputs_path, current_workdir):
         """Run the command on the distant node using SSH.
 
         Args:
@@ -140,18 +140,17 @@ class SSHDisciplineWrapper(MDODiscipline):
         LOGGER.debug("Data written on local disk in %s seconds.", time.time() - timer)
 
         discipline_path, input_path = self._write_inputs_to_disk(current_workdir)
-        distant_workdir = self.__distant_workdir / Path(self._current_loc_id)
-
         distant_workdir_root = str(self.__distant_workdir)
-        distant_workdir = distant_workdir.as_posix()
+        distant_workdir = self.__current_distant_workdir.as_posix()
         discipline_path = discipline_path.as_posix()
         input_path = input_path.as_posix()
 
         ftp_client = self._open_sftp_client(s, distant_workdir_root)
         self._send_serialized_inputs(ftp_client, discipline_path, input_path)
-        self._send_transfer_inputs(ftp_client, distant_workdir_root)
+        self._send_transfer_inputs(ftp_client)
         return_code, stdout, stderr = self._run_distant_command(s, distant_workdir)
         self._retrieve_serialized_outputs(ftp_client, current_workdir)
+        self._handle_outputs(outputs_path, current_workdir)
         self._retrieve_transfer_outputs(ftp_client, current_workdir)
 
         s.close()
@@ -211,7 +210,7 @@ class SSHDisciplineWrapper(MDODiscipline):
             "Input data written on distant node in %s seconds.", time.time() - timer
         )
 
-    def _send_transfer_inputs(self, ftp_client, distant_workdir_root):
+    def _send_transfer_inputs(self, ftp_client):
         if self.__transfer_inputs is None:
             return
 
@@ -224,7 +223,7 @@ class SSHDisciplineWrapper(MDODiscipline):
                 )
             ftp_client.put(
                 localpath=str(local_path),
-                remotepath=str(distant_workdir_root / local_path.name),
+                remotepath=str(Path(self.__current_distant_workdir) / local_path.name),
                 confirm=True,
             )
             LOGGER.debug(
@@ -314,6 +313,9 @@ class SSHDisciplineWrapper(MDODiscipline):
         current_workdir = self.workdir_path / loc_id
         current_workdir.mkdir()
         self._current_loc_id = loc_id
+        self.__current_distant_workdir = self.__distant_workdir / Path(
+            self._current_loc_id
+        )
         return current_workdir
 
     def _write_inputs_to_disk(self, current_workdir):
@@ -321,20 +323,31 @@ class SSHDisciplineWrapper(MDODiscipline):
         with open(discipline_path, "wb") as outf:
             outf.write(self.pickled_discipline)
         inputs_path = current_workdir / self.DISC_INPUT_FILE_NAME
-        serialized_local_data = pickle.dumps(self.local_data)
+
+        if self.__transfer_inputs:
+            inputs_to_serialize = self.local_data.copy()
+            for data_name in self.__transfer_inputs:
+                local_path = Path(self.local_data[data_name])
+                inputs_to_serialize[data_name] = str(
+                    self.__current_distant_workdir / local_path.name
+                )
+        else:
+            inputs_to_serialize = self.local_data
+
+        serialized_local_data = pickle.dumps(inputs_to_serialize)
         with open(inputs_path, "wb") as outf:
             outf.write(serialized_local_data)
         return discipline_path, inputs_path
 
     def _run(self):
         current_workdir = self._create_current_workdir()
+
         outputs_path = current_workdir / self.DISC_OUTPUT_FILE_NAME
 
         discipline_path, inputs_path = self._write_inputs_to_disk(current_workdir)
         self._send_data_to_distant_node(discipline_path, inputs_path)
-        self._run_command(current_workdir)
+        self._run_command(outputs_path, current_workdir)
         self._retrieved_data_from_distant_node(current_workdir)
-        self._handle_outputs(outputs_path, current_workdir)
 
     def _send_data_to_distant_node(self, discipline_path, inputs_path):
         pass
