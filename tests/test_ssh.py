@@ -6,16 +6,19 @@ from gemseo.api import create_discipline
 from gemseo_ssh.wrappers.ssh.api import wrap_discipline
 from gemseo_ssh.wrappers.ssh.ssh_wrapped_disc import SSHDisciplineWrapper
 from numpy import array
+import os
+import getpass
 
+USERNAME=getpass. getuser()
+HOME_DIR=Path(os.path.expanduser('~'))
 
-def test_ssh_bliss():
+def test_ssh_bliss(tmpdir):
     """Test the remote execution on a Linux env."""
     hostname = "bliss-2"
     port = 22
-    username = "jc.giret"
-    key = "C:\\Users\\jc.giret\\.ssh\\id_rsa.pub"
-    local_workdir = "C:\\Users\\jc.giret\\Documents\\test_ssh"
-    distant_workdir = Path("/home/jc.giret/tmp_ssh").as_posix()
+    key = HOME_DIR/".ssh"/"id_rsa.pub"
+    local_workdir = tmpdir
+    distant_workdir = Path(f"/home/{USERNAME}").as_posix()
     authentification_method = SSHDisciplineWrapper.AUTHENTIFICATION_METHOD.public_key
     expression = {"b": "2*a"}
     analytic_disc = create_discipline("AnalyticDiscipline", expressions=expression)
@@ -25,7 +28,7 @@ def test_ssh_bliss():
         local_workdir_path=local_workdir,
         hostname=hostname,
         port=port,
-        username=username,
+        username=USERNAME,
         password=None,
         ssh_public_key=key,
         authentification_method=authentification_method,
@@ -40,14 +43,13 @@ def test_ssh_styx():
     """Test the execution on a Windows env."""
     hostname = "styx"
     port = 22
-    username = "jc.giret"
-    key = "C:\\Users\\jc.giret\\.ssh\\id_rsa.pub"
-    local_workdir = "C:\\Users\\jc.giret\\Documents\\test_ssh"
-    distant_workdir = Path("C:\\Users\\jc.giret\\test_ssh\\")
+    key = f"C:\\Users\\{USERNAME}\\.ssh\\id_rsa.pub"
+    local_workdir = f"C:\\Users\\{USERNAME}\\Documents\\test_ssh"
+    distant_workdir = Path(f"C:\\Users\\{USERNAME}\\test_ssh\\")
     authentification_method = SSHDisciplineWrapper.AUTHENTIFICATION_METHOD.public_key
     expression = {"b": "2*a"}
     pre_commands = [
-        "C:\\Users\\jc.giret\\AppData\\Local\\miniconda3\\Scripts\\activate.bat",
+        f"C:\\Users\\{USERNAME}\\AppData\\Local\\miniconda3\\Scripts\\activate.bat",
         "conda activate test_ssh",
     ]
     analytic_disc = create_discipline("AnalyticDiscipline", expressions=expression)
@@ -56,7 +58,7 @@ def test_ssh_styx():
         local_workdir_path=local_workdir,
         hostname=hostname,
         port=port,
-        username=username,
+        username=USERNAME,
         password=None,
         ssh_public_key=key,
         authentification_method=authentification_method,
