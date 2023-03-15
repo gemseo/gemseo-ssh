@@ -4,11 +4,14 @@ import getpass
 import os
 from pathlib import Path
 
+from gemseo.api import configure_logger
 from gemseo.api import create_discipline
 from gemseo_ssh.problems.dummy_disc_with_files import DiscWithFiles
 from gemseo_ssh.wrappers.ssh.api import wrap_discipline
 from gemseo_ssh.wrappers.ssh.ssh_wrapped_disc import SSHDisciplineWrapper
 from numpy import array
+
+configure_logger()
 
 USERNAME = getpass.getuser()
 HOME_DIR = Path(os.path.expanduser("~"))
@@ -49,7 +52,9 @@ def test_ssh_bliss_transfer(tmpdir):
     local_workdir = tmpdir
     distant_workdir = Path(f"/home/{USERNAME}/test_ssh").as_posix()
     authentification_method = SSHDisciplineWrapper.AUTHENTIFICATION_METHOD.public_key
-    discipline = DiscWithFiles(tmpdir)
+    discipline = DiscWithFiles()
+
+    # print("distant_workdir", distant_workdir)
 
     in_path = tmpdir / "in_f.txt"
     with open(in_path, "w") as infile:

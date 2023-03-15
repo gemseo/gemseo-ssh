@@ -25,7 +25,7 @@ from gemseo_ssh.problems.dummy_disc_with_files import DiscWithFiles
 
 def test_exec(tmpdir):
     """Test execution."""
-    disc = DiscWithFiles(tmpdir)
+    disc = DiscWithFiles()
 
     in_path = tmpdir / "in_f.txt"
     with open(in_path, "w") as infile:

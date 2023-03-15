@@ -338,6 +338,8 @@ class SSHDisciplineWrapper(MDODiscipline):
         else:
             inputs_to_serialize = self.local_data
 
+        # print("inputs_to_serialize", inputs_to_serialize)
+
         serialized_local_data = pickle.dumps(inputs_to_serialize)
         with open(inputs_path, "wb") as outf:
             outf.write(serialized_local_data)

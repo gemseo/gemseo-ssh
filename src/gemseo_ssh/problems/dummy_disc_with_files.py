@@ -27,7 +27,7 @@ from gemseo.core.discipline import MDODiscipline
 class DiscWithFiles(MDODiscipline):
     """A dummy discipline that handles files in inputs and outputs."""
 
-    def __init__(self, workdir):
+    def __init__(self):
         """Constructor.
 
         Args:
@@ -36,29 +36,14 @@ class DiscWithFiles(MDODiscipline):
         super().__init__(grammar_type=DiscWithFiles.SIMPLE_GRAMMAR_TYPE)
         self.input_grammar.update({"in_file": str})
         self.output_grammar.update({"out_file": str, "out_val": int})
-        self.workdir = workdir
-
-    def get_attributes_to_serialize(self) -> list[str]:  # pylint: disable=R0201
-        """Define the names of the attributes to be serialized.
-
-        Shall be overloaded by disciplines
-
-        Returns:
-            The names of the attributes to be serialized.
-        """
-        # pylint warning ==> method could be a function but when overridden,
-        # it is a function==> self is required
-        sup_attr = super().get_attributes_to_serialize()
-        return sup_attr + ["workdir"]
 
     def _run(self):
-        with open(self.local_data["in_file"]) as inf:
-            values = int(inf.read())
+        in_file_path = Path(self.local_data["in_file"])
+        values = int(in_file_path.read_text())
 
         out_val = values + 1
-        out_path = Path(self.workdir) / "out_file.txt"
-        with open(out_path, "w") as outf:
-            outf.write(str(out_val))
+        out_path = in_file_path.parent / "out_file.txt"
+        out_path.write_text(str(out_val), encoding="utf8")
 
         self.local_data["out_val"] = out_val
         self.local_data["out_file"] = str(out_path)
