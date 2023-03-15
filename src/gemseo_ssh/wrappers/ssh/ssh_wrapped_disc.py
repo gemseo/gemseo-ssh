@@ -91,10 +91,14 @@ class SSHDisciplineWrapper(MDODiscipline):
         self.__distant_workdir = distant_workdir
         self.__authentification_method = authentification_method
 
-        if not self.is_all_inputs_existing(transfer_inputs):
+        if transfer_inputs is not None and not self.is_all_inputs_existing(
+            transfer_inputs
+        ):
             missing_in = set(transfer_inputs) - self.input_grammar
             raise KeyError(f"Invalid transfer_inputs: {missing_in}")
-        if not self.is_all_outputs_existing(transfer_outputs):
+        if transfer_outputs is not None and not self.is_all_outputs_existing(
+            transfer_outputs
+        ):
             missing_out = set(transfer_outputs) - self.output_grammar
             raise KeyError(f"Invalid transfer_outputs: {missing_out}")
         self.__transfer_inputs = transfer_inputs
@@ -248,7 +252,7 @@ class SSHDisciplineWrapper(MDODiscipline):
         for data_name in self.__transfer_outputs:
             timer = time.time()
             remotepath = Path(self.local_data[data_name])
-            local_output_path = current_workdir / remotepath.name
+            local_output_path = self.__local_workdir / remotepath.name
             ftp_client.get(remotepath=str(remotepath), localpath=str(local_output_path))
             LOGGER.debug(
                 "Transfer outputs to local node in %s seconds.", time.time() - timer
