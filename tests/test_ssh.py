@@ -4,14 +4,12 @@ import getpass
 import os
 from pathlib import Path
 
-from gemseo.api import configure_logger
 from gemseo.api import create_discipline
 from gemseo_ssh.problems.dummy_disc_with_files import DiscWithFiles
 from gemseo_ssh.wrappers.ssh.api import wrap_discipline
 from gemseo_ssh.wrappers.ssh.ssh_wrapped_disc import SSHDisciplineWrapper
 from numpy import array
 
-configure_logger()
 
 USERNAME = getpass.getuser()
 HOME_DIR = Path(os.path.expanduser("~"))
