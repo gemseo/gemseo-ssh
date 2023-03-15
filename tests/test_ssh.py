@@ -54,8 +54,6 @@ def test_ssh_bliss_transfer(tmpdir):
     authentification_method = SSHDisciplineWrapper.AUTHENTIFICATION_METHOD.public_key
     discipline = DiscWithFiles()
 
-    # print("distant_workdir", distant_workdir)
-
     in_path = tmpdir / "in_f.txt"
     with open(in_path, "w") as infile:
         infile.write("0")
@@ -76,10 +74,10 @@ def test_ssh_bliss_transfer(tmpdir):
         transfer_outputs=["out_file"],
     )
     data = new_disc.execute({"in_file": str(in_path)})
-    assert Path(data["out_file"]).exists()
+    out_file_path = Path(data["out_file"])
+    assert out_file_path.exists()
 
-    with open(data["out_file"]) as outfile:
-        assert int(outfile.read()) == 1
+    assert int(out_file_path.read_text("utf8")) == 1
 
 
 def test_ssh_styx():

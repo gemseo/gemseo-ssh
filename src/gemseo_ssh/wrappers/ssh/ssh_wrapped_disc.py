@@ -257,6 +257,7 @@ class SSHDisciplineWrapper(MDODiscipline):
             LOGGER.debug(
                 "Transfer outputs to local node in %s seconds.", time.time() - timer
             )
+            self.local_data[data_name] = str(local_output_path)
 
     def _run_distant_command(self, session, distant_workdir):
         timer = time.time()
@@ -337,8 +338,6 @@ class SSHDisciplineWrapper(MDODiscipline):
                 )
         else:
             inputs_to_serialize = self.local_data
-
-        # print("inputs_to_serialize", inputs_to_serialize)
 
         serialized_local_data = pickle.dumps(inputs_to_serialize)
         with open(inputs_path, "wb") as outf:
