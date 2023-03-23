@@ -21,6 +21,7 @@ from enum import Enum
 from logging import getLogger
 from pathlib import Path
 from uuid import uuid1
+import numpy as np
 
 import paramiko
 from gemseo.core.discipline import MDODiscipline
@@ -184,12 +185,13 @@ class SSHDisciplineWrapper(MDODiscipline):
                     self.__port,
                     self.__username,
                     key_filename=self.__ssh_public_key_path,
+                    allow_agent=False
                 )
             elif (
                 self.__authentification_method == self.AUTHENTIFICATION_METHOD.password
             ):
                 s.connect(
-                    self.__hostname, self.__port, self.__username, self.__password
+                    self.__hostname, self.__port, self.__username, self.__password, allow_agent=False
                 )
         except AuthenticationException:
             raise AuthenticationException(
@@ -220,7 +222,7 @@ class SSHDisciplineWrapper(MDODiscipline):
 
         for data_name in self.__transfer_inputs:
             timer = time.time()
-            local_path = Path(self.local_data[data_name])
+            local_path = Path(self.local_data[data_name][0])
             if not local_path.exists():
                 raise OSError(
                     f"Input to transfer {data_name} is not a file or does not exist!"
@@ -272,10 +274,15 @@ class SSHDisciplineWrapper(MDODiscipline):
         for command in self.pre_commands:
             cmd += f"{command} {command_separator} "
         cmd += cmd_run
+        LOGGER.debug(f"Command = {cmd}")
         stdin, f_stdout, f_stderr = session.exec_command(cmd)
         return_code = f_stdout.channel.recv_exit_status()
-        stdout = " ".join(f_stdout.readlines())
-        stderr = " ".join(f_stderr.readlines())
+        try:
+            stdout = " ".join(f_stdout.readlines())
+            stderr = " ".join(f_stderr.readlines())
+        except:
+            stdout = "stdout not decoded"
+            stderr = "stderr not decoded"
         if return_code != 0:
             raise RuntimeError(
                 f"Remote execution failed.\n"
@@ -332,10 +339,10 @@ class SSHDisciplineWrapper(MDODiscipline):
         if self.__transfer_inputs:
             inputs_to_serialize = self.local_data.copy()
             for data_name in self.__transfer_inputs:
-                local_path = Path(self.local_data[data_name])
-                inputs_to_serialize[data_name] = str(
+                local_path = Path(self.local_data[data_name][0])
+                inputs_to_serialize[data_name] = np.array([str(
                     self.__current_distant_workdir / local_path.name
-                )
+                )])
         else:
             inputs_to_serialize = self.local_data
 
