@@ -20,13 +20,15 @@ For example, we can submit a discipline to a remote host like this:
 
     from gemseo import create_discipline
     from gemseo_ssh import wrap_discipline_with_ssh
+    from numpy import array
 
     analytic_disc = create_discipline("AnalyticDiscipline", expressions={"y":"2*x+1"})
     remote_discipline = wrap_discipline_with_ssh(
         discipline=analytic_disc,
-        hostname="remote_hostname"
-        workdir_path_path: "~/workdir",
-        distant_workdir_path="~/distant_workdir"
+        hostname="remote_hostname",
+        local_workdir_path= ".",
+        distant_workdir_path="~/test_ssh",
+        ssh_public_key="C:\\Users\\my_user_name\\.ssh\\id_rsa.pub"
     )
     data = remote_discipline.execute({"x": array([1.0])})
 
@@ -47,8 +49,9 @@ A more complex process, like a MDA, can also be sent to a remote host:
     remote_discipline = wrap_discipline_with_ssh(
         discipline=mda,
         hostname="remote_hostname",
-        workdir_path_path: "~/workdir",
-        distant_workdir_path="~/distant_workdir"
+        local_workdir_path = ".",
+        distant_workdir_path="~/test_ssh",
+        ssh_public_key="C:\\Users\\my_user_name\\.ssh\\id_rsa.pub"
     )
 
     # Note that the default_inputs of the SSH discipline are the same

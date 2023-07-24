@@ -1,6 +1,3 @@
-"""Wrappers."""
-from __future__ import annotations
-
 # Copyright 2021 IRT Saint Exupéry, https://www.irt-saintexupery.com
 #
 # This program is free software; you can redistribute it and/or
@@ -16,8 +13,10 @@ from __future__ import annotations
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 # Copyright 2023 IRT Saint Exupéry, https://www.irt-saintexupery.com
-"""API for SSH Transfer discipline."""
 from __future__ import annotations
+
+"""API for SSH Transfer discipline."""
+
 
 from enum import Enum
 from pathlib import Path

@@ -26,6 +26,7 @@ import numpy as np
 import paramiko
 from gemseo.core.discipline import MDODiscipline
 from paramiko.ssh_exception import AuthenticationException
+import os
 
 LOGGER = getLogger(__name__)
 
@@ -55,7 +56,7 @@ class SSHDisciplineWrapper(MDODiscipline):
             port: int = 22,
             username: str = None,
             password: str = None,
-            ssh_public_key=None,
+            ssh_public_key:str|None=None,
             authentification_method=AUTHENTIFICATION_METHOD.password,
             pre_commands=None,
             transfer_inputs=None,
