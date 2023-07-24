@@ -4,12 +4,12 @@ import getpass
 import os
 from pathlib import Path
 
-from gemseo.api import create_discipline
-from gemseo_ssh.problems.dummy_disc_with_files import DiscWithFiles
-from gemseo_ssh.wrappers.ssh.api import wrap_discipline
-from gemseo_ssh.wrappers.ssh.ssh_wrapped_disc import SSHDisciplineWrapper
+from gemseo import create_discipline
 from numpy import array
 
+from gemseo_ssh import wrap_discipline_with_ssh
+from gemseo_ssh.problems.dummy_disc_with_files import DiscWithFiles
+from gemseo_ssh.wrappers.ssh.ssh_wrapped_disc import SSHDisciplineWrapper
 
 USERNAME = getpass.getuser()
 HOME_DIR = Path(os.path.expanduser("~"))
@@ -26,7 +26,7 @@ def test_ssh_bliss(tmpdir):
     expression = {"b": "2*a"}
     analytic_disc = create_discipline("AnalyticDiscipline", expressions=expression)
     pre_commands = ["conda activate test_ssh"]
-    new_disc = wrap_discipline(
+    new_disc = wrap_discipline_with_ssh(
         discipline=analytic_disc,
         local_workdir_path=local_workdir,
         hostname=hostname,
@@ -57,7 +57,7 @@ def test_ssh_bliss_transfer(tmpdir):
         infile.write("0")
 
     pre_commands = ["conda activate test_ssh"]
-    new_disc = wrap_discipline(
+    new_disc = wrap_discipline_with_ssh(
         discipline=discipline,
         local_workdir_path=local_workdir,
         hostname=hostname,
@@ -92,7 +92,7 @@ def test_ssh_styx():
         "conda activate test_ssh",
     ]
     analytic_disc = create_discipline("AnalyticDiscipline", expressions=expression)
-    new_disc = wrap_discipline(
+    new_disc = wrap_discipline_with_ssh(
         discipline=analytic_disc,
         local_workdir_path=local_workdir,
         hostname=hostname,

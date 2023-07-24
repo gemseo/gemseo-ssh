@@ -21,8 +21,8 @@ from enum import Enum
 from logging import getLogger
 from pathlib import Path
 from uuid import uuid1
-import numpy as np
 
+import numpy as np
 import paramiko
 from gemseo.core.discipline import MDODiscipline
 from paramiko.ssh_exception import AuthenticationException
@@ -47,19 +47,19 @@ class SSHDisciplineWrapper(MDODiscipline):
     _current_loc_id: str
 
     def __init__(
-        self,
-        discipline: MDODiscipline,
-        workdir_path: Path,
-        hostname: str,
-        port: int = 22,
-        username: str = None,
-        password: str = None,
-        ssh_public_key=None,
-        authentification_method=AUTHENTIFICATION_METHOD.password,
-        distant_workdir=None,
-        pre_commands=None,
-        transfer_inputs=None,
-        transfer_outputs=None,
+            self,
+            discipline: MDODiscipline,
+            workdir_path: Path | str,
+            hostname: str,
+            distant_workdir: Path | str,
+            port: int = 22,
+            username: str = None,
+            password: str = None,
+            ssh_public_key=None,
+            authentification_method=AUTHENTIFICATION_METHOD.password,
+            pre_commands=None,
+            transfer_inputs=None,
+            transfer_outputs=None,
     ):
         """Constructor.
 
@@ -89,16 +89,16 @@ class SSHDisciplineWrapper(MDODiscipline):
         self.__password = password
         self.__ssh_public_key_path = ssh_public_key
         self.__local_workdir = workdir_path
-        self.__distant_workdir = distant_workdir
+        self.__distant_workdir = str(distant_workdir)
         self.__authentification_method = authentification_method
 
         if transfer_inputs is not None and not self.is_all_inputs_existing(
-            transfer_inputs
+                transfer_inputs
         ):
             missing_in = set(transfer_inputs) - self.input_grammar
             raise KeyError(f"Invalid transfer_inputs: {missing_in}")
         if transfer_outputs is not None and not self.is_all_outputs_existing(
-            transfer_outputs
+                transfer_outputs
         ):
             missing_out = set(transfer_outputs) - self.output_grammar
             raise KeyError(f"Invalid transfer_outputs: {missing_out}")
@@ -115,15 +115,15 @@ class SSHDisciplineWrapper(MDODiscipline):
              with the given parameters.
         """
         if (
-            self.__authentification_method == self.AUTHENTIFICATION_METHOD.password
-            and not self.__password
+                self.__authentification_method == self.AUTHENTIFICATION_METHOD.password
+                and not self.__password
         ):
             raise ValueError(
                 "Password is not set while using password authentification for SSH connection."
             )
         elif (
-            self.__authentification_method == self.AUTHENTIFICATION_METHOD.public_key
-            and not self.__ssh_public_key_path
+                self.__authentification_method == self.AUTHENTIFICATION_METHOD.public_key
+                and not self.__ssh_public_key_path
         ):
             raise ValueError(
                 "SSH public key is not set while using public key authentification"
@@ -176,8 +176,8 @@ class SSHDisciplineWrapper(MDODiscipline):
             s = paramiko.SSHClient()
             s.set_missing_host_key_policy(paramiko.AutoAddPolicy())
             if (
-                self.__authentification_method
-                == self.AUTHENTIFICATION_METHOD.public_key
+                    self.__authentification_method
+                    == self.AUTHENTIFICATION_METHOD.public_key
             ):
                 s.load_system_host_keys()
                 s.connect(
@@ -188,7 +188,7 @@ class SSHDisciplineWrapper(MDODiscipline):
                     allow_agent=False
                 )
             elif (
-                self.__authentification_method == self.AUTHENTIFICATION_METHOD.password
+                    self.__authentification_method == self.AUTHENTIFICATION_METHOD.password
             ):
                 s.connect(
                     self.__hostname, self.__port, self.__username, self.__password, allow_agent=False
