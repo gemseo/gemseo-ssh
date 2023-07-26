@@ -160,7 +160,7 @@ class SSHDisciplineWrapper(MDODiscipline):
                 " for SSH connection."
             )
 
-    def _run_command(self, outputs_path, current_workdir):
+    def _run_command(self, outputs_path: Path, current_workdir: Path):
         """Run the command on the remote node using SSH.
 
         Args:
@@ -189,14 +189,14 @@ class SSHDisciplineWrapper(MDODiscipline):
         return_code, stdout, stderr = self._run_remote_command(ssh_session, remote_workdir)
         self._retrieve_serialized_outputs(ftp_client, current_workdir)
         self._handle_outputs(outputs_path, current_workdir)
-        self._retrieve_transfer_outputs(ftp_client, current_workdir)
+        self._retrieve_transfer_outputs(ftp_client)
 
         ssh_session.close()
 
         LOGGER.debug("Job execution ended in %s", current_workdir)
         return return_code
 
-    def _open_sftp_client(self, ssh_session:SSHClient, remote_workdir_root:Path)-> SFTPClient:
+    def _open_sftp_client(self, ssh_session: SSHClient, remote_workdir_root: Path) -> SFTPClient:
         """
         Opens the SFTP client to allow file transfer
 
@@ -214,7 +214,7 @@ class SSHDisciplineWrapper(MDODiscipline):
         ftp_client.chdir(self._current_loc_id)
         return ftp_client
 
-    def _open_ssh_session(self)->SSHClient:
+    def _open_ssh_session(self) -> SSHClient:
         """Open a SSH session.
 
         Retuns:
@@ -247,7 +247,7 @@ class SSHDisciplineWrapper(MDODiscipline):
 
         return ssh_client
 
-    def _send_serialized_inputs(self, ftp_client:SFTPClient, discipline_path:Path, input_path:Path):
+    def _send_serialized_inputs(self, ftp_client: SFTPClient, discipline_path: Path, input_path: Path):
         """
         Sends the serialized inputs to the remote host.
 
@@ -300,7 +300,7 @@ class SSHDisciplineWrapper(MDODiscipline):
                 time.time() - start_time,
             )
 
-    def _retrieve_serialized_outputs(self, ftp_client:SFTPClient, current_workdir:Path):
+    def _retrieve_serialized_outputs(self, ftp_client: SFTPClient, current_workdir: Path):
         """
         Retrieves the output data to the remote host after execution.
 
@@ -318,13 +318,12 @@ class SSHDisciplineWrapper(MDODiscipline):
             time.time() - start_time,
         )
 
-    def _retrieve_transfer_outputs(self, ftp_client:SFTPClient, current_workdir:Path):
+    def _retrieve_transfer_outputs(self, ftp_client: SFTPClient):
         """
         Retrieves the output files to the remote host after execution.
 
         Args:
             ftp_client: The FTP client.
-            current_workdir: The path to the current work directory on the local host.
         """
         if self.__transfer_outputs is None:
             return
@@ -341,7 +340,7 @@ class SSHDisciplineWrapper(MDODiscipline):
             )
             self.local_data[data_name] = str(remote_path)
 
-    def _run_remote_command(self, session:SSHClient, remote_workdir:Path) -> Tuple[int,str,str]:
+    def _run_remote_command(self, session: SSHClient, remote_workdir: Path) -> Tuple[int, str, str]:
         """
         Executes the gemseo-deserialize-run command on the remote host.
 
@@ -387,7 +386,7 @@ class SSHDisciplineWrapper(MDODiscipline):
         )
         return return_code, stdout, stderr
 
-    def _handle_outputs(self, outputs_path:Path, current_workdir:Path)->None:
+    def _handle_outputs(self, outputs_path: Path, current_workdir: Path) -> None:
         """
         Handles the outputs, deserializes the output data and updates
         the local data of the discipline.
@@ -422,7 +421,7 @@ class SSHDisciplineWrapper(MDODiscipline):
                 )
                 self.local_data.update(output)
 
-    def _create_current_workdir(self)-> Path:
+    def _create_current_workdir(self) -> Path:
         """
         Creates a unique local work directory.
 
@@ -438,7 +437,7 @@ class SSHDisciplineWrapper(MDODiscipline):
         )
         return current_workdir
 
-    def _write_inputs_to_disk(self, current_workdir: Path)->Tuple[Path,Path]:
+    def _write_inputs_to_disk(self, current_workdir: Path) -> Tuple[Path, Path]:
         """
         Serializes the input data to the disk for execution.
 
@@ -478,7 +477,7 @@ class SSHDisciplineWrapper(MDODiscipline):
         self._run_command(outputs_path, current_workdir)
         self._retrieved_data_from_remote_node(current_workdir)
 
-    def _send_data_to_remote_node(self, discipline_path, inputs_path):
+    def _send_data_to_remote_node(self, discipline_path: Path, inputs_path: Path) -> None:
         """
         Send the data to the remote host, in addition to the transfer_inputs.
         By default, does nothing but can be overloaded by subclasses
@@ -490,7 +489,7 @@ class SSHDisciplineWrapper(MDODiscipline):
         """
         pass
 
-    def _retrieved_data_from_remote_node(self, current_workdir):
+    def _retrieved_data_from_remote_node(self, current_workdir: Path) -> None:
         """
         Retrieves the data from the remote host, in addition to the transfer_outputs.
         By default, does nothing but can be overloaded by subclasses

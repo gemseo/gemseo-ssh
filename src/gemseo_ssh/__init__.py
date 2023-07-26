@@ -24,20 +24,21 @@ from gemseo.core.discipline import MDODiscipline
 if TYPE_CHECKING:
     from gemseo_ssh.wrappers.ssh.ssh_wrapped_disc import SSHDisciplineWrapper
 
+
 def wrap_discipline_with_ssh(
-    discipline: MDODiscipline,
-    local_workdir: str | Path,
-    hostname: str,
-    port: int = 22,
-    username: str = "",
-    password: str = "",
-    ssh_public_key: str | Path = None,
-    authentication_method: SSHDisciplineWrapper.AuthenticationMethod=SSHDisciplineWrapper.AuthenticationMethod.PASSWORD,
-    remote_workdir: str | Path = None,
-    pre_commands: Sequence[str] = (),
-    transfer_inputs: Sequence[str] = (),
-    transfer_outputs: Sequence[str] = (),
-):
+        discipline: MDODiscipline,
+        local_workdir: str | Path,
+        hostname: str,
+        port: int = 22,
+        username: str = "",
+        password: str = "",
+        ssh_public_key: str | Path = None,
+        authentication_method: SSHDisciplineWrapper.AuthenticationMethod = SSHDisciplineWrapper.AuthenticationMethod.PASSWORD,
+        remote_workdir: str | Path = None,
+        pre_commands: Sequence[str] = (),
+        transfer_inputs: Sequence[str] = (),
+        transfer_outputs: Sequence[str] = (),
+) -> SSHDisciplineWrapper:
     """Wrap the discipline within the SSH transfer discipline.
 
     The discipline is serialized to the disk, its input too, then a job file is
