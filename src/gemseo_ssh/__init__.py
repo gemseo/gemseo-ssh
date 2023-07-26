@@ -1,3 +1,17 @@
+# Copyright 2023 IRT Saint Exupéry, https://www.irt-saintexupery.com
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License version 3 as published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with this program; if not, write to the Free Software Foundation,
+# Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 """Wrappers."""
 from __future__ import annotations
 
@@ -10,20 +24,19 @@ from gemseo.core.discipline import MDODiscipline
 if TYPE_CHECKING:
     from gemseo_ssh.wrappers.ssh.ssh_wrapped_disc import SSHDisciplineWrapper
 
-
 def wrap_discipline_with_ssh(
     discipline: MDODiscipline,
     local_workdir: str | Path,
     hostname: str,
-    port: int,
-    username: str,
-    password: str,
-    ssh_public_key: str | Path,
-    authentification_method: SSHDisciplineWrapper.AuthentificationMethod,
-    remote_workdir: str | Path,
-    pre_commands: Sequence[str],
-    transfer_inputs=None,
-    transfer_outputs=None,
+    port: int = 22,
+    username: str = "",
+    password: str = "",
+    ssh_public_key: str | Path = None,
+    authentication_method: SSHDisciplineWrapper.AuthenticationMethod=SSHDisciplineWrapper.AuthenticationMethod.PASSWORD,
+    remote_workdir: str | Path = None,
+    pre_commands: Sequence[str] = (),
+    transfer_inputs: Sequence[str] = (),
+    transfer_outputs: Sequence[str] = (),
 ):
     """Wrap the discipline within the SSH transfer discipline.
 
@@ -34,11 +47,31 @@ def wrap_discipline_with_ssh(
     Finally, the deserialized outputs are returned by the wrapper.
 
     Args:
-        discipline: The discipline to wrapp in the job scheduler.
-        local_workdir_path: The path to the workdir
+        discipline: The discipline to wrap and execute on the remote host.
+        local_workdir: The path to the work directory on the local host.
+        hostname: The name of the remote host to delegate the execution.
+        port: The port to use for SSH.
+        username: The user name on the remote host.
+        password: The password associated to the username on the remote host.
+            Used when the authentication_method is
+            SSHDisciplineWrapper.AuthenticationMethod.PASSWORD
+        ssh_public_key: The public key used for authentication on the remote host.
+            Used when the authentication_method is
+            SSHDisciplineWrapper.AuthenticationMethod.PUBLIC_KEY
+        authentication_method: The method used for authentication on the remote host.
+            Either public keys must be setup, or the plain password.
+        remote_workdir: The path to the work directory on the remote host.
+        pre_commands: The commands run on the remote host before deserialization and
+            execution of the discipline on the remote host. This can be used to load
+            the Python environment for instance.
+        transfer_inputs: The sequence of files input data names that
+            must be transferred before execution.
+        transfer_outputs: The sequence of files output data names that
+            must be transferred after execution.
 
     Raises:
-        OSError if the job template does not exist.
+        KeyError: if the transfer_inputs or transfer_outputs arguments are inconsistent
+            with the discipline grammars.
     """
     from gemseo_ssh.wrappers.ssh.ssh_wrapped_disc import SSHDisciplineWrapper
 
@@ -50,7 +83,7 @@ def wrap_discipline_with_ssh(
         username=username,
         password=password,
         ssh_public_key=ssh_public_key,
-        authentification_method=authentification_method,
+        authentication_method=authentication_method,
         remote_workdir=remote_workdir,
         pre_commands=pre_commands,
         transfer_inputs=transfer_inputs,

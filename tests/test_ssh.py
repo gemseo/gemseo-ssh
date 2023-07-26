@@ -1,3 +1,17 @@
+# Copyright 2023 IRT Saint Exupéry, https://www.irt-saintexupery.com
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License version 3 as published by the Free Software Foundation.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with this program; if not, write to the Free Software Foundation,
+# Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 from __future__ import annotations
 
 import getpass
@@ -12,17 +26,17 @@ import pytest
 from gemseo import create_discipline
 from gemseo.utils.comparisons import compare_dict_of_arrays
 from gemseo.utils.platform import PLATFORM_IS_WINDOWS
-from gemseo_ssh import wrap_discipline_with_ssh
-from gemseo_ssh.wrappers.ssh.ssh_wrapped_disc import SSHDisciplineWrapper
 from numpy import array
 
+from gemseo_ssh import wrap_discipline_with_ssh
+from gemseo_ssh.wrappers.ssh.ssh_wrapped_disc import SSHDisciplineWrapper
 
 USERNAME = getpass.getuser()
 HOME_DIR = Path(os.path.expanduser("~"))
 HOSTNAME = socket.gethostname()
 SSH_PORT = 22
 PASSWORD = ""
-AUTHENTIFICATION_METHOD = SSHDisciplineWrapper.AuthentificationMethod.PUBLIC_KEY
+AUTHENTICATION_METHOD = SSHDisciplineWrapper.authenticationMethod.PUBLIC_KEY
 CURRENT_DIR_PATH = Path(__file__).parent
 
 if PLATFORM_IS_WINDOWS:
@@ -91,7 +105,7 @@ def test_linux(tmp_path, remote_setup):
         username=USERNAME,
         password=PASSWORD,
         ssh_public_key=key,
-        authentification_method=AUTHENTIFICATION_METHOD,
+        authentication_method=AUTHENTICATION_METHOD,
         remote_workdir=remote_setup.workdir_path.as_posix(),
         pre_commands=pre_commands,
     )
@@ -129,7 +143,7 @@ def test_linux_transfer(tmp_path, remote_setup, monkeypatch):
         username=USERNAME,
         password=PASSWORD,
         ssh_public_key=key,
-        authentification_method=AUTHENTIFICATION_METHOD,
+        authentication_method=AUTHENTICATION_METHOD,
         remote_workdir=remote_setup.workdir_path.as_posix(),
         pre_commands=pre_commands,
         # The discipline module is transfered along with its inputs, but it is not used by itself.
@@ -156,7 +170,7 @@ def test_ssh_styx():
     key = f"C:\\Users\\{USERNAME}\\.ssh\\id_rsa.pub"
     local_workdir = f"C:\\Users\\{USERNAME}\\Documents\\test_ssh"
     distant_workdir = Path(f"C:\\Users\\{USERNAME}\\test_ssh\\")
-    authentification_method = SSHDisciplineWrapper.AUTHENTIFICATION_METHOD.public_key
+    authentication_method = SSHDisciplineWrapper.AUTHENTICATION_METHOD.public_key
     expression = {"b": "2*a"}
     pre_commands = [
         f"C:\\Users\\{USERNAME}\\AppData\\Local\\miniconda3\\Scripts\\activate.bat",
@@ -171,7 +185,7 @@ def test_ssh_styx():
         username=USERNAME,
         password=None,
         ssh_public_key=key,
-        authentification_method=authentification_method,
+        authentication_method=authentication_method,
         distant_workdir_path=distant_workdir,
         pre_commands=pre_commands,
     )
