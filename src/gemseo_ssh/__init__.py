@@ -13,14 +13,14 @@ if TYPE_CHECKING:
 
 def wrap_discipline_with_ssh(
     discipline: MDODiscipline,
-    local_workdir_path: str | Path,
+    local_workdir: str | Path,
     hostname: str,
     port: int,
     username: str,
     password: str,
     ssh_public_key: str | Path,
     authentification_method: SSHDisciplineWrapper.AuthentificationMethod,
-    remote_workdir_path: str | Path,
+    remote_workdir: str | Path,
     pre_commands: Sequence[str],
     transfer_inputs=None,
     transfer_outputs=None,
@@ -44,14 +44,14 @@ def wrap_discipline_with_ssh(
 
     return SSHDisciplineWrapper(
         discipline=discipline,
-        workdir_path=local_workdir_path,
+        local_workdir=local_workdir,
         hostname=hostname,
         port=port,
         username=username,
         password=password,
         ssh_public_key=ssh_public_key,
         authentification_method=authentification_method,
-        remote_workdir=remote_workdir_path,
+        remote_workdir=remote_workdir,
         pre_commands=pre_commands,
         transfer_inputs=transfer_inputs,
         transfer_outputs=transfer_outputs,

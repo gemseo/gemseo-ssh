@@ -21,7 +21,7 @@ from logging import getLogger
 from pathlib import Path
 from typing import ClassVar
 from uuid import uuid1
-import numpy as np
+from strenum import StrEnum
 
 import paramiko
 from gemseo.core.discipline import MDODiscipline
@@ -46,7 +46,7 @@ class SSHDisciplineWrapper(MDODiscipline):
     discipline: MDODiscipline
     """The discipline to execute on the remote host."""
 
-    workdir_path: Path
+    local_workdir: Path
     """The path to the working directory."""
 
     _current_loc_id: str
@@ -54,7 +54,7 @@ class SSHDisciplineWrapper(MDODiscipline):
     def __init__(
         self,
         discipline: MDODiscipline,
-        workdir_path: Path | str,
+        local_workdir: Path | str,
         hostname: str,
         port: int = 22,
         username: str = "",
@@ -69,7 +69,7 @@ class SSHDisciplineWrapper(MDODiscipline):
         """
         Args:
             discipline: The discipline to wrap.
-            workdir_path: The path to the workdir.
+            local_workdir: The path to the workdir.
 
         Raises:
             OSError if job_template_path does not exist.
@@ -82,7 +82,7 @@ class SSHDisciplineWrapper(MDODiscipline):
         self.input_grammar = self.discipline.input_grammar
         self.output_grammar = self.discipline.output_grammar
         self.default_inputs = self.discipline.default_inputs
-        self.workdir_path = Path(workdir_path)
+        self.local_workdir = Path(local_workdir)
         self.pickled_discipline = pickle.dumps(self.discipline)
 
         self.pre_commands = pre_commands
@@ -92,8 +92,8 @@ class SSHDisciplineWrapper(MDODiscipline):
         self.__username = username
         self.__password = password
         self.__ssh_public_key_path = ssh_public_key
-        self.__local_workdir = workdir_path
-        self.__distant_workdir = distant_workdir
+        self.__local_workdir = local_workdir
+        self.__remote_workdir = remote_workdir
         self.__authentification_method = authentification_method
         self._check_authentification_method()
 
@@ -333,7 +333,7 @@ class SSHDisciplineWrapper(MDODiscipline):
 
     def _create_current_workdir(self):
         loc_id = str(uuid1()).split("-")[0]
-        current_workdir = self.workdir_path / loc_id
+        current_workdir = self.local_workdir / loc_id
         current_workdir.mkdir()
         self._current_loc_id = loc_id
         self.__current_remote_workdir = self.__remote_workdir / Path(
