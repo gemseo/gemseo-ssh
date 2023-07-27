@@ -90,4 +90,3 @@ Contributors
 - François Gallard
 - Nicolas Roussoully
 - Antoine Dechaume
-

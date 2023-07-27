@@ -18,7 +18,6 @@ import getpass
 import os
 import socket
 import subprocess
-import venv
 from pathlib import Path
 from typing import NamedTuple
 
@@ -26,10 +25,11 @@ import pytest
 from gemseo import create_discipline
 from gemseo.utils.comparisons import compare_dict_of_arrays
 from gemseo.utils.platform import PLATFORM_IS_WINDOWS
-from numpy import array
-
 from gemseo_ssh import wrap_discipline_with_ssh
 from gemseo_ssh.wrappers.ssh.ssh_wrapped_disc import SSHDisciplineWrapper
+from numpy import array
+
+import venv
 
 USERNAME = getpass.getuser()
 HOME_DIR = Path(os.path.expanduser("~"))
@@ -78,7 +78,7 @@ def test_helper_discipline(tmp_path, monkeypatch):
 def remote_setup(tmp_path_factory):
     """Create the virtual env for the remote connection on the local host."""
     workdir_path = tmp_path_factory.mktemp("ssh-workdir")
-    workdir_path = Path('/tmp/test_ssh')
+    workdir_path = Path("/tmp/test_ssh")
     venv_path = workdir_path / "venv"
     venv.create(venv_path, with_pip=True)
     subprocess.run(
@@ -120,7 +120,8 @@ def test_linux_transfer(tmp_path, remote_setup, monkeypatch):
     key = str(HOME_DIR / ".ssh" / "id_rsa.pub")
 
     # For the picling to work, the namespace of the discipline shall be accessible on the
-    # remote host, this can be done by importing it absolutely the both on local and remote hosts.
+    # remote host, this can be done by importing it absolutely the both
+    # on local and remote hosts.
     monkeypatch.syspath_prepend(CURRENT_DIR_PATH)
     from discipline import DiscWithFiles
 
@@ -146,7 +147,8 @@ def test_linux_transfer(tmp_path, remote_setup, monkeypatch):
         authentication_method=AUTHENTICATION_METHOD,
         remote_workdir_path=remote_setup.workdir_path.as_posix(),
         pre_commands=pre_commands,
-        # The discipline module is transfered along with its inputs, but it is not used by itself.
+        # The discipline module is transfered along with its inputs,
+        # but it is not used by itself.
         transfer_inputs=["in_file", "discipline"],
         transfer_outputs=["out_file"],
     )
