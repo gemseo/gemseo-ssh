@@ -72,12 +72,12 @@ class SSHDisciplineWrapper(MDODiscipline):
         port: int = 22,
         username: str = "",
         password: str = "",
-        ssh_public_key: str | Path = None,
+        ssh_public_key_path: str | Path = "",
         authentication_method: AuthenticationMethod = AuthenticationMethod.PASSWORD,
-        remote_workdir_path: str | Path = None,
+        remote_workdir_path: str | Path = "",
         pre_commands: Sequence[str] = (),
-        transfer_inputs: Sequence[str] = (),
-        transfer_outputs: Sequence[str] = (),
+        transfer_input_names: Sequence[str] = (),
+        transfer_output_names: Sequence[str] = (),
     ) -> None:
         """
 
@@ -90,23 +90,24 @@ class SSHDisciplineWrapper(MDODiscipline):
             password: The password associated to the username on the remote host.
                 Used when the authentication_method is
                 SSHDisciplineWrapper.AuthenticationMethod.PASSWORD
-            ssh_public_key: The public key used for authentication on the remote host.
+            ssh_public_key_path: The path to the public key used for authentication on
+                the remote host.
                 Used when the authentication_method is
                 SSHDisciplineWrapper.AuthenticationMethod.PUBLIC_KEY
             authentication_method: The method used for authentication on the remote host.
                 Either public keys must be setup, or the plain password.
             remote_workdir_path: The path to the work directory on the remote host.
             pre_commands: The commands run on the remote host before deserialization and
-                execution of the discipline on the remote host. This can be used to load
+                execution of the discipline on the remote host. This can be used to activate
                 the Python environment for instance.
-            transfer_inputs: The sequence of files input data names that
-                must be transferred before execution.
-            transfer_outputs: The sequence of files output data names that
-                must be transferred after execution.
+            transfer_input_names: The names of the discipline inputs that correspond
+                to files that must be transferred before execution.
+            transfer_output_names: The names of the discipline outputs that correspond
+                to files that must be transferred after execution.
 
         Raises:
-            KeyError: if the transfer_inputs or transfer_outputs arguments are inconsistent
-                with the discipline grammars.
+            KeyError: if the transfer_input_names or transfer_output_names arguments
+                are inconsistent with the discipline grammars.
         """  # noqa: D205, D212, D415
         super().__init__(discipline.name, grammar_type=discipline.grammar_type)
         self.discipline = discipline
@@ -115,7 +116,7 @@ class SSHDisciplineWrapper(MDODiscipline):
         self.output_grammar = self.discipline.output_grammar
         self.default_inputs = self.discipline.default_inputs
         self.local_workdir_path = Path(local_workdir_path)
-        self.pickled_discipline = pickle.dumps(self.discipline)
+        self.__pickled_discipline = pickle.dumps(self.discipline)
 
         self.pre_commands = pre_commands
 
@@ -123,24 +124,24 @@ class SSHDisciplineWrapper(MDODiscipline):
         self.__port = port
         self.__username = username
         self.__password = password
-        self.__ssh_public_key_path = ssh_public_key
+        self.__ssh_public_key_path = ssh_public_key_path
         self.__local_workdir_path = local_workdir_path
         self.__remote_workdir_path = remote_workdir_path
         self.__authentication_method = authentication_method
         self._check_authentication_method()
 
-        if transfer_inputs is not None and not self.is_all_inputs_existing(
-            transfer_inputs
+        if transfer_input_names is not None and not self.is_all_inputs_existing(
+            transfer_input_names
         ):
-            missing_in = set(transfer_inputs) - self.input_grammar
-            raise KeyError(f"Invalid transfer_inputs: {missing_in}")
-        if transfer_outputs is not None and not self.is_all_outputs_existing(
-            transfer_outputs
+            missing_in = set(transfer_input_names) - self.input_grammar
+            raise KeyError(f"Invalid transfer_input_names: {missing_in}")
+        if transfer_output_names is not None and not self.is_all_outputs_existing(
+            transfer_output_names
         ):
-            missing_out = set(transfer_outputs) - self.output_grammar
-            raise KeyError(f"Invalid transfer_outputs: {missing_out}")
-        self.__transfer_inputs = transfer_inputs
-        self.__transfer_outputs = transfer_outputs
+            missing_out = set(transfer_output_names) - self.output_grammar
+            raise KeyError(f"Invalid transfer_output_names: {missing_out}")
+        self.__transfer_input_names = transfer_input_names
+        self.__transfer_output_names = transfer_output_names
 
     def _check_authentication_method(self) -> None:
         """Check that the authentication method is correctly set.
@@ -286,10 +287,10 @@ class SSHDisciplineWrapper(MDODiscipline):
         Args:
             ftp_client: The FTP client.
         """
-        if self.__transfer_inputs is None:
+        if self.__transfer_input_names is None:
             return
 
-        for data_name in self.__transfer_inputs:
+        for data_name in self.__transfer_input_names:
             start_time = time.time()
             local_path = Path(self.local_data[data_name])
             if not local_path.exists():
@@ -332,10 +333,10 @@ class SSHDisciplineWrapper(MDODiscipline):
         Args:
             ftp_client: The FTP client.
         """
-        if self.__transfer_outputs is None:
+        if self.__transfer_output_names is None:
             return
 
-        for data_name in self.__transfer_outputs:
+        for data_name in self.__transfer_output_names:
             start_time = time.time()
             file_name = Path(self.local_data[data_name]).name
             local_path = self.__local_workdir_path / file_name
@@ -453,12 +454,12 @@ class SSHDisciplineWrapper(MDODiscipline):
         """
         discipline_path = current_workdir / self.DISC_PICKLE_FILE_NAME
         with open(discipline_path, "wb") as outf:
-            outf.write(self.pickled_discipline)
+            outf.write(self.__pickled_discipline)
         inputs_path = current_workdir / self.DISC_INPUT_FILE_NAME
 
-        if self.__transfer_inputs:
+        if self.__transfer_input_names:
             inputs_to_serialize = self.local_data.copy()
-            for data_name in self.__transfer_inputs:
+            for data_name in self.__transfer_input_names:
                 local_path = Path(self.local_data[data_name])
                 inputs_to_serialize[data_name] = str(
                     self.__current_remote_workdir_path / local_path.name

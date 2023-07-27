@@ -14,10 +14,10 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 from __future__ import annotations
 
-import getpass
 import os
 import socket
 import subprocess
+import venv
 from pathlib import Path
 from typing import NamedTuple
 
@@ -28,8 +28,6 @@ from gemseo.utils.platform import PLATFORM_IS_WINDOWS
 from gemseo_ssh import wrap_discipline_with_ssh
 from gemseo_ssh.wrappers.ssh.ssh_wrapped_disc import SSHDisciplineWrapper
 from numpy import array
-
-import venv
 
 USERNAME = os.getlogin()
 HOME_DIR = Path(os.path.expanduser("~"))
@@ -80,7 +78,7 @@ def test_helper_discipline(tmp_path, monkeypatch):
 def remote_setup(tmp_path_factory):
     """Create the virtual env for the remote connection on the local host."""
     workdir_path = tmp_path_factory.mktemp("ssh-remote-workdir")
-    workdir_path = Path('/tmp/test_ssh')
+    workdir_path = Path("/tmp/test_ssh")
     venv_path = workdir_path / "venv"
     venv.create(venv_path, with_pip=True)
     subprocess.run(
@@ -89,7 +87,8 @@ def remote_setup(tmp_path_factory):
         capture_output=True,
     )
     return RemoteSetup(
-        workdir_path, ACTIVATE_CMD.format(venv_path=venv_path),
+        workdir_path,
+        ACTIVATE_CMD.format(venv_path=venv_path),
         SET_PYTHONPATH_CMD.format(workdir_path=workdir_path),
     )
 
@@ -107,7 +106,7 @@ def test_linux(tmp_path, remote_setup):
         port=SSH_PORT,
         username=USERNAME,
         password=PASSWORD,
-        ssh_public_key=key,
+        ssh_public_key_path=key,
         authentication_method=AUTHENTICATION_METHOD,
         remote_workdir_path=remote_setup.workdir_path.as_posix(),
         pre_commands=pre_commands,
@@ -146,14 +145,14 @@ def test_linux_transfer(tmp_path, remote_setup, monkeypatch):
         port=SSH_PORT,
         username=USERNAME,
         password=PASSWORD,
-        ssh_public_key=key,
+        ssh_public_key_path=key,
         authentication_method=AUTHENTICATION_METHOD,
         remote_workdir_path=remote_setup.workdir_path.as_posix(),
         pre_commands=pre_commands,
         # The discipline module is transfered along with its inputs,
         # but it is not used by itself.
-        transfer_inputs=["in_file", "discipline"],
-        transfer_outputs=["out_file"],
+        transfer_input_names=["in_file", "discipline"],
+        transfer_output_names=["out_file"],
     )
     data = remote_disc.execute(
         {
@@ -187,8 +186,7 @@ def test_ssh_styx():
         hostname=hostname,
         port=port,
         username=USERNAME,
-        password=None,
-        ssh_public_key=key,
+        ssh_public_key_path=key,
         authentication_method=authentication_method,
         remote_workdir_path=distant_workdir,
         pre_commands=pre_commands,
