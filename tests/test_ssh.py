@@ -29,6 +29,7 @@ from gemseo_ssh.wrappers.ssh.ssh_wrapped_disc import SSHDisciplineWrapper
 from numpy import array
 
 USERNAME = os.getlogin()
+PASSWORD = ""
 HOME_DIR = Path(os.path.expanduser("~"))
 HOSTNAME = "localhost"
 AUTHENTICATION_METHOD = SSHDisciplineWrapper.AuthenticationMethod.PUBLIC_KEY
@@ -101,6 +102,7 @@ def test_linux(tmp_path, remote_setup):
         local_workdir_path=tmp_path,
         hostname=HOSTNAME,
         username=USERNAME,
+        password=PASSWORD,
         ssh_public_key_path=SSH_KEY,
         authentication_method=AUTHENTICATION_METHOD,
         remote_workdir_path=remote_setup.workdir_path.as_posix(),
@@ -137,6 +139,7 @@ def test_linux_transfer(tmp_path, remote_setup, monkeypatch):
         local_workdir_path=tmp_path,
         hostname=HOSTNAME,
         username=USERNAME,
+        password=PASSWORD,
         ssh_public_key_path=SSH_KEY,
         authentication_method=AUTHENTICATION_METHOD,
         remote_workdir_path=remote_setup.workdir_path.as_posix(),
