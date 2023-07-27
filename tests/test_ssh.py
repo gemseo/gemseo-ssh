@@ -42,15 +42,17 @@ CURRENT_DIR_PATH = Path(__file__).parent
 if PLATFORM_IS_WINDOWS:
     VENV_REL_PATH_TO_PYTHON = "Scripts/python.exe"
     ACTIVATE_CMD = r"{venv_path}\Scripts\activate"
+    SET_PYTHONPATH_CMD = "for /f \"delims=\" %a in ('cd') do @set PYTHONPATH=%a"
 else:
     VENV_REL_PATH_TO_PYTHON = "bin/python"
     ACTIVATE_CMD = ". {venv_path}/bin/activate"
+    SET_PYTHONPATH_CMD = "export PYTHONPATH={workdir_path}:$PYTHONPATH"
 
 
 class RemoteSetup(NamedTuple):
     workdir_path: Path
-    venv_path: Path
     activation_cmd: str
+    set_python_path_cmd: str
 
 
 def test_helper_discipline(tmp_path, monkeypatch):
@@ -87,7 +89,8 @@ def remote_setup(tmp_path_factory):
         capture_output=True,
     )
     return RemoteSetup(
-        workdir_path, venv_path, ACTIVATE_CMD.format(venv_path=venv_path)
+        workdir_path, ACTIVATE_CMD.format(venv_path=venv_path),
+        SET_PYTHONPATH_CMD.format(workdir_path=workdir_path),
     )
 
 
@@ -130,8 +133,7 @@ def test_linux_transfer(tmp_path, remote_setup, monkeypatch):
     pre_commands = [
         remote_setup.activation_cmd,
         # This allows unpickling the discipline on the remote host.
-        # f"export PYTHONPATH={remote_setup.workdir_path}:$PYTHONPATH",
-        "for /f \"delims=\" %a in ('cd') do @set PYTHONPATH=%a",
+        remote_setup.set_python_path_cmd,
     ]
 
     in_path = tmp_path / "in_f.txt"
