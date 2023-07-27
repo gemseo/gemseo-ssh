@@ -172,7 +172,7 @@ def test_ssh_styx():
     key = f"C:\\Users\\{USERNAME}\\.ssh\\id_rsa.pub"
     local_workdir_path = f"C:\\Users\\{USERNAME}\\Documents\\test_ssh"
     distant_workdir = Path(f"C:\\Users\\{USERNAME}\\test_ssh\\")
-    authentication_method = SSHDisciplineWrapper.AUTHENTICATION_METHOD.public_key
+    authentication_method = SSHDisciplineWrapper.AuthenticationMethod.PUBLIC_KEY
     expression = {"b": "2*a"}
     pre_commands = [
         f"C:\\Users\\{USERNAME}\\AppData\\Local\\miniconda3\\Scripts\\activate.bat",
@@ -188,7 +188,7 @@ def test_ssh_styx():
         password=None,
         ssh_public_key=key,
         authentication_method=authentication_method,
-        distant_workdir_path=distant_workdir,
+        remote_workdir_path=distant_workdir,
         pre_commands=pre_commands,
     )
     data = new_disc.execute({"a": array([1.0])})

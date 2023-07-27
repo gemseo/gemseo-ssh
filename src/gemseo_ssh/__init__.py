@@ -17,12 +17,10 @@ from __future__ import annotations
 
 from pathlib import Path
 from typing import Sequence
-from typing import TYPE_CHECKING
 
 from gemseo.core.discipline import MDODiscipline
 
-if TYPE_CHECKING:
-    from gemseo_ssh.wrappers.ssh.ssh_wrapped_disc import SSHDisciplineWrapper
+from gemseo_ssh.wrappers.ssh.ssh_wrapped_disc import SSHDisciplineWrapper
 
 AuthenticationMethod = SSHDisciplineWrapper.AuthenticationMethod
 
