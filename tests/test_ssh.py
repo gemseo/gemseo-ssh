@@ -15,7 +15,6 @@
 from __future__ import annotations
 
 import os
-import socket
 import subprocess
 import venv
 from pathlib import Path
@@ -31,11 +30,10 @@ from numpy import array
 
 USERNAME = os.getlogin()
 HOME_DIR = Path(os.path.expanduser("~"))
-HOSTNAME = socket.gethostname()
-SSH_PORT = 22
-PASSWORD = ""
+HOSTNAME = "localhost"
 AUTHENTICATION_METHOD = SSHDisciplineWrapper.AuthenticationMethod.PUBLIC_KEY
 CURRENT_DIR_PATH = Path(__file__).parent
+SSH_KEY = str(HOME_DIR / ".ssh" / "id_rsa.pub")
 
 if PLATFORM_IS_WINDOWS:
     VENV_REL_PATH_TO_PYTHON = "Scripts/python.exe"
@@ -95,7 +93,6 @@ def remote_setup(tmp_path_factory):
 
 def test_linux(tmp_path, remote_setup):
     """Test the remote execution on a Linux env."""
-    key = str(HOME_DIR / ".ssh" / "id_rsa.pub")
     local_disc = create_discipline("SobieskiMission")
     pre_commands = [remote_setup.activation_cmd]
 
@@ -103,10 +100,8 @@ def test_linux(tmp_path, remote_setup):
         discipline=local_disc,
         local_workdir_path=tmp_path,
         hostname=HOSTNAME,
-        port=SSH_PORT,
         username=USERNAME,
-        password=PASSWORD,
-        ssh_public_key_path=key,
+        ssh_public_key_path=SSH_KEY,
         authentication_method=AUTHENTICATION_METHOD,
         remote_workdir_path=remote_setup.workdir_path.as_posix(),
         pre_commands=pre_commands,
@@ -119,7 +114,6 @@ def test_linux(tmp_path, remote_setup):
 
 def test_linux_transfer(tmp_path, remote_setup, monkeypatch):
     """Test the remote execution on a Linux env with files transfers."""
-    key = str(HOME_DIR / ".ssh" / "id_rsa.pub")
 
     # For the picling to work, the namespace of the discipline shall be accessible on the
     # remote host, this can be done by importing it absolutely the both
@@ -142,10 +136,8 @@ def test_linux_transfer(tmp_path, remote_setup, monkeypatch):
         discipline=local_disc,
         local_workdir_path=tmp_path,
         hostname=HOSTNAME,
-        port=SSH_PORT,
         username=USERNAME,
-        password=PASSWORD,
-        ssh_public_key_path=key,
+        ssh_public_key_path=SSH_KEY,
         authentication_method=AUTHENTICATION_METHOD,
         remote_workdir_path=remote_setup.workdir_path.as_posix(),
         pre_commands=pre_commands,
@@ -168,9 +160,6 @@ def test_linux_transfer(tmp_path, remote_setup, monkeypatch):
 
 def test_ssh_styx():
     """Test the execution on a Windows env."""
-    hostname = "styx"
-    port = 22
-    key = f"C:\\Users\\{USERNAME}\\.ssh\\id_rsa.pub"
     local_workdir_path = f"C:\\Users\\{USERNAME}\\Documents\\test_ssh"
     distant_workdir = Path(f"C:\\Users\\{USERNAME}\\test_ssh\\")
     authentication_method = SSHDisciplineWrapper.AuthenticationMethod.PUBLIC_KEY
@@ -183,10 +172,9 @@ def test_ssh_styx():
     new_disc = wrap_discipline_with_ssh(
         discipline=analytic_disc,
         local_workdir_path=local_workdir_path,
-        hostname=hostname,
-        port=port,
+        hostname="styx",
         username=USERNAME,
-        ssh_public_key_path=key,
+        ssh_public_key_path=SSH_KEY,
         authentication_method=authentication_method,
         remote_workdir_path=distant_workdir,
         pre_commands=pre_commands,

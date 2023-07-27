@@ -20,7 +20,7 @@ import time
 from logging import getLogger
 from pathlib import Path
 from typing import ClassVar
-from typing import TYPE_CHECKING
+from typing import Iterable
 from uuid import uuid1
 
 from gemseo.core.discipline import MDODiscipline
@@ -29,9 +29,6 @@ from paramiko.client import SSHClient
 from paramiko.sftp_client import SFTPClient
 from paramiko.ssh_exception import AuthenticationException
 from strenum import StrEnum
-
-if TYPE_CHECKING:
-    from typing import Sequence
 
 LOGGER = getLogger(__name__)
 
@@ -59,10 +56,47 @@ class SSHDisciplineWrapper(MDODiscipline):
     discipline: MDODiscipline
     """The discipline to execute on the remote host."""
 
-    local_workdir_path: Path
-    """The path to the working directory."""
+    __pickled_discipline: bytes
+    """The pickle object of the discipline."""
 
-    _current_loc_id: str
+    __local_root_wd_path: Path
+    """The path to the root work directory on the local host."""
+
+    __hostname: str
+    """The name of the remote host to delegate the execution."""
+
+    __port: int
+    """The port to use for SSH."""
+
+    __username: str
+    """The user name on the remote host."""
+
+    __password: str
+    """The password associated to the username on the remote host."""
+
+    __ssh_public_key_path: Path
+    """The path to the public key used for authentication on the remote host."""
+
+    __authentication_method: AuthenticationMethod
+    """The method used for authentication on the remote host."""
+
+    __remote_root_wd_path: Path
+    """The path to the root work directory on the remote host."""
+
+    __remote_cwd_path: Path
+    """The path to the work directory on the remote host."""
+
+    __pre_commands: Iterable[str]
+    """The commands run on the remote host before deserialization and execution of the
+    discipline on the remote host."""
+
+    __transfer_input_names: Iterable[str]
+    """The names of the discipline inputs that correspond to files that must be
+    transferred before execution."""
+
+    __transfer_output_names: Iterable[str]
+    """The names of the discipline outputs that correspond to files that must be
+    transferred after execution."""
 
     def __init__(
         self,
@@ -75,12 +109,11 @@ class SSHDisciplineWrapper(MDODiscipline):
         ssh_public_key_path: str | Path = "",
         authentication_method: AuthenticationMethod = AuthenticationMethod.PASSWORD,
         remote_workdir_path: str | Path = "",
-        pre_commands: Sequence[str] = (),
-        transfer_input_names: Sequence[str] = (),
-        transfer_output_names: Sequence[str] = (),
+        pre_commands: Iterable[str] = (),
+        transfer_input_names: Iterable[str] = (),
+        transfer_output_names: Iterable[str] = (),
     ) -> None:
         """
-
         Args:
             discipline: The discipline to wrap and execute on the remote host.
             local_workdir_path: The path to the work directory on the local host.
@@ -110,32 +143,30 @@ class SSHDisciplineWrapper(MDODiscipline):
                 are inconsistent with the discipline grammars.
         """  # noqa: D205, D212, D415
         super().__init__(discipline.name, grammar_type=discipline.grammar_type)
-        self.discipline = discipline
 
+        self.discipline = discipline
         self.input_grammar = self.discipline.input_grammar
         self.output_grammar = self.discipline.output_grammar
         self.default_inputs = self.discipline.default_inputs
-        self.local_workdir_path = Path(local_workdir_path)
+
+        self.__local_root_wd_path = Path(local_workdir_path)
         self.__pickled_discipline = pickle.dumps(self.discipline)
-
-        self.pre_commands = pre_commands
-
+        self.__pre_commands = pre_commands
         self.__hostname = hostname
         self.__port = port
         self.__username = username
         self.__password = password
-        self.__ssh_public_key_path = ssh_public_key_path
-        self.__local_workdir_path = local_workdir_path
-        self.__remote_workdir_path = remote_workdir_path
+        self.__ssh_public_key_path = Path(ssh_public_key_path)
+        self.__remote_root_wd_path = Path(remote_workdir_path)
         self.__authentication_method = authentication_method
         self._check_authentication_method()
 
-        if transfer_input_names is not None and not self.is_all_inputs_existing(
+        if transfer_input_names and not self.is_all_inputs_existing(
             transfer_input_names
         ):
             missing_in = set(transfer_input_names) - self.input_grammar
             raise KeyError(f"Invalid transfer_input_names: {missing_in}")
-        if transfer_output_names is not None and not self.is_all_outputs_existing(
+        if transfer_output_names and not self.is_all_outputs_existing(
             transfer_output_names
         ):
             missing_out = set(transfer_output_names) - self.output_grammar
@@ -157,7 +188,8 @@ class SSHDisciplineWrapper(MDODiscipline):
             raise ValueError(
                 "Password is not set while using password authentication for SSH connection."
             )
-        elif (
+
+        if (
             self.__authentication_method == self.AuthenticationMethod.PUBLIC_KEY
             and not self.__ssh_public_key_path
         ):
@@ -177,24 +209,12 @@ class SSHDisciplineWrapper(MDODiscipline):
             The return code of the command run remotely.
         """
         ssh_session = self._open_ssh_session()
+        discipline_path, input_path = self._write_inputs_to_disk()
 
-        start_time = time.time()
-        LOGGER.debug(
-            "Data written on local disk in %s seconds.", time.time() - start_time
-        )
-
-        discipline_path, input_path = self._write_inputs_to_disk(current_workdir)
-        remote_workdir_path_root = str(self.__remote_workdir_path)
-        remote_workdir_path = self.__current_remote_workdir_path.as_posix()
-        discipline_path = discipline_path.as_posix()
-        input_path = input_path.as_posix()
-
-        ftp_client = self._open_sftp_client(ssh_session, remote_workdir_path_root)
+        ftp_client = self._open_sftp_client(ssh_session, self.__remote_root_wd_path)
         self._send_serialized_inputs(ftp_client, discipline_path, input_path)
         self._send_transfer_inputs(ftp_client)
-        return_code, stdout, stderr = self._run_remote_command(
-            ssh_session, remote_workdir_path
-        )
+        return_code = self._run_remote_command(ssh_session, self.__remote_cwd_path)
         self._retrieve_serialized_outputs(ftp_client, current_workdir)
         self._handle_outputs(outputs_path, current_workdir)
         self._retrieve_transfer_outputs(ftp_client)
@@ -217,9 +237,8 @@ class SSHDisciplineWrapper(MDODiscipline):
             The FTP client.
         """
         ftp_client = ssh_session.open_sftp()
-        ftp_client.chdir(remote_workdir_path_root)
-        ftp_client.mkdir(self._current_loc_id)
-        ftp_client.chdir(self._current_loc_id)
+        ftp_client.mkdir(str(self.__remote_cwd_path))
+        ftp_client.chdir(str(self.__remote_cwd_path))
         return ftp_client
 
     def _open_ssh_session(self) -> SSHClient:
@@ -228,26 +247,23 @@ class SSHDisciplineWrapper(MDODiscipline):
         Retuns:
             The SSH client.
         """
+        ssh_client = SSHClient()
+        ssh_client.set_missing_host_key_policy(AutoAddPolicy())
+
+        key_filename = None
+
+        if self.__authentication_method == self.AuthenticationMethod.PUBLIC_KEY:
+            ssh_client.load_system_host_keys()
+            key_filename = str(self.__ssh_public_key_path)
+
         try:
-            ssh_client = SSHClient()
-            ssh_client.set_missing_host_key_policy(AutoAddPolicy())
-            if self.__authentication_method == self.AuthenticationMethod.PUBLIC_KEY:
-                ssh_client.load_system_host_keys()
-                ssh_client.connect(
-                    self.__hostname,
-                    self.__port,
-                    self.__username,
-                    key_filename=self.__ssh_public_key_path,
-                    allow_agent=False,
-                )
-            elif self.__authentication_method == self.AuthenticationMethod.PASSWORD:
-                ssh_client.connect(
-                    self.__hostname,
-                    self.__port,
-                    self.__username,
-                    self.__password,
-                    allow_agent=False,
-                )
+            ssh_client.connect(
+                self.__hostname,
+                self.__port,
+                self.__username,
+                allow_agent=False,
+                key_filename=key_filename,
+            )
         except AuthenticationException:
             raise AuthenticationException(
                 "The authentication failed. Check your password or your ssh key."
@@ -287,9 +303,6 @@ class SSHDisciplineWrapper(MDODiscipline):
         Args:
             ftp_client: The FTP client.
         """
-        if self.__transfer_input_names is None:
-            return
-
         for data_name in self.__transfer_input_names:
             start_time = time.time()
             local_path = Path(self.local_data[data_name])
@@ -320,7 +333,7 @@ class SSHDisciplineWrapper(MDODiscipline):
         start_time = time.time()
         ftp_client.get(
             remotepath=str(self.DISC_OUTPUT_FILE_NAME),
-            localpath=current_workdir / Path(self.DISC_OUTPUT_FILE_NAME),
+            localpath=current_workdir / self.DISC_OUTPUT_FILE_NAME,
         )
         LOGGER.debug(
             "Transfered serialized outputs from remote in %s seconds.",
@@ -333,24 +346,19 @@ class SSHDisciplineWrapper(MDODiscipline):
         Args:
             ftp_client: The FTP client.
         """
-        if self.__transfer_output_names is None:
-            return
-
         for data_name in self.__transfer_output_names:
             start_time = time.time()
             file_name = Path(self.local_data[data_name]).name
-            local_path = self.__local_workdir_path / file_name
-            ftp_client.get(remotepath=file_name, localpath=str(local_path))
+            local_path = str(self.__local_root_wd_path / file_name)
+            ftp_client.get(remotepath=file_name, localpath=local_path)
             LOGGER.debug(
                 "Transfered input file %s to remote in %s seconds.",
                 local_path,
                 time.time() - start_time,
             )
-            self.local_data[data_name] = str(local_path)
+            self.local_data[data_name] = local_path
 
-    def _run_remote_command(
-        self, session: SSHClient, remote_workdir_path: Path
-    ) -> tuple[int, str, str]:
+    def _run_remote_command(self, session: SSHClient, remote_workdir_path: Path) -> int:
         """Executes the gemseo-deserialize-run command on the remote host.
 
         Args:
@@ -359,8 +367,6 @@ class SSHDisciplineWrapper(MDODiscipline):
 
         Returns:
             The return code of the command.
-            The stdout of the command.
-            The stderr of the command.
         """
         start_time = time.time()
         command_separator = "&&"
@@ -371,7 +377,7 @@ class SSHDisciplineWrapper(MDODiscipline):
             f" {self.DISC_OUTPUT_FILE_NAME}"
         )
         cmd = cmd_change_dir
-        for command in self.pre_commands:
+        for command in self.__pre_commands:
             cmd += f"{command} {command_separator} "
         cmd += cmd_run
         LOGGER.debug("Command = %s ", cmd)
@@ -393,7 +399,7 @@ class SSHDisciplineWrapper(MDODiscipline):
         LOGGER.debug(
             "Remote discipline execution in %s seconds.", time.time() - start_time
         )
-        return return_code, stdout, stderr
+        return return_code
 
     def _handle_outputs(self, outputs_path: Path, current_workdir: Path) -> None:
         """Deserializes the output data and updates the discipline's local data.
@@ -403,13 +409,13 @@ class SSHDisciplineWrapper(MDODiscipline):
             current_workdir: The path to the current work directory on the local host.
         """
         if not outputs_path.exists():
-            raise RuntimeError(
-                "Serialized discipline outputs file does not exist {}.".format(
-                    outputs_path
-                )
+            raise FileNotFoundError(
+                f"Serialized discipline outputs file does not exist {outputs_path}."
             )
-        with open(outputs_path, "rb") as output_file:
+
+        with outputs_path.open("rb") as output_file:
             output = pickle.load(output_file)
+
             if isinstance(output, tuple):
                 error, trace = output
                 LOGGER.error(
@@ -420,13 +426,13 @@ class SSHDisciplineWrapper(MDODiscipline):
 
                 LOGGER.error(trace)
                 raise error
-            else:
-                LOGGER.debug(
-                    "Discipline %s execution succeded in %s",
-                    self.discipline.name,
-                    current_workdir,
-                )
-                self.local_data.update(output)
+
+            LOGGER.debug(
+                "Discipline %s execution succeded in %s",
+                self.discipline.name,
+                current_workdir,
+            )
+            self.local_data.update(output)
 
     def _create_current_workdir(self) -> Path:
         """Creates a unique local work directory.
@@ -434,48 +440,36 @@ class SSHDisciplineWrapper(MDODiscipline):
         Returns:
             The path to the created work directory.
         """
-        loc_id = str(uuid1()).split("-")[0]
-        current_workdir = self.local_workdir_path / loc_id
-        current_workdir.mkdir()
-        self._current_loc_id = loc_id
-        self.__current_remote_workdir_path = self.__remote_workdir_path / Path(
-            self._current_loc_id
-        )
-        return current_workdir
+        dir_name = str(uuid1()).split("-")[0]
+        self.__local_cwd_path = self.__local_root_wd_path / dir_name
+        self.__local_cwd_path.mkdir()
+        self.__remote_cwd_path = self.__remote_root_wd_path / dir_name
+        return self.__local_cwd_path
 
-    def _write_inputs_to_disk(self, current_workdir: Path) -> tuple[Path, Path]:
+    def _write_inputs_to_disk(self) -> tuple[Path, Path]:
         """Serializes the input data to the disk for execution.
-
-        Args:
-            current_workdir: The path to the current work directory on the local host.
 
         Returns:
             The path to the serialized discipline, and the path to the serialized inputs.
         """
-        discipline_path = current_workdir / self.DISC_PICKLE_FILE_NAME
-        with open(discipline_path, "wb") as outf:
-            outf.write(self.__pickled_discipline)
-        inputs_path = current_workdir / self.DISC_INPUT_FILE_NAME
+        discipline_path = self.__local_cwd_path / self.DISC_PICKLE_FILE_NAME
+        discipline_path.write_bytes(self.__pickled_discipline)
 
         if self.__transfer_input_names:
             inputs_to_serialize = self.local_data.copy()
             for data_name in self.__transfer_input_names:
                 local_path = Path(self.local_data[data_name])
                 inputs_to_serialize[data_name] = str(
-                    self.__current_remote_workdir_path / local_path.name
+                    self.__remote_cwd_path / local_path.name
                 )
         else:
             inputs_to_serialize = self.local_data
 
-        serialized_local_data = pickle.dumps(inputs_to_serialize)
-        with open(inputs_path, "wb") as outf:
-            outf.write(serialized_local_data)
+        inputs_path = self.__local_cwd_path / self.DISC_INPUT_FILE_NAME
+        inputs_path.write_bytes(pickle.dumps(inputs_to_serialize))
+
         return discipline_path, inputs_path
 
     def _run(self) -> None:
         current_workdir = self._create_current_workdir()
-
-        outputs_path = current_workdir / self.DISC_OUTPUT_FILE_NAME
-
-        self._write_inputs_to_disk(current_workdir)
-        self._run_command(outputs_path, current_workdir)
+        self._run_command(current_workdir / self.DISC_OUTPUT_FILE_NAME, current_workdir)
