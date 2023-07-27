@@ -34,7 +34,7 @@ HOME_DIR = Path(os.path.expanduser("~"))
 HOSTNAME = socket.gethostname()
 SSH_PORT = 22
 PASSWORD = ""
-AUTHENTICATION_METHOD = SSHDisciplineWrapper.AuthenticationMethod.PASSWORD
+AUTHENTICATION_METHOD = SSHDisciplineWrapper.AuthenticationMethod.PUBLIC_KEY
 CURRENT_DIR_PATH = Path(__file__).parent
 
 if PLATFORM_IS_WINDOWS:
