@@ -298,9 +298,7 @@ class SSHDisciplineWrapper(MDODiscipline):
                 )
             ftp_client.put(
                 localpath=str(local_path),
-                remotepath=str(
-                    Path(self.__current_remote_workdir_path) / local_path.name
-                ),
+                remotepath=local_path.name,
                 confirm=True,
             )
             LOGGER.debug(
@@ -339,15 +337,15 @@ class SSHDisciplineWrapper(MDODiscipline):
 
         for data_name in self.__transfer_outputs:
             start_time = time.time()
-            remotepath = Path(self.local_data[data_name])
-            remote_path = self.__local_workdir_path / remotepath.name
-            ftp_client.get(remotepath=str(remotepath), localpath=str(remote_path))
+            file_name = Path(self.local_data[data_name]).name
+            local_path = self.__local_workdir / file_name
+            ftp_client.get(remotepath=file_name, localpath=str(local_path))
             LOGGER.debug(
                 "Transfered input file %s to remote in %s seconds.",
-                remote_path,
+                local_path,
                 time.time() - start_time,
             )
-            self.local_data[data_name] = str(remote_path)
+            self.local_data[data_name] = str(local_path)
 
     def _run_remote_command(
         self, session: SSHClient, remote_workdir_path: Path

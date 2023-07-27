@@ -31,17 +31,17 @@ from numpy import array
 
 import venv
 
-USERNAME = getpass.getuser()
+USERNAME = os.getlogin()
 HOME_DIR = Path(os.path.expanduser("~"))
 HOSTNAME = socket.gethostname()
 SSH_PORT = 22
 PASSWORD = ""
-AUTHENTICATION_METHOD = SSHDisciplineWrapper.AuthenticationMethod.PUBLIC_KEY
+AUTHENTIFICATION_METHOD = SSHDisciplineWrapper.AuthentificationMethod.PASSWORD
 CURRENT_DIR_PATH = Path(__file__).parent
 
 if PLATFORM_IS_WINDOWS:
     VENV_REL_PATH_TO_PYTHON = "Scripts/python.exe"
-    ACTIVATE_CMD = r"{venv_path}\Scripts\activate.ps1"
+    ACTIVATE_CMD = r"{venv_path}\Scripts\activate"
 else:
     VENV_REL_PATH_TO_PYTHON = "bin/python"
     ACTIVATE_CMD = ". {venv_path}/bin/activate"
@@ -77,8 +77,8 @@ def test_helper_discipline(tmp_path, monkeypatch):
 @pytest.fixture(scope="module")
 def remote_setup(tmp_path_factory):
     """Create the virtual env for the remote connection on the local host."""
-    workdir_path = tmp_path_factory.mktemp("ssh-workdir")
-    workdir_path = Path("/tmp/test_ssh")
+    workdir_path = tmp_path_factory.mktemp("ssh-remote-workdir")
+    workdir_path = Path('/tmp/test_ssh')
     venv_path = workdir_path / "venv"
     venv.create(venv_path, with_pip=True)
     subprocess.run(
@@ -130,7 +130,8 @@ def test_linux_transfer(tmp_path, remote_setup, monkeypatch):
     pre_commands = [
         remote_setup.activation_cmd,
         # This allows unpickling the discipline on the remote host.
-        f"export PYTHONPATH={remote_setup.workdir_path}:$PYTHONPATH",
+        # f"export PYTHONPATH={remote_setup.workdir_path}:$PYTHONPATH",
+        "for /f \"delims=\" %a in ('cd') do @set PYTHONPATH=%a",
     ]
 
     in_path = tmp_path / "in_f.txt"
@@ -152,7 +153,6 @@ def test_linux_transfer(tmp_path, remote_setup, monkeypatch):
         transfer_inputs=["in_file", "discipline"],
         transfer_outputs=["out_file"],
     )
-
     data = remote_disc.execute(
         {
             "in_file": str(in_path),
