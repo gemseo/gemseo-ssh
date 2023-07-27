@@ -338,7 +338,7 @@ class SSHDisciplineWrapper(MDODiscipline):
         for data_name in self.__transfer_outputs:
             start_time = time.time()
             file_name = Path(self.local_data[data_name]).name
-            local_path = self.__local_workdir / file_name
+            local_path = self.__local_workdir_path / file_name
             ftp_client.get(remotepath=file_name, localpath=str(local_path))
             LOGGER.debug(
                 "Transfered input file %s to remote in %s seconds.",
