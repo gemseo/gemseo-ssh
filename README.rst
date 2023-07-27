@@ -26,9 +26,10 @@ For example, we can submit a discipline to a remote host like this:
     remote_discipline = wrap_discipline_with_ssh(
         discipline=analytic_disc,
         hostname="remote_hostname",
-        local_workdir= ".",
-        remote_workdir="~/test_ssh",
-        ssh_public_key="C:\\Users\\my_user_name\\.ssh\\id_rsa.pub"
+         local_workdir_path= ".",
+        remote_workdir_path="~/test_ssh",
+        ssh_public_key="C:\\Users\\my_user_name\\.ssh\\id_rsa.pub",
+        authentication_method="public_key"
     )
     data = remote_discipline.execute({"x": array([1.0])})
 
@@ -49,9 +50,11 @@ A more complex process, like a MDA, can also be sent to a remote host:
     remote_discipline = wrap_discipline_with_ssh(
         discipline=mda,
         hostname="remote_hostname",
-        local_workdir = ".",
-        remote_workdir="~/test_ssh",
-        ssh_public_key="C:\\Users\\my_user_name\\.ssh\\id_rsa.pub"
+        local_workdir_path = ".",
+        remote_workdir_path="~/test_ssh",
+        username="my_username",
+        password="my_password",
+        authentication_method="password"
     )
 
     # Note that the default_inputs of the SSH discipline are the same

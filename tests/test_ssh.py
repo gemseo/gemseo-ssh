@@ -36,7 +36,7 @@ HOME_DIR = Path(os.path.expanduser("~"))
 HOSTNAME = socket.gethostname()
 SSH_PORT = 22
 PASSWORD = ""
-AUTHENTICATION_METHOD = SSHDisciplineWrapper.authenticationMethod.PUBLIC_KEY
+AUTHENTICATION_METHOD = SSHDisciplineWrapper.AuthenticationMethod.PUBLIC_KEY
 CURRENT_DIR_PATH = Path(__file__).parent
 
 if PLATFORM_IS_WINDOWS:
@@ -99,14 +99,14 @@ def test_linux(tmp_path, remote_setup):
 
     remote_disc = wrap_discipline_with_ssh(
         discipline=local_disc,
-        local_workdir=tmp_path,
+        local_workdir_path=tmp_path,
         hostname=HOSTNAME,
         port=SSH_PORT,
         username=USERNAME,
         password=PASSWORD,
         ssh_public_key=key,
         authentication_method=AUTHENTICATION_METHOD,
-        remote_workdir=remote_setup.workdir_path.as_posix(),
+        remote_workdir_path=remote_setup.workdir_path.as_posix(),
         pre_commands=pre_commands,
     )
     data = remote_disc.execute()
@@ -137,14 +137,14 @@ def test_linux_transfer(tmp_path, remote_setup, monkeypatch):
 
     remote_disc = wrap_discipline_with_ssh(
         discipline=local_disc,
-        local_workdir=tmp_path,
+        local_workdir_path=tmp_path,
         hostname=HOSTNAME,
         port=SSH_PORT,
         username=USERNAME,
         password=PASSWORD,
         ssh_public_key=key,
         authentication_method=AUTHENTICATION_METHOD,
-        remote_workdir=remote_setup.workdir_path.as_posix(),
+        remote_workdir_path=remote_setup.workdir_path.as_posix(),
         pre_commands=pre_commands,
         # The discipline module is transfered along with its inputs, but it is not used by itself.
         transfer_inputs=["in_file", "discipline"],
@@ -168,7 +168,7 @@ def test_ssh_styx():
     hostname = "styx"
     port = 22
     key = f"C:\\Users\\{USERNAME}\\.ssh\\id_rsa.pub"
-    local_workdir = f"C:\\Users\\{USERNAME}\\Documents\\test_ssh"
+    local_workdir_path = f"C:\\Users\\{USERNAME}\\Documents\\test_ssh"
     distant_workdir = Path(f"C:\\Users\\{USERNAME}\\test_ssh\\")
     authentication_method = SSHDisciplineWrapper.AUTHENTICATION_METHOD.public_key
     expression = {"b": "2*a"}
@@ -179,7 +179,7 @@ def test_ssh_styx():
     analytic_disc = create_discipline("AnalyticDiscipline", expressions=expression)
     new_disc = wrap_discipline_with_ssh(
         discipline=analytic_disc,
-        local_workdir=local_workdir,
+        local_workdir_path=local_workdir_path,
         hostname=hostname,
         port=port,
         username=USERNAME,

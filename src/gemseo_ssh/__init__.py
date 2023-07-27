@@ -27,14 +27,14 @@ if TYPE_CHECKING:
 
 def wrap_discipline_with_ssh(
         discipline: MDODiscipline,
-        local_workdir: str | Path,
+        local_workdir_path: str | Path,
         hostname: str,
         port: int = 22,
         username: str = "",
         password: str = "",
         ssh_public_key: str | Path = None,
         authentication_method: SSHDisciplineWrapper.AuthenticationMethod = SSHDisciplineWrapper.AuthenticationMethod.PASSWORD,
-        remote_workdir: str | Path = None,
+        remote_workdir_path: str | Path = None,
         pre_commands: Sequence[str] = (),
         transfer_inputs: Sequence[str] = (),
         transfer_outputs: Sequence[str] = (),
@@ -49,7 +49,7 @@ def wrap_discipline_with_ssh(
 
     Args:
         discipline: The discipline to wrap and execute on the remote host.
-        local_workdir: The path to the work directory on the local host.
+        local_workdir_path: The path to the work directory on the local host.
         hostname: The name of the remote host to delegate the execution.
         port: The port to use for SSH.
         username: The user name on the remote host.
@@ -61,7 +61,7 @@ def wrap_discipline_with_ssh(
             SSHDisciplineWrapper.AuthenticationMethod.PUBLIC_KEY
         authentication_method: The method used for authentication on the remote host.
             Either public keys must be setup, or the plain password.
-        remote_workdir: The path to the work directory on the remote host.
+        remote_workdir_path: The path to the work directory on the remote host.
         pre_commands: The commands run on the remote host before deserialization and
             execution of the discipline on the remote host. This can be used to load
             the Python environment for instance.
@@ -78,14 +78,14 @@ def wrap_discipline_with_ssh(
 
     return SSHDisciplineWrapper(
         discipline=discipline,
-        local_workdir=local_workdir,
+        local_workdir_path=local_workdir_path,
         hostname=hostname,
         port=port,
         username=username,
         password=password,
         ssh_public_key=ssh_public_key,
         authentication_method=authentication_method,
-        remote_workdir=remote_workdir,
+        remote_workdir_path=remote_workdir_path,
         pre_commands=pre_commands,
         transfer_inputs=transfer_inputs,
         transfer_outputs=transfer_outputs,
