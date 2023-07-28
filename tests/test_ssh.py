@@ -30,11 +30,10 @@ from numpy import array
 
 USERNAME = os.getlogin()
 PASSWORD = ""
-HOME_DIR = Path(os.path.expanduser("~"))
 HOSTNAME = "localhost"
 AUTHENTICATION_METHOD = SSHDisciplineWrapper.AuthenticationMethod.PUBLIC_KEY
 CURRENT_DIR_PATH = Path(__file__).parent
-SSH_KEY = str(HOME_DIR / ".ssh" / "id_rsa.pub")
+SSH_KEY_PATH = Path(os.path.expanduser("~")) / ".ssh" / "id_rsa.pub"
 
 if PLATFORM_IS_WINDOWS:
     VENV_REL_PATH_TO_PYTHON = "Scripts/python.exe"
@@ -103,7 +102,7 @@ def test_linux(tmp_path, remote_setup):
         hostname=HOSTNAME,
         username=USERNAME,
         password=PASSWORD,
-        ssh_public_key_path=SSH_KEY,
+        ssh_public_key_path=SSH_KEY_PATH,
         authentication_method=AUTHENTICATION_METHOD,
         remote_workdir_path=remote_setup.workdir_path.as_posix(),
         pre_commands=pre_commands,
@@ -140,7 +139,7 @@ def test_linux_transfer(tmp_path, remote_setup, monkeypatch):
         hostname=HOSTNAME,
         username=USERNAME,
         password=PASSWORD,
-        ssh_public_key_path=SSH_KEY,
+        ssh_public_key_path=SSH_KEY_PATH,
         authentication_method=AUTHENTICATION_METHOD,
         remote_workdir_path=remote_setup.workdir_path.as_posix(),
         pre_commands=pre_commands,
@@ -177,7 +176,7 @@ def test_ssh_styx():
         local_workdir_path=local_workdir_path,
         hostname="styx",
         username=USERNAME,
-        ssh_public_key_path=SSH_KEY,
+        ssh_public_key_path=SSH_KEY_PATH,
         authentication_method=authentication_method,
         remote_workdir_path=distant_workdir,
         pre_commands=pre_commands,

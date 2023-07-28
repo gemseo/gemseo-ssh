@@ -420,21 +420,20 @@ class SSHDisciplineWrapper(MDODiscipline):
             The path to the serialized discipline, and the path to the serialized inputs.
         """
         self.__local_cwd_path.mkdir()
+
         discipline_path = self.__local_cwd_path / self.SERIALIZED_DISC_FILE_NAME
         discipline_path.write_bytes(self.__pickled_discipline)
 
         if self.__transfer_input_names:
-            inputs_to_serialize = self.local_data.copy()
+            local_data = self.local_data.copy()
             for data_name in self.__transfer_input_names:
                 local_path = Path(self.local_data[data_name])
-                inputs_to_serialize[data_name] = str(
-                    self.__remote_cwd_path / local_path.name
-                )
+                local_data[data_name] = str(self.__remote_cwd_path / local_path.name)
         else:
-            inputs_to_serialize = self.local_data
+            local_data = self.local_data
 
         inputs_path = self.__local_cwd_path / self.SERIALIZED_INPUTS_FILE_NAME
-        inputs_path.write_bytes(pickle.dumps(inputs_to_serialize))
+        inputs_path.write_bytes(pickle.dumps(local_data))
 
         return discipline_path, inputs_path
 
