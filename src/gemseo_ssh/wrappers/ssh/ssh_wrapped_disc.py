@@ -44,8 +44,16 @@ class SSHDisciplineWrapper(MDODiscipline):
     """
 
     SERIALIZED_DISC_FILE_NAME: ClassVar[str] = "discipline.pckl"
+    """The name of the file with the serialized discipline."""
+
     SERIALIZED_INPUTS_FILE_NAME: ClassVar[str] = "input_data.pckl"
+    """The name of the file with the serialized discipline input data."""
+
     SERIALIZED_OUTPUTS_FILE_NAME: ClassVar[str] = "output_data.pckl"
+    """The name of the file with the serialized discipline output data."""
+
+    SSH_KEEP_ALIVE_INTERVAL: ClassVar[int] = 600
+    """The time interval in seconds to keep the alive the ssh connection."""
 
     class AuthenticationMethod(StrEnum):
         """The ssh authentication method."""
@@ -244,6 +252,11 @@ class SSHDisciplineWrapper(MDODiscipline):
                 "The authentication failed. Check your password or your ssh key."
             )
 
+        ssh_client.get_transport().set_keepalive(self.SSH_KEEP_ALIVE_INTERVAL)
+        LOGGER.debug(
+            "Setting keep alive interval to %s seconds.", self.SSH_KEEP_ALIVE_INTERVAL
+        )
+
         ftp_client = ssh_client.open_sftp()
         ftp_client.mkdir(str(self.__remote_cwd_path))
         ftp_client.chdir(str(self.__remote_cwd_path))
@@ -368,6 +381,7 @@ class SSHDisciplineWrapper(MDODiscipline):
         if return_code != 0:
             raise RuntimeError(
                 f"Remote execution failed.\n"
+                f"Distant command was: {cmd}\n"
                 f"Return code is {return_code}.\n"
                 f"stdout is {stdout}.\n"
                 f"stderr is {stderr}."
