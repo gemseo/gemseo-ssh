@@ -1,3 +1,11 @@
+..
+    Copyright 2021 IRT Saint Exupéry, https://www.irt-saintexupery.com
+
+    This work is licensed under the Creative Commons Attribution-ShareAlike 4.0
+    International License. To view a copy of this license, visit
+    http://creativecommons.org/licenses/by-sa/4.0/ or send a letter to Creative
+    Commons, PO Box 1866, Mountain View, CA 94042, USA.
+
 Usage
 -----
 
@@ -75,13 +83,14 @@ which is not good practice.
 Bugs/Questions
 --------------
 
-Please create and issue on the public Github page of the project:
-https://gitlab.com/gemseo/dev/gemseo-ssh
+Please use the gitlab issue tracker at
+https://gitlab.com/gemseo/dev/gemseo-ssh/-/issues
+to submit bugs or questions.
 
 License
 -------
 
-The license is LGPL v3
+The license is LGPL v3.
 
 Contributors
 ------------

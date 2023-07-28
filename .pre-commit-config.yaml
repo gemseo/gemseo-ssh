@@ -106,3 +106,28 @@ repos:
     - id: nbqa-pyupgrade
       args: [ "--py38-plus" ]
     - id: nbqa-autopep8
+
+- repo: https://github.com/Lucas-C/pre-commit-hooks
+  rev: v1.5.1
+  hooks:
+    - id: insert-license
+      name: insert LGPL license
+      exclude: ^doc_src
+      files: \.py$
+      args:
+        - --license-filepath
+        - LICENSES/headers/LGPL-3.0.txt
+    - id: insert-license
+      name: insert BSD license
+      files: ^doc_src/(examples|tutorials).*\.py$
+      args:
+        - --license-filepath
+        - LICENSES/headers/BSD-0-Clause.txt
+    - id: insert-license
+      name: insert CC BY-SA license
+      files: (\.rst|\.rst\.txt)$
+      args:
+        - --license-filepath
+        - LICENSES/headers/CC-BY-SA-4.0.txt
+        - --comment-style
+        - ..|   |
