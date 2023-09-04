@@ -22,7 +22,7 @@ from gemseo.core.discipline import MDODiscipline
 class DiscWithFiles(MDODiscipline):
     """A dummy discipline that handles files in inputs and outputs."""
 
-    def __init__(self):
+    def __init__(self):  # noqa: D107
         super().__init__(grammar_type=self.GrammarType.SIMPLE)
         self.input_grammar.update_from_types({"in_file": str, "discipline": str})
         self.output_grammar.update_from_types({"out_file": str, "out_val": int})

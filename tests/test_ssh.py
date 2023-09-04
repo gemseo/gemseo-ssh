@@ -46,6 +46,8 @@ else:
 
 
 class RemoteSetup(NamedTuple):
+    """Settings for the remote."""
+
     workdir_path: Path
     activation_cmd: str
     set_python_path_cmd: str
@@ -115,7 +117,6 @@ def test_linux(tmp_path, remote_setup):
 
 def test_linux_transfer(tmp_path, remote_setup, monkeypatch):
     """Test the remote execution on a Linux env with files transfers."""
-
     # For the picling to work, the namespace of the discipline shall be accessible on the
     # remote host, this can be done by importing it absolutely the both
     # on local and remote hosts.
