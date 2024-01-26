@@ -17,4 +17,5 @@
 #        :author: Francois Gallard
 #    OTHER AUTHORS   - MACROSCOPIC CHANGES
 """SSH transfer discipline."""
+
 from __future__ import annotations

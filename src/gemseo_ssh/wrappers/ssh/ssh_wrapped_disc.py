@@ -13,22 +13,26 @@
 # along with this program; if not, write to the Free Software Foundation,
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 """Execution of a discipline on a remote host through SSH."""
+
 from __future__ import annotations
 
 import pickle
 import time
 from logging import getLogger
 from pathlib import Path
+from typing import TYPE_CHECKING
+from typing import Any
 from typing import ClassVar
-from typing import Iterable
 from uuid import uuid1
 
 from gemseo.core.discipline import MDODiscipline
 from paramiko import AutoAddPolicy
 from paramiko.client import SSHClient
-from paramiko.sftp_client import SFTPClient
-from paramiko.ssh_exception import AuthenticationException
-from strenum import StrEnum
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+
+    from paramiko.sftp_client import SFTPClient
 
 LOGGER = getLogger(__name__)
 
@@ -55,12 +59,6 @@ class SSHDisciplineWrapper(MDODiscipline):
     SSH_KEEP_ALIVE_INTERVAL: ClassVar[int] = 600
     """The time interval in seconds to keep the alive the ssh connection."""
 
-    class AuthenticationMethod(StrEnum):
-        """The ssh authentication method."""
-
-        PASSWORD = "password"
-        PUBLIC_KEY = "public_key"
-
     discipline: MDODiscipline
     """The discipline to execute on the remote host."""
 
@@ -72,21 +70,6 @@ class SSHDisciplineWrapper(MDODiscipline):
 
     __hostname: str
     """The name of the remote host to delegate the execution."""
-
-    __port: int
-    """The port to use for SSH."""
-
-    __username: str
-    """The user name on the remote host."""
-
-    __password: str
-    """The password associated to the username on the remote host."""
-
-    __ssh_public_key_path: Path
-    """The path to the public key used for authentication on the remote host."""
-
-    __authentication_method: AuthenticationMethod
-    """The method used for authentication on the remote host."""
 
     __remote_root_wd_path: Path
     """The path to the root work directory on the remote host."""
@@ -106,45 +89,35 @@ class SSHDisciplineWrapper(MDODiscipline):
     """The names of the discipline outputs that correspond to files that must be
     transferred after execution."""
 
+    __ssh_client_parameters: dict[str, Any]
+    """The optional parameters for paramiko.SSHClient."""
+
     def __init__(
         self,
         discipline: MDODiscipline,
         local_workdir_path: str | Path,
         hostname: str,
-        port: int = 22,
-        username: str = "",
-        password: str = "",
-        ssh_public_key_path: str | Path = "",
-        authentication_method: AuthenticationMethod = AuthenticationMethod.PASSWORD,
         remote_workdir_path: str | Path = "",
         pre_commands: Iterable[str] = (),
         transfer_input_names: Iterable[str] = (),
         transfer_output_names: Iterable[str] = (),
+        **ssh_client_parameters: Any,
     ) -> None:
         """
         Args:
             discipline: The discipline to wrap and execute on the remote host.
             local_workdir_path: The path to the work directory on the local host.
-            hostname: The name of the remote host to delegate the execution.
-            port: The port to use for SSH.
             username: The user name on the remote host.
-            password: The password associated to the username on the remote host.
-                Used when the authentication_method is
-                SSHDisciplineWrapper.AuthenticationMethod.PASSWORD
-            ssh_public_key_path: The path to the public key used for authentication on
-                the remote host.
-                Used when the authentication_method is
-                SSHDisciplineWrapper.AuthenticationMethod.PUBLIC_KEY
-            authentication_method: The method used for authentication on the remote host.
-                Either public keys must be setup, or the plain password.
             remote_workdir_path: The path to the work directory on the remote host.
             pre_commands: The commands run on the remote host before deserialization and
-                execution of the discipline on the remote host. This can be used to activate
-                the Python environment for instance.
+                execution of the discipline on the remote host.
+                This can be used to activate the Python environment for instance.
             transfer_input_names: The names of the discipline inputs that correspond
                 to files that must be transferred before execution.
             transfer_output_names: The names of the discipline outputs that correspond
                 to files that must be transferred after execution.
+            **ssh_client_parameters: The optional parameters to pass to
+                paramiko.SSHClient.
 
         Raises:
             KeyError: if the transfer_input_names or transfer_output_names arguments
@@ -161,13 +134,9 @@ class SSHDisciplineWrapper(MDODiscipline):
         self.__pickled_discipline = pickle.dumps(self.discipline)
         self.__pre_commands = pre_commands
         self.__hostname = hostname
-        self.__port = port
-        self.__username = username
-        self.__password = password
-        self.__ssh_public_key_path = Path(ssh_public_key_path)
         self.__remote_root_wd_path = Path(remote_workdir_path)
-        self.__set_authentication_method(authentication_method)
         self.__set_transfer_io_names(transfer_input_names, transfer_output_names)
+        self.__ssh_client_parameters = ssh_client_parameters
 
     def __set_transfer_io_names(
         self, transfer_input_names: Iterable[str], transfer_output_names: Iterable[str]
@@ -193,37 +162,6 @@ class SSHDisciplineWrapper(MDODiscipline):
 
         self.__transfer_output_names = transfer_output_names
 
-    def __set_authentication_method(
-        self, authentication_method: AuthenticationMethod
-    ) -> None:
-        """Check and set the authentication method.
-
-        Args:
-            authentication_method: The authentication method.
-
-        Raises:
-            ValueError: If the authentication method is inconsistent
-                with the given parameters.
-        """
-        if (
-            authentication_method == self.AuthenticationMethod.PASSWORD
-            and not self.__password
-        ):
-            raise ValueError(
-                "Password is not set while using password authentication for SSH connection."
-            )
-
-        if (
-            authentication_method == self.AuthenticationMethod.PUBLIC_KEY
-            and not self.__ssh_public_key_path
-        ):
-            raise ValueError(
-                "SSH public key is not set while using public key authentication"
-                " for SSH connection."
-            )
-
-        self.__authentication_method = authentication_method
-
     def _create_ssh_session(self) -> tuple[SSHClient, SFTPClient]:
         """Create a SSH session and the remote current workdir.
 
@@ -231,26 +169,12 @@ class SSHDisciplineWrapper(MDODiscipline):
             The SSH and SFTP clients.
         """
         ssh_client = SSHClient()
+        # Do not fail when connecting to a host for the first time.
         ssh_client.set_missing_host_key_policy(AutoAddPolicy())
+        # Read the ~/.ssh/known_hosts.
+        ssh_client.load_system_host_keys()
 
-        key_filename = None
-
-        if self.__authentication_method == self.AuthenticationMethod.PUBLIC_KEY:
-            ssh_client.load_system_host_keys()
-            key_filename = str(self.__ssh_public_key_path)
-
-        try:
-            ssh_client.connect(
-                self.__hostname,
-                self.__port,
-                self.__username,
-                allow_agent=False,
-                key_filename=key_filename,
-            )
-        except AuthenticationException:
-            raise AuthenticationException(
-                "The authentication failed. Check your password or your ssh key."
-            )
+        ssh_client.connect(self.__hostname, **self.__ssh_client_parameters)
 
         ssh_client.get_transport().set_keepalive(self.SSH_KEEP_ALIVE_INTERVAL)
         LOGGER.debug(
@@ -275,14 +199,12 @@ class SSHDisciplineWrapper(MDODiscipline):
         """
         start_time = time.time()
         ftp_client.put(
-            localpath=str(discipline_path),
-            remotepath=self.SERIALIZED_DISC_FILE_NAME,
-            confirm=True,
+            str(discipline_path),
+            self.SERIALIZED_DISC_FILE_NAME,
         )
         ftp_client.put(
-            localpath=str(input_path),
-            remotepath=self.SERIALIZED_INPUTS_FILE_NAME,
-            confirm=True,
+            str(input_path),
+            self.SERIALIZED_INPUTS_FILE_NAME,
         )
         LOGGER.debug(
             "Transfered serialized inputs to remote in %s seconds.",
@@ -303,9 +225,8 @@ class SSHDisciplineWrapper(MDODiscipline):
                     f"Input to transfer {data_name} is not a file or does not exist!"
                 )
             ftp_client.put(
-                localpath=str(local_path),
-                remotepath=local_path.name,
-                confirm=True,
+                str(local_path),
+                local_path.name,
             )
             LOGGER.debug(
                 "Transfered %s in %s seconds.",
@@ -324,8 +245,8 @@ class SSHDisciplineWrapper(MDODiscipline):
         """
         start_time = time.time()
         ftp_client.get(
-            remotepath=str(self.SERIALIZED_OUTPUTS_FILE_NAME),
-            localpath=self.__local_cwd_path / self.SERIALIZED_OUTPUTS_FILE_NAME,
+            str(self.SERIALIZED_OUTPUTS_FILE_NAME),
+            self.__local_cwd_path / self.SERIALIZED_OUTPUTS_FILE_NAME,
         )
         LOGGER.debug(
             "Transfered serialized outputs from remote in %s seconds.",
@@ -342,7 +263,7 @@ class SSHDisciplineWrapper(MDODiscipline):
             start_time = time.time()
             file_name = Path(self.local_data[data_name]).name
             local_path = str(self.__local_root_wd_path / file_name)
-            ftp_client.get(remotepath=file_name, localpath=local_path)
+            ftp_client.get(file_name, local_path)
             LOGGER.debug(
                 "Transfered input file %s to remote in %s seconds.",
                 local_path,
@@ -358,7 +279,7 @@ class SSHDisciplineWrapper(MDODiscipline):
         """
         start_time = time.time()
 
-        cmd_lines = [f"cd {self.__remote_cwd_path}"] + list(self.__pre_commands)
+        cmd_lines = [f"cd {self.__remote_cwd_path}", *list(self.__pre_commands)]
         cmd_lines += [
             f"gemseo-deserialize-run {self.__remote_cwd_path}"
             f" {self.SERIALIZED_DISC_FILE_NAME} {self.SERIALIZED_INPUTS_FILE_NAME}"
@@ -368,7 +289,7 @@ class SSHDisciplineWrapper(MDODiscipline):
         cmd = " && ".join(cmd_lines)
 
         LOGGER.debug("Commands = %s ", cmd)
-        stdin, f_stdout, f_stderr = ssh_client.exec_command(cmd)
+        _, f_stdout, f_stderr = ssh_client.exec_command(cmd)
 
         try:
             stdout = " ".join(f_stdout.readlines())
@@ -431,7 +352,7 @@ class SSHDisciplineWrapper(MDODiscipline):
         """Serializes the files needed for the remote execution.
 
         Returns:
-            The path to the serialized discipline, and the path to the serialized inputs.
+            The path to the serialized discipline and the path to the serialized inputs.
         """
         self.__local_cwd_path.mkdir()
 

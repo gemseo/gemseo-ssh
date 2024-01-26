@@ -15,25 +15,27 @@
 from __future__ import annotations
 
 import os
+import shutil
 import subprocess
 import venv
+from importlib.metadata import version
 from pathlib import Path
 from typing import NamedTuple
+from unittest.mock import MagicMock
 
 import pytest
+import tomli
+from filelock import FileLock
 from gemseo import create_discipline
 from gemseo.utils.comparisons import compare_dict_of_arrays
 from gemseo.utils.platform import PLATFORM_IS_WINDOWS
-from gemseo_ssh import wrap_discipline_with_ssh
-from gemseo_ssh.wrappers.ssh.ssh_wrapped_disc import SSHDisciplineWrapper
-from numpy import array
+from paramiko import SSHClient
 
-USERNAME = os.getlogin()
-PASSWORD = ""
-HOSTNAME = "localhost"
-AUTHENTICATION_METHOD = SSHDisciplineWrapper.AuthenticationMethod.PUBLIC_KEY
+from gemseo_ssh import wrap_discipline_with_ssh
+
 CURRENT_DIR_PATH = Path(__file__).parent
-SSH_KEY_PATH = Path(os.path.expanduser("~")) / ".ssh" / "id_rsa.pub"
+# The hostname does not matter since the ssh layer will be mocked.
+HOSTNAME = "dummy"
 
 if PLATFORM_IS_WINDOWS:
     VENV_REL_PATH_TO_PYTHON = "Scripts/python.exe"
@@ -45,6 +47,33 @@ else:
     SET_PYTHONPATH_CMD = "export PYTHONPATH={workdir_path}:$PYTHONPATH"
 
 
+class SFTP:
+    """Mock of the sftp client."""
+
+    mkdir = os.mkdir
+    chdir = os.chdir
+    get = staticmethod(shutil.copyfile)
+    put = staticmethod(shutil.copyfile)
+
+
+def exec_command(self, cmd: str) -> tuple:
+    """Mock the related command of the ssh client."""
+    os.system(cmd)
+    stdout = MagicMock()
+    stdout.channel.recv_exit_status = MagicMock(return_value=0)
+    return None, stdout, MagicMock()
+
+
+# Mock the ssh client.
+ssh_client = SSHClient
+ssh_client.set_missing_host_key_policy = MagicMock()
+ssh_client.load_system_host_keys = MagicMock()
+ssh_client.connect = MagicMock()
+ssh_client.get_transport = MagicMock()
+ssh_client.open_sftp = MagicMock(side_effect=SFTP)
+ssh_client.exec_command = exec_command
+
+
 class RemoteSetup(NamedTuple):
     """Settings for the remote."""
 
@@ -53,39 +82,60 @@ class RemoteSetup(NamedTuple):
     set_python_path_cmd: str
 
 
-def test_helper_discipline(tmp_path, monkeypatch):
+def test_helper_discipline(tmp_path):
     """Test execution."""
-    monkeypatch.syspath_prepend(CURRENT_DIR_PATH)
-    from discipline import DiscWithFiles
+    from .discipline import DiscWithFiles
 
     disc = DiscWithFiles()
 
     in_path = tmp_path / "in_f.txt"
     in_path.write_text("0")
 
-    out = disc.execute(
-        {
-            "in_file": str(in_path),
-            "discipline": "",
-        }
-    )
+    out = disc.execute({
+        "in_file": str(in_path),
+        "discipline": "",
+    })
+
     assert out["out_val"] == 1
 
     assert Path(out["out_file"]).exists()
 
 
-@pytest.fixture(scope="module")
-def remote_setup(tmp_path_factory):
-    """Create the virtual env for the remote connection on the local host."""
-    workdir_path = tmp_path_factory.mktemp("ssh-remote-workdir")
-    workdir_path = Path("/tmp/test_ssh")
-    venv_path = workdir_path / "venv"
-    venv.create(venv_path, with_pip=True)
+def create_venv(path: Path):
+    """Create a virtualenv with the same version of GEMSEO.
+
+    Args:
+        path: The path to the virtualenv root directory.
+    """
+    venv.create(path, with_pip=True)
+
+    gemseo_version = version("gemseo")
+
+    # Get the gitlab repository where develop distributions are stored.
+    with (CURRENT_DIR_PATH.parent / ".pip-tools.toml").open("rb") as fstream:
+        extra_index_url = tomli.load(fstream)["tool"]["pip-tools"]["extra_index_url"][0]
+
     subprocess.run(
-        f"{venv_path / VENV_REL_PATH_TO_PYTHON} -m pip install gemseo".split(),
+        f"{path / VENV_REL_PATH_TO_PYTHON} -m pip "
+        f"install --extra-index-url {extra_index_url} gemseo=={gemseo_version}".split(),
         check=True,
         capture_output=True,
     )
+
+
+@pytest.fixture(scope="session")
+def remote_setup(tmp_path_factory, worker_id):
+    """Create the virtual env for the remote connection on the local host."""
+    workdir_path = tmp_path_factory.mktemp("ssh-remote-workdir")
+    venv_path = workdir_path / "venv"
+
+    # Safely creates the venv when executing the tests in parallel.
+    if worker_id == "master":
+        create_venv(venv_path)
+    else:
+        with FileLock(str(workdir_path / "fixture.lock")):
+            create_venv(venv_path)
+
     return RemoteSetup(
         workdir_path,
         ACTIVATE_CMD.format(venv_path=venv_path),
@@ -99,16 +149,13 @@ def test_linux(tmp_path, remote_setup):
     pre_commands = [remote_setup.activation_cmd]
 
     remote_disc = wrap_discipline_with_ssh(
-        discipline=local_disc,
-        local_workdir_path=tmp_path,
-        hostname=HOSTNAME,
-        username=USERNAME,
-        password=PASSWORD,
-        ssh_public_key_path=SSH_KEY_PATH,
-        authentication_method=AUTHENTICATION_METHOD,
+        local_disc,
+        tmp_path,
+        HOSTNAME,
         remote_workdir_path=remote_setup.workdir_path.as_posix(),
         pre_commands=pre_commands,
     )
+
     data = remote_disc.execute()
 
     ref_data = local_disc.execute()
@@ -117,7 +164,8 @@ def test_linux(tmp_path, remote_setup):
 
 def test_linux_transfer(tmp_path, remote_setup, monkeypatch):
     """Test the remote execution on a Linux env with files transfers."""
-    # For the picling to work, the namespace of the discipline shall be accessible on the
+    # For the picling to work,
+    # the namespace of the discipline shall be accessible on the
     # remote host, this can be done by importing it absolutely the both
     # on local and remote hosts.
     monkeypatch.syspath_prepend(CURRENT_DIR_PATH)
@@ -135,13 +183,9 @@ def test_linux_transfer(tmp_path, remote_setup, monkeypatch):
     in_path.write_text("0")
 
     remote_disc = wrap_discipline_with_ssh(
-        discipline=local_disc,
-        local_workdir_path=tmp_path,
-        hostname=HOSTNAME,
-        username=USERNAME,
-        password=PASSWORD,
-        ssh_public_key_path=SSH_KEY_PATH,
-        authentication_method=AUTHENTICATION_METHOD,
+        local_disc,
+        tmp_path,
+        HOSTNAME,
         remote_workdir_path=remote_setup.workdir_path.as_posix(),
         pre_commands=pre_commands,
         # The discipline module is transfered along with its inputs,
@@ -149,6 +193,7 @@ def test_linux_transfer(tmp_path, remote_setup, monkeypatch):
         transfer_input_names=["in_file", "discipline"],
         transfer_output_names=["out_file"],
     )
+
     data = remote_disc.execute(
         {
             "in_file": str(in_path),
@@ -159,28 +204,3 @@ def test_linux_transfer(tmp_path, remote_setup, monkeypatch):
     out_file_path = Path(data["out_file"])
     assert out_file_path.exists()
     assert int(out_file_path.read_text("utf8")) == 1
-
-
-def test_ssh_styx():
-    """Test the execution on a Windows env."""
-    local_workdir_path = f"C:\\Users\\{USERNAME}\\Documents\\test_ssh"
-    distant_workdir = Path(f"C:\\Users\\{USERNAME}\\test_ssh\\")
-    authentication_method = SSHDisciplineWrapper.AuthenticationMethod.PUBLIC_KEY
-    expression = {"b": "2*a"}
-    pre_commands = [
-        f"C:\\Users\\{USERNAME}\\AppData\\Local\\miniconda3\\Scripts\\activate.bat",
-        "conda activate test_ssh",
-    ]
-    analytic_disc = create_discipline("AnalyticDiscipline", expressions=expression)
-    new_disc = wrap_discipline_with_ssh(
-        discipline=analytic_disc,
-        local_workdir_path=local_workdir_path,
-        hostname="styx",
-        username=USERNAME,
-        ssh_public_key_path=SSH_KEY_PATH,
-        authentication_method=authentication_method,
-        remote_workdir_path=distant_workdir,
-        pre_commands=pre_commands,
-    )
-    data = new_disc.execute({"a": array([1.0])})
-    assert data["b"] == 2.0
