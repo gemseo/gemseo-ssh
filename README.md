@@ -33,10 +33,9 @@ analytic_disc = create_discipline("AnalyticDiscipline", expressions={"y":"2*x+1"
 remote_discipline = wrap_discipline_with_ssh(
     discipline=analytic_disc,
     hostname="remote_hostname",
-     local_workdir_path= ".",
+    local_workdir_path= ".",
     remote_workdir_path="~/test_ssh",
-    ssh_public_key="C:\\Users\\my_user_name\\.ssh\\id_rsa.pub",
-    authentication_method="public_key"
+    pkey="C:\\Users\\my_user_name\\.ssh\\id_rsa",
 )
 data = remote_discipline.execute({"x": array([1.0])})
 ```
@@ -50,10 +49,7 @@ from gemseo_ssh import wrap_discipline_with_ssh
 
 disciplines = create_discipline(["SobieskiPropulsion", "SobieskiAerodynamics",
                                  "SobieskiMission",  "SobieskiStructure"])
-mda = create_mda(
-    "MDAChain",
-    disciplines,
-)
+mda = create_mda("MDAChain", disciplines)
 remote_discipline = wrap_discipline_with_ssh(
     discipline=mda,
     hostname="remote_hostname",
@@ -61,7 +57,6 @@ remote_discipline = wrap_discipline_with_ssh(
     remote_workdir_path="~/test_ssh",
     username="my_username",
     password="my_password",
-    authentication_method="password"
 )
 
 # Note that the default_inputs of the SSH discipline are the same
