@@ -51,6 +51,7 @@ def wrap_discipline_with_ssh(
         local_workdir_path: The path to the work directory on the local host.
         hostname: The name of the remote host to delegate the execution.
         remote_workdir_path: The path to the work directory on the remote host.
+            If empty, use the default ssh remote directory (usually user's home).
         pre_commands: The commands run on the remote host before deserialization and
             execution of the discipline on the remote host. This can be used to activate
             the Python environment for instance.
