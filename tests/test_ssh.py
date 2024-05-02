@@ -18,22 +18,22 @@ import os
 import shutil
 import subprocess
 import venv
-from importlib.metadata import version
 from pathlib import Path
 from typing import NamedTuple
 from unittest.mock import MagicMock
 
 import pytest
-import tomli
 from filelock import FileLock
 from gemseo import create_discipline
 from gemseo.utils.comparisons import compare_dict_of_arrays
 from gemseo.utils.platform import PLATFORM_IS_WINDOWS
-from paramiko import SSHClient
+from paramiko import SSHClient as ParamikoSSHCLIENT
 
 from gemseo_ssh import wrap_discipline_with_ssh
+from gemseo_ssh.wrappers.ssh.paramiko import SSHClient as GemseoSSHClient
 
 CURRENT_DIR_PATH = Path(__file__).parent
+
 # The hostname does not matter since the ssh layer will be mocked.
 HOSTNAME = "dummy"
 
@@ -65,13 +65,12 @@ def exec_command(self, cmd: str) -> tuple:
 
 
 # Mock the ssh client.
-ssh_client = SSHClient
-ssh_client.set_missing_host_key_policy = MagicMock()
-ssh_client.load_system_host_keys = MagicMock()
-ssh_client.connect = MagicMock()
-ssh_client.get_transport = MagicMock()
-ssh_client.open_sftp = MagicMock(side_effect=SFTP)
-ssh_client.exec_command = exec_command
+ParamikoSSHCLIENT.set_missing_host_key_policy = MagicMock()
+ParamikoSSHCLIENT.load_system_host_keys = MagicMock()
+ParamikoSSHCLIENT.connect = MagicMock()
+ParamikoSSHCLIENT.get_transport = MagicMock()
+ParamikoSSHCLIENT.exec_command = exec_command
+GemseoSSHClient.open_sftp = MagicMock(side_effect=SFTP)
 
 
 class RemoteSetup(NamedTuple):
@@ -109,15 +108,10 @@ def create_venv(path: Path):
     """
     venv.create(path, with_pip=True)
 
-    gemseo_version = version("gemseo")
-
-    # Get the gitlab repository where develop distributions are stored.
-    with (CURRENT_DIR_PATH.parent / ".pip-tools.toml").open("rb") as fstream:
-        extra_index_url = tomli.load(fstream)["tool"]["pip-tools"]["extra_index_url"][0]
+    gemseo_version = "gemseo@git+https://gitlab.com/gemseo/dev/gemseo.git@develop"
 
     subprocess.run(
-        f"{path / VENV_REL_PATH_TO_PYTHON} -m pip "
-        f"install --extra-index-url {extra_index_url} gemseo=={gemseo_version}".split(),
+        f"{path / VENV_REL_PATH_TO_PYTHON} -m pip " f"install {gemseo_version}".split(),
         check=True,
         capture_output=True,
     )
