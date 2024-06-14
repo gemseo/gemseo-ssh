@@ -26,6 +26,12 @@ The format is based on
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+# Develop
+
+## Added
+
+- Support to discipline linearization, so Jacobians can be computed via SSH.
+
 # Version 1.0.0 (July 2023)
 
 First version.

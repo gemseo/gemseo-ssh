@@ -25,6 +25,7 @@ from unittest.mock import MagicMock
 import pytest
 from filelock import FileLock
 from gemseo import create_discipline
+from gemseo.problems.topology_optimization.volume_fraction_disc import VolumeFraction
 from gemseo.utils.comparisons import compare_dict_of_arrays
 from gemseo.utils.platform import PLATFORM_IS_WINDOWS
 from paramiko import SSHClient as ParamikoSSHCLIENT
@@ -198,3 +199,55 @@ def test_linux_transfer(tmp_path, remote_setup, monkeypatch):
     out_file_path = Path(data["out_file"])
     assert out_file_path.exists()
     assert int(out_file_path.read_text("utf8")) == 1
+
+
+@pytest.mark.parametrize("compute_all_jacobians", [False, True])
+@pytest.mark.parametrize("execute", [False, True])
+def test_linearize(tmp_path, remote_setup, compute_all_jacobians, execute) -> None:
+    """Test the linearization of the wrapped discipline."""
+
+    local_disc = create_discipline("SobieskiMission")
+    pre_commands = [remote_setup.activation_cmd]
+    remote_disc = wrap_discipline_with_ssh(
+        local_disc,
+        tmp_path,
+        HOSTNAME,
+        remote_workdir_path=remote_setup.workdir_path.as_posix(),
+        pre_commands=pre_commands,
+    )
+
+    if not compute_all_jacobians:
+        remote_disc.add_differentiated_inputs(["x_shared"])
+        remote_disc.add_differentiated_outputs(["y_4"])
+        local_disc.add_differentiated_inputs(["x_shared"])
+        local_disc.add_differentiated_outputs(["y_4"])
+
+    remote_disc.linearize(compute_all_jacobians=compute_all_jacobians, execute=execute)
+    local_disc.linearize(compute_all_jacobians=compute_all_jacobians, execute=execute)
+
+    data = remote_disc.jac
+    assert "y_4" in data
+    assert compare_dict_of_arrays(data, local_disc.jac)
+
+
+def test_linearize_at_exe(tmp_path, remote_setup) -> None:
+    """Test the linearization at execute."""
+
+    # This discipline linearizes at exe
+    local_disc = VolumeFraction()
+    pre_commands = [remote_setup.activation_cmd]
+
+    remote_disc = wrap_discipline_with_ssh(
+        local_disc,
+        tmp_path,
+        HOSTNAME,
+        remote_workdir_path=remote_setup.workdir_path.as_posix(),
+        pre_commands=pre_commands,
+    )
+
+    remote_disc.execute()
+    local_disc.execute()
+
+    data = remote_disc.jac
+    assert "volume fraction" in data
+    assert compare_dict_of_arrays(data, local_disc.jac)

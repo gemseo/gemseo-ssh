@@ -27,12 +27,26 @@ dependencies = [
 [project.optional-dependencies]
 test = [
     "covdefaults",
-    "pytest <8",
+    "pytest <9",
     "pytest-cov",
     "pytest-xdist",
     "filelock",
     "mock-ssh-server",
     "tomli",
+]
+doc = [
+    "black",
+    "griffe-inherited-docstrings",
+    "markdown-exec[ansi]",
+    "mike",
+    "mkdocs-bibtex",
+    "mkdocs-gallery",
+    "mkdocs-gen-files",
+    "mkdocs-include-markdown-plugin",
+    "mkdocs-literate-nav",
+    "mkdocs-material",
+    "mkdocs-section-index",
+    "mkdocstrings[python]",
 ]
 
 [project.urls]
