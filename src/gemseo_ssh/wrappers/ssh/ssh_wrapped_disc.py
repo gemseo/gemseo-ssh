@@ -32,6 +32,9 @@ from gemseo_ssh.wrappers.ssh.paramiko import SSHClient
 if TYPE_CHECKING:
     from collections.abc import Iterable
 
+    from gemseo.typing import JacobianData
+    from gemseo.typing import StrKeyMapping
+
 
 LOGGER = getLogger(__name__)
 
@@ -57,6 +60,9 @@ class SSHDisciplineWrapper(MDODiscipline):
 
     SSH_KEEP_ALIVE_INTERVAL: ClassVar[int] = 600
     """The time interval in seconds to keep the alive the ssh connection."""
+
+    __execute_at_linearize: bool
+    """Whether to execute the discipline at linearization."""
 
     __discipline: MDODiscipline
     """The discipline to execute on the remote host."""
@@ -133,6 +139,7 @@ class SSHDisciplineWrapper(MDODiscipline):
         self.__remote_root_wd_path = Path(remote_workdir_path)
         self.__set_transfer_io_names(transfer_input_names, transfer_output_names)
         self.__ssh_client_parameters = ssh_client_parameters
+        self.__execute_at_linearize = False
 
     def __set_transfer_io_names(
         self,
@@ -214,19 +221,31 @@ class SSHDisciplineWrapper(MDODiscipline):
             self.local_data[data_name] = local_path.as_posix()
             sftp_client.get(file_name, local_path)
 
-    def _execute_on_remote(self, ssh_client: SSHClient) -> None:
+    def _execute_on_remote(
+        self,
+        ssh_client: SSHClient,
+        linearize: bool = False,
+    ) -> None:
         """Execute the gemseo-deserialize-run command on the remote host.
 
         Args:
             ssh_client: The SSH client.
+            linearize: wheather to linearize the discipline.
         """
+        linearization_options = ""
+        if linearize:
+            linearization_options = "--linearize"
+            if self.__execute_at_linearize:
+                linearization_options += " --execute-at-linearize"
+
         cmd_lines = [
             f"cd {self.__remote_cwd_path.as_posix()}",
             *list(self.__pre_commands),
             f"gemseo-deserialize-run {self.__remote_cwd_path.as_posix()}"
             f" {self.SERIALIZED_DISC_FILE_NAME} {self.SERIALIZED_INPUTS_FILE_NAME}"
-            f" {self.SERIALIZED_OUTPUTS_FILE_NAME}",
+            f" {self.SERIALIZED_OUTPUTS_FILE_NAME} {linearization_options}",
         ]
+
         ssh_client.execute(cmd_lines)
 
     def _handle_outputs(self) -> None:
@@ -240,7 +259,7 @@ class SSHDisciplineWrapper(MDODiscipline):
         with outputs_path.open("rb") as output_file:
             output_data = pickle.load(output_file)
 
-        if isinstance(output_data, tuple):
+        if isinstance(output_data[0], BaseException):
             error, trace = output_data
             LOGGER.error(
                 "Discipline %s execution failed in %s",
@@ -257,7 +276,9 @@ class SSHDisciplineWrapper(MDODiscipline):
             self.__local_cwd_path,
         )
 
-        self.local_data.update(output_data)
+        self.local_data.update(output_data[0])
+        if output_data[1]:
+            self.jac = output_data[1]
 
     def __create_cwd_paths(self, sftp_client: SFTPClient) -> None:
         """Create the unique current local and remote work directory paths."""
@@ -267,8 +288,18 @@ class SSHDisciplineWrapper(MDODiscipline):
         self.__remote_cwd_path = self.__remote_root_wd_path / dir_name
         sftp_client.mkdir(self.__remote_cwd_path)
 
-    def _write_serialized_files(self) -> tuple[Path, Path]:
+    def _write_serialized_files(
+        self,
+        differentiated_inputs: Iterable[str] = (),
+        differentiated_outputs: Iterable[str] = (),
+    ) -> tuple[Path, Path]:
         """Serialize the files needed for the remote execution.
+
+        Args:
+            differentiated_inputs: If the linearization is performed, the
+                inputs that define the rows of the jacobian.
+            differentiated_outputs: If the linearization is performed, the
+                outputs that define the columns of the jacobian.
 
         Returns:
             The path to the serialized discipline and the path to the serialized inputs.
@@ -287,11 +318,52 @@ class SSHDisciplineWrapper(MDODiscipline):
             local_data = self.local_data
 
         inputs_path = self.__local_cwd_path / self.SERIALIZED_INPUTS_FILE_NAME
-        inputs_path.write_bytes(pickle.dumps(local_data))
+        inputs_path.write_bytes(
+            pickle.dumps((local_data, differentiated_inputs, differentiated_outputs))
+        )
 
         return discipline_path, inputs_path
 
     def _run(self) -> None:
+        self._run_or_compute_jac(False)
+
+    def linearize(  # noqa: D102
+        self,
+        input_data: StrKeyMapping | None = None,
+        compute_all_jacobians: bool = False,
+        execute: bool = True,
+    ) -> JacobianData:
+        self.__execute_at_linearize = execute
+        return super().linearize(
+            input_data=input_data,
+            compute_all_jacobians=compute_all_jacobians,
+            execute=False,
+        )
+
+    def _compute_jacobian(
+        self,
+        inputs: Iterable[str] = (),
+        outputs: Iterable[str] = (),
+    ) -> None:
+        self._run_or_compute_jac(
+            True, differentiated_inputs=inputs, differentiated_outputs=outputs
+        )
+
+    def _run_or_compute_jac(
+        self,
+        linearize: bool,
+        differentiated_inputs: Iterable[str] = (),
+        differentiated_outputs: Iterable[str] = (),
+    ) -> None:
+        """Executes or linearizes the discipline.
+
+        Args:
+            linearize: wheather to linearize the discipline.
+            differentiated_inputs: If the linearization is performed, the
+                inputs that define the rows of the jacobian.
+            differentiated_outputs: If the linearization is performed, the
+                outputs that define the columns of the jacobian.
+        """
         ssh_client = SSHClient.create_connection(
             self.__hostname,
             self.SSH_KEEP_ALIVE_INTERVAL,
@@ -300,13 +372,15 @@ class SSHDisciplineWrapper(MDODiscipline):
 
         sftp_client = ssh_client.open_sftp()
         self.__create_cwd_paths(sftp_client)
-        serialized_disc_path, serialized_inputs_path = self._write_serialized_files()
+        serialized_disc_path, serialized_inputs_path = self._write_serialized_files(
+            differentiated_inputs, differentiated_outputs
+        )
         sftp_client.chdir(self.__remote_cwd_path)
         self._send_serialized_files(
             sftp_client, serialized_disc_path, serialized_inputs_path
         )
         self._send_transfer_inputs(sftp_client)
-        self._execute_on_remote(ssh_client)
+        self._execute_on_remote(ssh_client, linearize)
         self._retrieve_serialized_outputs(sftp_client)
         self._handle_outputs()
         self._retrieve_transfer_outputs(sftp_client)

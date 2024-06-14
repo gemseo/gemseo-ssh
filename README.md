@@ -7,7 +7,33 @@ http://creativecommons.org/licenses/by-sa/4.0/ or send a letter to Creative
 Commons, PO Box 1866, Mountain View, CA 94042, USA.
 -->
 
-# Usage
+# gemseo-ssh
+
+[![PyPI - License](https://img.shields.io/pypi/l/gemseo)](https://www.gnu.org/licenses/lgpl-3.0.en.html)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/gemseo-ssh)](https://pypi.org/project/gemseo-ssh/)
+[![PyPI](https://img.shields.io/pypi/v/gemseo-ssh)](https://pypi.org/project/gemseo-ssh/)
+[![Codecov branch](https://img.shields.io/codecov/c/gitlab/gemseo:dev/gemseo-ssh/develop)](https://app.codecov.io/gl/gemseo:dev/gemseo-ssh)
+
+## Overview
+
+SSH plugin for GEMSEO
+
+## Installation
+
+Install the latest stable version with `pip install gemseo-ssh`.
+
+Install the development version with
+`pip install gemseo-ssh@git+https://gitlab.com/gemseo/dev/gemseo-ssh.git@develop`.
+
+See [pip](https://pip.pypa.io/en/stable/getting-started/) for more information.
+
+## Requirements
+
+The same version of GEMSEO must be installed on the remote and local
+machines, but not the GEMSEO-SSH plugin, which is only required on the
+local machine.
+
+## Usage
 
 This GEMSEO SSH plugin allows to delegate the execution of a discipline
 or any sub-process to a (such as an MDA or MDOScenario, or MDOChain) to
@@ -18,9 +44,18 @@ multiple systems (Linux, Windows, MacOS).
 
 It can be combined with GEMSEO\'s job scheduler interface to send
 disciplines to a remote to a remote HPC and add them to the job
-scheduler queue. See the gemseo.wrap_discipline_in_job_scheduler method.
+scheduler queue.
+See the `gemseo.wrap_discipline_in_job_scheduler` method.
 
-# Examples
+The SSH connection is handled with [paramiko](https://www.paramiko.org).
+The settings for the SSH connections are passed as optional arguments
+via the constructor of `SSHDisciplineWrapper` directly to `paramiko`'s SSH client.
+Please refer to
+[paramiko's `SSHClient` doc](https://docs.paramiko.org/en/latest/api/client.html#paramiko.client.SSHClient.connect)
+for details on the
+connection options.
+
+## Examples
 
 For example, we can submit a discipline to a remote host like this:
 
@@ -64,40 +99,16 @@ remote_discipline = wrap_discipline_with_ssh(
 couplings = remote_discipline.execute()
 ```
 
-# Requirements
+## Bugs and questions
 
-The same version of GEMSEO must be installed on the remote and local
-machines, but not the GEMSEO-SSH plugin, which is only required on the
-local machine.
-
-The SSH keys must be generated and exchanged in order to establish the
-SSH connections without a password. See for example the ssh-copy-id
-utility. Otherwise, the password and login must be written in clear text
-in the user script, which is not good practice.
-
-# Bugs/Questions
-
-Please use the gitlab issue tracker at
-<https://gitlab.com/gemseo/dev/gemseo-ssh/-/issues>
+Please use the [gitlab issue tracker](https://gitlab.com/gemseo/dev/gemseo-ssh/-/issues)
 to submit bugs or questions.
 
-# License
+## Contributing
 
-The **gemseo-ssh** source code is distributed under the GNU LGPL v3.0 license.
-A copy of it can be found in the LICENSE.txt file.
-The GNU LGPL v3.0 license is an exception to the GNU GPL v3.0 license.
-A copy of the GNU GPL v3.0 license can be found in the LICENSES folder.
+See the [contributing section of GEMSEO](https://gemseo.readthedocs.io/en/stable/software/developing.html#dev).
 
-The **gemseo-ssh** examples are distributed under the BSD 0-Clause, a permissive
-license that allows to copy paste the code of examples without preserving the
-copyright mentions.
-
-The **gemseo-ssh** documentation is distributed under the CC BY-SA 4.0 license.
-
-The **gemseo-ssh** product depends on other software which have various licenses.
-The list of dependencies with their licenses is given in the CREDITS.md file.
-
-# Contributors
+## Contributors
 
 - Jean-Christophe Giret
 - François Gallard
