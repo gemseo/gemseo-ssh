@@ -152,7 +152,7 @@ class SSHClient(_SSHClient):
                 f"stdout is {stdout}.\n"
                 f"stderr is {stderr}."
             )
-            raise RuntimeError(msg)
+            LOGGER.error(msg)
 
     def open_sftp(self) -> SFTPClient:  # noqa: D102
         transport = self.get_transport()
