@@ -16,7 +16,7 @@ contourpy==1.2.1
     # via matplotlib
 covdefaults==2.3.0
     # via gemseo-ssh (pyproject.toml)
-coverage==7.5.3
+coverage==7.5.4
     # via
     #   covdefaults
     #   pytest-cov
@@ -34,7 +34,7 @@ execnet==2.1.1
     # via pytest-xdist
 fastjsonschema==2.19.1
     # via gemseo
-filelock==3.15.3
+filelock==3.15.4
     # via gemseo-ssh (pyproject.toml)
 fonttools==4.53.0
     # via matplotlib
