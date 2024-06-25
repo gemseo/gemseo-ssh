@@ -63,7 +63,7 @@ h5py==3.10.0
     # via gemseo
 idna==3.7
     # via requests
-importlib-metadata==7.2.1
+importlib-metadata==8.0.0
     # via
     #   markdown
     #   mike
@@ -269,7 +269,7 @@ scipy==1.12.0
     #   gemseo
     #   pydoe3
     #   scikit-learn
-setuptools==70.1.0
+setuptools==70.1.1
     # via mkdocs-bibtex
 six==1.16.0
     # via
