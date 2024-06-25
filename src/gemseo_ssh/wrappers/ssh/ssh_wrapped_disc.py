@@ -241,7 +241,7 @@ class SSHDisciplineWrapper(MDODiscipline):
         cmd_lines = [
             f"cd {self.__remote_cwd_path.as_posix()}",
             *list(self.__pre_commands),
-            f"gemseo-deserialize-run {self.__remote_cwd_path.as_posix()}"
+            f"gemseo-deserialize-run"
             f" {self.SERIALIZED_DISC_FILE_NAME} {self.SERIALIZED_INPUTS_FILE_NAME}"
             f" {self.SERIALIZED_OUTPUTS_FILE_NAME} {linearization_options}",
         ]
