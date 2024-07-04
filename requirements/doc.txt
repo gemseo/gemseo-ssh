@@ -10,7 +10,7 @@ black==24.4.2
     # via gemseo-ssh (pyproject.toml)
 bracex==2.4
     # via wcmatch
-certifi==2024.6.2
+certifi==2024.7.4
     # via requests
 cffi==1.16.0
     # via
@@ -43,7 +43,7 @@ fastjsonschema==2.19.1
     # via gemseo
 fonttools==4.53.0
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@6a27d06026d3ae62a85226c49ab184022e72a91c
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@523ffd87ad18139a4c838fbba8d422e171eb148b
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
@@ -300,7 +300,7 @@ tzdata==2024.1
     # via pandas
 urllib3==2.2.2
     # via requests
-validators==0.29.0
+validators==0.30.0
     # via mkdocs-bibtex
 verspec==0.1.0
     # via mike
