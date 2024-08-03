@@ -10,7 +10,7 @@ bcrypt==4.2.0
     # via paramiko
 black==24.8.0
     # via gemseo-ssh (pyproject.toml)
-bracex==2.4
+bracex==2.5
     # via wcmatch
 certifi==2024.7.4
     # via requests
