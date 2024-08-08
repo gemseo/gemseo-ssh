@@ -2,7 +2,7 @@
 #    uv pip compile --extra doc --constraint requirements/test-constraints.in -o requirements/doc.txt --python-version 3.9 pyproject.toml
 annotated-types==0.7.0
     # via pydantic
-babel==2.15.0
+babel==2.16.0
     # via mkdocs-material
 backports-strenum==1.3.1
     # via griffe
@@ -45,7 +45,7 @@ fastjsonschema==2.20.0
     # via gemseo
 fonttools==4.53.1
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@e3f6d5e344278f2735f04cf6bc5f11982cbb5f36
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@1de9ffdb6e0c95805a4b9b4acc27a81426160a90
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
