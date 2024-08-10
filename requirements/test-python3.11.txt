@@ -157,7 +157,9 @@ tenacity==9.0.0
 threadpoolctl==3.5.0
     # via scikit-learn
 tomli==2.0.1
-    # via gemseo-ssh (pyproject.toml)
+    # via
+    #   gemseo-ssh (pyproject.toml)
+    #   coverage
 tqdm==4.66.5
     # via gemseo
 typing-extensions==4.12.2
