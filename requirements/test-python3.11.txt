@@ -38,7 +38,7 @@ filelock==3.15.4
     # via gemseo-ssh (pyproject.toml)
 fonttools==4.53.1
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@d5dd72d81583798967b772abf8d6f6ccafb7b2ec
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@762888502768a54747d6e6fba28263d337d7af3b
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
