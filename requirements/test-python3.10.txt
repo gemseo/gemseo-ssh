@@ -40,7 +40,7 @@ filelock==3.15.4
     # via gemseo-ssh (pyproject.toml)
 fonttools==4.53.1
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@762888502768a54747d6e6fba28263d337d7af3b
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@dbaf86a0e1d7d34580d0d63f8fb54ff708fe5703
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
@@ -62,7 +62,7 @@ kiwisolver==1.4.5
     # via matplotlib
 markupsafe==2.1.5
     # via jinja2
-matplotlib==3.9.1.post1
+matplotlib==3.9.2
     # via gemseo
 mock-ssh-server==0.9.1
     # via gemseo-ssh (pyproject.toml)
