@@ -182,7 +182,7 @@ packaging==24.1
     #   mkdocs
     #   mkdocs-gallery
     #   plotly
-paginate==0.5.6
+paginate==0.5.7
     # via mkdocs-material
 pandas==2.2.2
     # via gemseo
@@ -230,7 +230,7 @@ pynacl==1.5.0
     # via paramiko
 pypandoc==1.13
     # via mkdocs-bibtex
-pyparsing==3.1.2
+pyparsing==3.1.4
     # via
     #   matplotlib
     #   mike
