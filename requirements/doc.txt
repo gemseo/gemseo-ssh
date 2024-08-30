@@ -10,7 +10,7 @@ black==24.8.0
     # via gemseo-ssh (pyproject.toml)
 bracex==2.5
     # via wcmatch
-certifi==2024.7.4
+certifi==2024.8.30
     # via requests
 cffi==1.17.0
     # via
@@ -43,7 +43,7 @@ fastjsonschema==2.20.0
     # via gemseo
 fonttools==4.53.1
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@fd094a7881053ddad002b98ac1dea857fb63cbce
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@d21d61a5e86094df597a1aaca23dd4dff24ce910
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
@@ -110,7 +110,7 @@ mergedeep==1.3.4
     #   mkdocs-get-deps
 mike==2.1.3
     # via gemseo-ssh (pyproject.toml)
-mkdocs==1.6.0
+mkdocs==1.6.1
     # via
     #   mike
     #   mkdocs-autorefs
@@ -123,7 +123,9 @@ mkdocs==1.6.0
     #   mkdocs-section-index
     #   mkdocstrings
 mkdocs-autorefs==1.1.0
-    # via mkdocstrings
+    # via
+    #   mkdocstrings
+    #   mkdocstrings-python
 mkdocs-bibtex==2.16.1
     # via gemseo-ssh (pyproject.toml)
 mkdocs-gallery==0.10.1
@@ -148,7 +150,7 @@ mkdocstrings==0.25.2
     # via
     #   gemseo-ssh (pyproject.toml)
     #   mkdocstrings-python
-mkdocstrings-python==1.10.8
+mkdocstrings-python==1.10.9
     # via mkdocstrings
 mpmath==1.3.0
     # via sympy
