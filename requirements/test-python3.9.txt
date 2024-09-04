@@ -6,7 +6,7 @@ bcrypt==4.2.0
     # via paramiko
 certifi==2024.8.30
     # via requests
-cffi==1.17.0
+cffi==1.17.1
     # via
     #   cryptography
     #   pynacl
@@ -26,7 +26,7 @@ cycler==0.12.1
     # via matplotlib
 dill==0.3.8
     # via openturns
-docstring-inheritance==2.2.0
+docstring-inheritance==2.2.1
     # via gemseo
 et-xmlfile==1.1.0
     # via openpyxl
@@ -40,7 +40,7 @@ filelock==3.15.4
     # via gemseo-ssh (pyproject.toml)
 fonttools==4.53.1
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@9f865f9a76c9e922482d8d095525d7f6b2cbf471
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@48d3df20b409f768d50e010eafd8c741fdd79713
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
@@ -60,7 +60,7 @@ jinja2==3.1.4
     # via gemseo
 joblib==1.4.2
     # via scikit-learn
-kiwisolver==1.4.6
+kiwisolver==1.4.7
     # via matplotlib
 markupsafe==2.1.5
     # via jinja2
@@ -106,7 +106,7 @@ pillow==10.4.0
     # via
     #   gemseo
     #   matplotlib
-plotly==5.23.0
+plotly==5.24.0
     # via gemseo
 pluggy==1.5.0
     # via pytest
@@ -118,7 +118,7 @@ pydantic==2.8.2
     # via gemseo
 pydantic-core==2.20.1
     # via pydantic
-pydoe3==1.0.3
+pydoe3==1.0.4
     # via gemseo
 pynacl==1.5.0
     # via paramiko
@@ -154,7 +154,7 @@ six==1.16.0
     # via python-dateutil
 strenum==0.4.15
     # via gemseo
-sympy==1.13.1
+sympy==1.13.2
     # via gemseo
 tenacity==9.0.0
     # via plotly
@@ -178,7 +178,7 @@ urllib3==2.2.2
     # via requests
 xdsmjs==2.0.0
     # via gemseo
-xxhash==3.4.1
+xxhash==3.5.0
     # via gemseo
 zipp==3.20.1
     # via importlib-resources
