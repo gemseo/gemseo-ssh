@@ -34,7 +34,7 @@ execnet==2.1.1
     # via pytest-xdist
 fastjsonschema==2.20.0
     # via gemseo
-filelock==3.16.0
+filelock==3.16.1
     # via gemseo-ssh (pyproject.toml)
 fonttools==4.53.1
     # via matplotlib
