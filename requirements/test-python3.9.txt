@@ -30,6 +30,8 @@ docstring-inheritance==2.2.1
     # via gemseo
 et-xmlfile==1.1.0
     # via openpyxl
+eval-type-backport==0.2.0
+    # via gemseo
 exceptiongroup==1.2.2
     # via pytest
 execnet==2.1.1
@@ -38,9 +40,9 @@ fastjsonschema==2.20.0
     # via gemseo
 filelock==3.16.1
     # via gemseo-ssh (pyproject.toml)
-fonttools==4.53.1
+fonttools==4.54.0
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@64e0bec4742773523836c1693aafd97c8166a7bb
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@0a068bd2d65cb2e4349a7cdc3986a0f8acd6c6a4
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
@@ -174,7 +176,7 @@ typing-extensions==4.12.2
     #   gemseo
     #   pydantic
     #   pydantic-core
-tzdata==2024.1
+tzdata==2024.2
     # via pandas
 urllib3==2.2.3
     # via requests
