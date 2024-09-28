@@ -8,7 +8,7 @@ bcrypt==4.2.0
     # via paramiko
 black==24.8.0
     # via gemseo-ssh (pyproject.toml)
-bracex==2.5
+bracex==2.5.post1
     # via wcmatch
 certifi==2024.8.30
     # via requests
@@ -45,7 +45,7 @@ fastjsonschema==2.20.0
     # via gemseo
 fonttools==4.54.1
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@2f02c9a6c876f8e91eb6dfa9644655afa0b40d63
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@9d95374227263e165606c5df2064a57ef4c97e98
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
@@ -226,7 +226,7 @@ pygments==2.18.0
     #   pygments-ansi-color
 pygments-ansi-color==0.3.0
     # via markdown-exec
-pymdown-extensions==10.10.2
+pymdown-extensions==10.11
     # via
     #   markdown-exec
     #   mkdocs-material
@@ -309,7 +309,7 @@ validators==0.34.0
     # via mkdocs-bibtex
 verspec==0.1.0
     # via mike
-watchdog==5.0.2
+watchdog==5.0.3
     # via mkdocs
 wcmatch==10.0
     # via mkdocs-include-markdown-plugin
