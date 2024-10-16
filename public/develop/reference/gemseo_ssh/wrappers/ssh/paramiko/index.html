@@ -18,7 +18,7 @@
       
       
       <link rel="icon" href="../../../../../images/favicon.ico">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.41">
     
     
       
@@ -26,7 +26,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.8c3ca2c6.min.css">
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.0253249f.min.css">
       
         
         <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.06af60db.min.css">
@@ -1027,6 +1027,11 @@
 
 
 
+
+
+
+
+
   <div class="doc doc-children">
 
 
@@ -1054,6 +1059,11 @@
 
         <p>An improved SFTPClient.</p>
 <p>With timing info via logging and better error messages.</p>
+
+
+
+
+
 
 
 
@@ -1097,6 +1107,11 @@
 
 
 
+
+
+
+
+
   <div class="doc doc-children">
 
 
@@ -1134,7 +1149,7 @@
 <p><span class="doc-section-title">Parameters:</span></p>
     <ul>
         <li class="doc-section-item field-body">
-          <b><code>hostname</code></b>
+            <b><code>hostname</code></b>
               (<code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>)
           –
           <div class="doc-md-description">
@@ -1142,7 +1157,7 @@
           </div>
         </li>
         <li class="doc-section-item field-body">
-          <b><code>keep_alive_interval</code></b>
+            <b><code>keep_alive_interval</code></b>
               (<code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>)
           –
           <div class="doc-md-description">
@@ -1150,7 +1165,7 @@
           </div>
         </li>
         <li class="doc-section-item field-body">
-          <b><code>**connection_options</code></b>
+            <b><code>**connection_options</code></b>
               (<code><a class="autorefs autorefs-external" title="typing.Any" href="https://docs.python.org/3/library/typing.html#typing.Any">Any</a></code>, default:
                   <code>{}</code>
 )
@@ -1257,7 +1272,7 @@
 <p><span class="doc-section-title">Parameters:</span></p>
     <ul>
         <li class="doc-section-item field-body">
-          <b><code>cmd_lines</code></b>
+            <b><code>cmd_lines</code></b>
               (<code><a class="autorefs autorefs-external" title="collections.abc.Sequence" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence">Sequence</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>]</code>)
           –
           <div class="doc-md-description">
@@ -1329,7 +1344,7 @@
     <span class="k">try</span><span class="p">:</span>
         <span class="n">stdout</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">f_stdout</span><span class="o">.</span><span class="n">readlines</span><span class="p">())</span>
         <span class="n">stderr</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">f_stderr</span><span class="o">.</span><span class="n">readlines</span><span class="p">())</span>
-    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="k">except</span> <span class="ne">BaseException</span><span class="p">:</span>  <span class="c1"># noqa: BLE001</span>
         <span class="n">stdout</span> <span class="o">=</span> <span class="s2">&quot;stdout not decoded&quot;</span>
         <span class="n">stderr</span> <span class="o">=</span> <span class="s2">&quot;stderr not decoded&quot;</span>
 
@@ -1377,7 +1392,7 @@
 <p><span class="doc-section-title">Parameters:</span></p>
     <ul>
         <li class="doc-section-item field-body">
-          <b><code>logging_prefix</code></b>
+            <b><code>logging_prefix</code></b>
               (<code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>)
           –
           <div class="doc-md-description">
@@ -1469,7 +1484,7 @@
     <script id="__config" type="application/json">{"base": "../../../../..", "features": ["navigation.tabs", "navigation.instant", "navigation.indexes"], "search": "../../../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../../../../assets/javascripts/bundle.525ec568.min.js"></script>
+      <script src="../../../../../assets/javascripts/bundle.83f73b43.min.js"></script>
       
         <script src="../../../../../assets/_markdown_exec_pyodide.js"></script>
       

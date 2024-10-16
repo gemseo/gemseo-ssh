@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../../../../images/favicon.ico">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.39">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.41">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.8c3ca2c6.min.css">
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.0253249f.min.css">
       
         
         <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.06af60db.min.css">
@@ -1043,6 +1043,11 @@
 
 
 
+
+
+
+
+
   <div class="doc doc-children">
 
 
@@ -1062,7 +1067,7 @@
 
 <a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper" class="headerlink" title="Permanent link">&para;</a></h4>
 <div class="doc-signature highlight"><pre><span></span><code><span class="nf">SSHDisciplineWrapper</span><span class="p">(</span>
-    <span class="n">discipline</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="gemseo.core.discipline.MDODiscipline" href="https://gemseo.readthedocs.io/en/stable/_modules/gemseo.core.discipline.html#gemseo.core.discipline.MDODiscipline">MDODiscipline</a></span><span class="p">,</span>
+    <span class="n">discipline</span><span class="p">:</span> <span class="n"><span title="gemseo.core.discipline.discipline.Discipline">Discipline</span></span><span class="p">,</span>
     <span class="n">local_workdir_path</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span> <span class="o">|</span> <span class="n"><a class="autorefs autorefs-external" title="pathlib.Path" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path">Path</a></span><span class="p">,</span>
     <span class="n">hostname</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span><span class="p">,</span>
     <span class="n">remote_workdir_path</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span> <span class="o">|</span> <span class="n"><a class="autorefs autorefs-external" title="pathlib.Path" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path">Path</a></span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
@@ -1075,7 +1080,7 @@
 
     <div class="doc doc-contents ">
             <p class="doc doc-class-bases">
-              Bases: <code><a class="autorefs autorefs-external" title="gemseo.core.discipline.MDODiscipline" href="https://gemseo.readthedocs.io/en/stable/_modules/gemseo.core.discipline.html#gemseo.core.discipline.MDODiscipline">MDODiscipline</a></code></p>
+              Bases: <code><span title="gemseo.core.discipline.discipline.Discipline">Discipline</span></code></p>
 
 
         <p>A discipline to execute another discipline via ssh.</p>
@@ -1091,15 +1096,15 @@ by the wrapper.</p>
 <p><span class="doc-section-title">Parameters:</span></p>
     <ul>
         <li class="doc-section-item field-body">
-          <b><code>discipline</code></b>
-              (<code><a class="autorefs autorefs-external" title="gemseo.core.discipline.MDODiscipline" href="https://gemseo.readthedocs.io/en/stable/_modules/gemseo.core.discipline.html#gemseo.core.discipline.MDODiscipline">MDODiscipline</a></code>)
+            <b><code>discipline</code></b>
+              (<code><span title="gemseo.core.discipline.discipline.Discipline">Discipline</span></code>)
           –
           <div class="doc-md-description">
             <p>The discipline to wrap and execute on the remote host.</p>
           </div>
         </li>
         <li class="doc-section-item field-body">
-          <b><code>local_workdir_path</code></b>
+            <b><code>local_workdir_path</code></b>
               (<code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a> | <a class="autorefs autorefs-external" title="pathlib.Path" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path">Path</a></code>)
           –
           <div class="doc-md-description">
@@ -1107,7 +1112,7 @@ by the wrapper.</p>
           </div>
         </li>
         <li class="doc-section-item field-body">
-          <b><code>hostname</code></b>
+            <b><code>hostname</code></b>
               (<code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>)
           –
           <div class="doc-md-description">
@@ -1115,7 +1120,7 @@ by the wrapper.</p>
           </div>
         </li>
         <li class="doc-section-item field-body">
-          <b><code>remote_workdir_path</code></b>
+            <b><code>remote_workdir_path</code></b>
               (<code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a> | <a class="autorefs autorefs-external" title="pathlib.Path" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path">Path</a></code>, default:
                   <code>&#39;&#39;</code>
 )
@@ -1126,7 +1131,7 @@ If empty, use the default ssh remote directory (usually user's home).</p>
           </div>
         </li>
         <li class="doc-section-item field-body">
-          <b><code>pre_commands</code></b>
+            <b><code>pre_commands</code></b>
               (<code><a class="autorefs autorefs-external" title="collections.abc.Iterable" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable">Iterable</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>]</code>, default:
                   <code>()</code>
 )
@@ -1138,7 +1143,7 @@ This can be used to activate the Python environment for instance.</p>
           </div>
         </li>
         <li class="doc-section-item field-body">
-          <b><code>transfer_input_names</code></b>
+            <b><code>transfer_input_names</code></b>
               (<code><a class="autorefs autorefs-external" title="collections.abc.Iterable" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable">Iterable</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>]</code>, default:
                   <code>()</code>
 )
@@ -1149,7 +1154,7 @@ to files that must be transferred before execution.</p>
           </div>
         </li>
         <li class="doc-section-item field-body">
-          <b><code>transfer_output_names</code></b>
+            <b><code>transfer_output_names</code></b>
               (<code><a class="autorefs autorefs-external" title="collections.abc.Iterable" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable">Iterable</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>]</code>, default:
                   <code>()</code>
 )
@@ -1160,7 +1165,7 @@ to files that must be transferred after execution.</p>
           </div>
         </li>
         <li class="doc-section-item field-body">
-          <b><code>**ssh_client_parameters</code></b>
+            <b><code>**ssh_client_parameters</code></b>
               (<code><a class="autorefs autorefs-external" title="typing.Any" href="https://docs.python.org/3/library/typing.html#typing.Any">Any</a></code>, default:
                   <code>{}</code>
 )
@@ -1185,10 +1190,14 @@ are inconsistent with the discipline grammars.</p>
         </li>
     </ul>
 
+
+
+
+
+
                   <details class="quote">
                     <summary>Source code in <code>src/gemseo_ssh/wrappers/ssh/ssh_wrapped_disc.py</code></summary>
-                    <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 97</span>
-<span class="normal"> 98</span>
+                    <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 98</span>
 <span class="normal"> 99</span>
 <span class="normal">100</span>
 <span class="normal">101</span>
@@ -1232,9 +1241,10 @@ are inconsistent with the discipline grammars.</p>
 <span class="normal">139</span>
 <span class="normal">140</span>
 <span class="normal">141</span>
-<span class="normal">142</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<span class="normal">142</span>
+<span class="normal">143</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
-    <span class="n">discipline</span><span class="p">:</span> <span class="n">MDODiscipline</span><span class="p">,</span>
+    <span class="n">discipline</span><span class="p">:</span> <span class="n">Discipline</span><span class="p">,</span>
     <span class="n">local_workdir_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">,</span>
     <span class="n">hostname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">remote_workdir_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
@@ -1264,11 +1274,11 @@ are inconsistent with the discipline grammars.</p>
 <span class="sd">        KeyError: if the transfer_input_names or transfer_output_names arguments</span>
 <span class="sd">            are inconsistent with the discipline grammars.</span>
 <span class="sd">    &quot;&quot;&quot;</span>  <span class="c1"># noqa: D205, D212, D415</span>
-    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">discipline</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">grammar_type</span><span class="o">=</span><span class="n">discipline</span><span class="o">.</span><span class="n">grammar_type</span><span class="p">)</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">discipline</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
     <span class="bp">self</span><span class="o">.</span><span class="n">input_grammar</span> <span class="o">=</span> <span class="n">discipline</span><span class="o">.</span><span class="n">input_grammar</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">output_grammar</span> <span class="o">=</span> <span class="n">discipline</span><span class="o">.</span><span class="n">output_grammar</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">default_inputs</span> <span class="o">=</span> <span class="n">discipline</span><span class="o">.</span><span class="n">default_inputs</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">default_input_data</span> <span class="o">=</span> <span class="n">discipline</span><span class="o">.</span><span class="n">default_input_data</span>
 
     <span class="bp">self</span><span class="o">.</span><span class="n">__discipline</span> <span class="o">=</span> <span class="n">discipline</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">__local_root_wd_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">local_workdir_path</span><span class="p">)</span>
@@ -1394,7 +1404,7 @@ are inconsistent with the discipline grammars.</p>
 
 <a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper.linearize" class="headerlink" title="Permanent link">&para;</a></h6>
 <div class="doc-signature highlight"><pre><span></span><code><span class="nf">linearize</span><span class="p">(</span>
-    <span class="n">input_data</span><span class="p">:</span> <span class="n"><span title="gemseo.typing.StrKeyMapping">StrKeyMapping</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">input_data</span><span class="p">:</span> <span class="n"><span title="gemseo.typing.StrKeyMapping">StrKeyMapping</span></span> <span class="o">=</span> <span class="n"><a class="autorefs autorefs-external" title="gemseo.utils.constants.READ_ONLY_EMPTY_DICT" href="https://gemseo.readthedocs.io/en/stable/_modules/gemseo.utils.constants.html#gemseo.utils.constants.READ_ONLY_EMPTY_DICT">READ_ONLY_EMPTY_DICT</a></span><span class="p">,</span>
     <span class="n">compute_all_jacobians</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">execute</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-external" title="gemseo.typing.JacobianData" href="https://gemseo.readthedocs.io/en/stable/_modules/gemseo.typing.html#gemseo.typing.JacobianData">JacobianData</a></span>
@@ -1408,42 +1418,41 @@ are inconsistent with the discipline grammars.</p>
 <p><span class="doc-section-title">Parameters:</span></p>
     <ul>
         <li class="doc-section-item field-body">
-          <b><code>input_data</code></b>
-              (<code><span title="gemseo.typing.StrKeyMapping">StrKeyMapping</span> | None</code>, default:
-                  <code>None</code>
+            <b><code>input_data</code></b>
+              (<code><span title="gemseo.typing.StrKeyMapping">StrKeyMapping</span></code>, default:
+                  <code><a class="autorefs autorefs-external" title="gemseo.utils.constants.READ_ONLY_EMPTY_DICT" href="https://gemseo.readthedocs.io/en/stable/_modules/gemseo.utils.constants.html#gemseo.utils.constants.READ_ONLY_EMPTY_DICT">READ_ONLY_EMPTY_DICT</a></code>
 )
           –
           <div class="doc-md-description">
-            <p>The input data for which to compute the Jacobian.
-If <code>None</code>, use the :attr:<code>.MDODiscipline.default_inputs</code>.</p>
+            <p>The input data.
+If empty, use the :attr:<code>.</code>default_input_data`.</p>
           </div>
         </li>
         <li class="doc-section-item field-body">
-          <b><code>compute_all_jacobians</code></b>
+            <b><code>compute_all_jacobians</code></b>
               (<code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>, default:
                   <code>False</code>
 )
           –
           <div class="doc-md-description">
-            <p>Whether to compute the Jacobians of all the output
-with respect to all the inputs.
+            <p>Whether to compute the Jacobians of
+all the outputs with respect to all the inputs.
 Otherwise,
-set the input variables against which to differentiate the output ones
-with :meth:<code>.add_differentiated_inputs</code>
-and set these output variables to differentiate
-with :meth:<code>.add_differentiated_outputs</code>.</p>
+set the output variables to differentiate
+with :meth:<code>.add_differentiated_outputs</code>
+and the input variables against which to differentiate them
+with :meth:<code>.add_differentiated_inputs</code>.</p>
           </div>
         </li>
         <li class="doc-section-item field-body">
-          <b><code>execute</code></b>
+            <b><code>execute</code></b>
               (<code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>, default:
                   <code>True</code>
 )
           –
           <div class="doc-md-description">
             <p>Whether to start by executing the discipline
-with the input data for which to compute the Jacobian;
-this allows to ensure that the discipline was executed
+to ensure that the discipline was executed
 with the right input data;
 it can be almost free if the corresponding output data
 have been stored in the :attr:<code>.cache</code>.</p>
@@ -1458,10 +1467,10 @@ have been stored in the :attr:<code>.cache</code>.</p>
               <code><a class="autorefs autorefs-external" title="gemseo.typing.JacobianData" href="https://gemseo.readthedocs.io/en/stable/_modules/gemseo.typing.html#gemseo.typing.JacobianData">JacobianData</a></code>
           –
           <div class="doc-md-description">
-            <p>The Jacobian of the discipline
-shaped as <code>{output_name: {input_name: jacobian_array}}</code> where
-<code>jacobian_array[i, j]</code> is the partial derivative of <code>output_name[i]</code>
-with respect to <code>input_name[j]</code>.</p>
+            <p>The Jacobian matrices
+in the dictionary form <code>{output_name: {input_name: jacobian_matrix}}</code>
+where <code>jacobian_matrix[i, j]</code> is
+the partial derivative of <code>output_name[i]</code> wrt <code>input_name[j]</code>.</p>
           </div>
         </li>
     </ul>
@@ -1482,8 +1491,7 @@ or the outputs to differentiate are missing.</p>
 
             <details class="quote">
               <summary>Source code in <code>src/gemseo_ssh/wrappers/ssh/ssh_wrapped_disc.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">330</span>
-<span class="normal">331</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">331</span>
 <span class="normal">332</span>
 <span class="normal">333</span>
 <span class="normal">334</span>
@@ -1493,9 +1501,10 @@ or the outputs to differentiate are missing.</p>
 <span class="normal">338</span>
 <span class="normal">339</span>
 <span class="normal">340</span>
-<span class="normal">341</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">linearize</span><span class="p">(</span>  <span class="c1"># noqa: D102</span>
+<span class="normal">341</span>
+<span class="normal">342</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">linearize</span><span class="p">(</span>  <span class="c1"># noqa: D102</span>
     <span class="bp">self</span><span class="p">,</span>
-    <span class="n">input_data</span><span class="p">:</span> <span class="n">StrKeyMapping</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">input_data</span><span class="p">:</span> <span class="n">StrKeyMapping</span> <span class="o">=</span> <span class="n">READ_ONLY_EMPTY_DICT</span><span class="p">,</span>
     <span class="n">compute_all_jacobians</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">execute</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JacobianData</span><span class="p">:</span>
@@ -1576,7 +1585,7 @@ or the outputs to differentiate are missing.</p>
     <script id="__config" type="application/json">{"base": "../../../../..", "features": ["navigation.tabs", "navigation.instant", "navigation.indexes"], "search": "../../../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../../../../assets/javascripts/bundle.525ec568.min.js"></script>
+      <script src="../../../../../assets/javascripts/bundle.83f73b43.min.js"></script>
       
         <script src="../../../../../assets/_markdown_exec_pyodide.js"></script>
       
