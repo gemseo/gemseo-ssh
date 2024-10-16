@@ -24,7 +24,8 @@ from typing import Any
 from typing import ClassVar
 from uuid import uuid1
 
-from gemseo.core.discipline import MDODiscipline
+from gemseo.core.discipline.discipline import Discipline
+from gemseo.utils.constants import READ_ONLY_EMPTY_DICT
 
 from gemseo_ssh.wrappers.ssh.paramiko import SFTPClient
 from gemseo_ssh.wrappers.ssh.paramiko import SSHClient
@@ -39,7 +40,7 @@ if TYPE_CHECKING:
 LOGGER = getLogger(__name__)
 
 
-class SSHDisciplineWrapper(MDODiscipline):
+class SSHDisciplineWrapper(Discipline):
     """A discipline to execute another discipline via ssh.
 
     The discipline is serialized to the disk, its input too, then a job file is created
@@ -64,7 +65,7 @@ class SSHDisciplineWrapper(MDODiscipline):
     __execute_at_linearize: bool
     """Whether to execute the discipline at linearization."""
 
-    __discipline: MDODiscipline
+    __discipline: Discipline
     """The discipline to execute on the remote host."""
 
     __local_root_wd_path: Path
@@ -96,7 +97,7 @@ class SSHDisciplineWrapper(MDODiscipline):
 
     def __init__(
         self,
-        discipline: MDODiscipline,
+        discipline: Discipline,
         local_workdir_path: str | Path,
         hostname: str,
         remote_workdir_path: str | Path = "",
@@ -126,11 +127,11 @@ class SSHDisciplineWrapper(MDODiscipline):
             KeyError: if the transfer_input_names or transfer_output_names arguments
                 are inconsistent with the discipline grammars.
         """  # noqa: D205, D212, D415
-        super().__init__(discipline.name, grammar_type=discipline.grammar_type)
+        super().__init__(discipline.name)
 
         self.input_grammar = discipline.input_grammar
         self.output_grammar = discipline.output_grammar
-        self.default_inputs = discipline.default_inputs
+        self.default_input_data = discipline.default_input_data
 
         self.__discipline = discipline
         self.__local_root_wd_path = Path(local_workdir_path)
@@ -192,7 +193,7 @@ class SSHDisciplineWrapper(MDODiscipline):
             sftp_client: The FTP client.
         """
         for data_name in self.__transfer_input_names:
-            local_path = Path(self.local_data[data_name])
+            local_path = Path(self.io.data[data_name])
             sftp_client.put(local_path, local_path.name)
 
     def _retrieve_serialized_outputs(
@@ -216,9 +217,9 @@ class SSHDisciplineWrapper(MDODiscipline):
             sftp_client: The FTP client.
         """
         for data_name in self.__transfer_output_names:
-            file_name = Path(self.local_data[data_name]).name
+            file_name = Path(self.io.data[data_name]).name
             local_path = self.__local_root_wd_path / file_name
-            self.local_data[data_name] = local_path.as_posix()
+            self.io.data[data_name] = local_path.as_posix()
             sftp_client.get(file_name, local_path)
 
     def _execute_on_remote(
@@ -276,7 +277,7 @@ class SSHDisciplineWrapper(MDODiscipline):
             self.__local_cwd_path,
         )
 
-        self.local_data.update(output_data[0])
+        self.io.data.update(output_data[0])
         if output_data[1]:
             self.jac = output_data[1]
 
@@ -308,14 +309,14 @@ class SSHDisciplineWrapper(MDODiscipline):
         discipline_path.write_bytes(pickle.dumps(self.__discipline))
 
         if self.__transfer_input_names:
-            local_data = self.local_data.copy()
+            local_data = self.io.data.copy()
             for data_name in self.__transfer_input_names:
-                local_path = Path(self.local_data[data_name])
+                local_path = Path(self.io.data[data_name])
                 local_data[data_name] = (
                     self.__remote_cwd_path / local_path.name
                 ).as_posix()
         else:
-            local_data = self.local_data
+            local_data = self.io.data
 
         inputs_path = self.__local_cwd_path / self.SERIALIZED_INPUTS_FILE_NAME
         inputs_path.write_bytes(
@@ -329,7 +330,7 @@ class SSHDisciplineWrapper(MDODiscipline):
 
     def linearize(  # noqa: D102
         self,
-        input_data: StrKeyMapping | None = None,
+        input_data: StrKeyMapping = READ_ONLY_EMPTY_DICT,
         compute_all_jacobians: bool = False,
         execute: bool = True,
     ) -> JacobianData:
@@ -342,11 +343,11 @@ class SSHDisciplineWrapper(MDODiscipline):
 
     def _compute_jacobian(
         self,
-        inputs: Iterable[str] = (),
-        outputs: Iterable[str] = (),
+        input_names: Iterable[str] = (),
+        output_names: Iterable[str] = (),
     ) -> None:
         self._run_or_compute_jac(
-            True, differentiated_inputs=inputs, differentiated_outputs=outputs
+            True, differentiated_inputs=input_names, differentiated_outputs=output_names
         )
 
     def _run_or_compute_jac(

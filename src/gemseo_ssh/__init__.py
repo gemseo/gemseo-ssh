@@ -23,13 +23,13 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
     from pathlib import Path
 
-    from gemseo.core.discipline import MDODiscipline
+    from gemseo.core.discipline.discipline import Discipline
 
     from gemseo_ssh.wrappers.ssh.ssh_wrapped_disc import SSHDisciplineWrapper
 
 
 def wrap_discipline_with_ssh(
-    discipline: MDODiscipline,
+    discipline: Discipline,
     local_workdir_path: str | Path,
     hostname: str,
     remote_workdir_path: str | Path = "",

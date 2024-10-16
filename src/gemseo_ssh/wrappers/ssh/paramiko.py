@@ -139,7 +139,7 @@ class SSHClient(_SSHClient):
         try:
             stdout = " ".join(f_stdout.readlines())
             stderr = " ".join(f_stderr.readlines())
-        except Exception:
+        except BaseException:  # noqa: BLE001
             stdout = "stdout not decoded"
             stderr = "stderr not decoded"
 

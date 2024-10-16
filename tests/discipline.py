@@ -16,22 +16,24 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from gemseo.core.discipline import MDODiscipline
+from gemseo.core.discipline.discipline import Discipline
 
 
-class DiscWithFiles(MDODiscipline):
+class DiscWithFiles(Discipline):
     """A dummy discipline that handles files in inputs and outputs."""
 
+    default_grammar_type = Discipline.GrammarType.SIMPLE
+
     def __init__(self):  # noqa: D107
-        super().__init__(grammar_type=self.GrammarType.SIMPLE)
+        super().__init__()
         self.input_grammar.update_from_types({"in_file": str, "discipline": str})
         self.output_grammar.update_from_types({"out_file": str, "out_val": int})
 
     def _run(self):
-        in_file_path = Path(self.local_data["in_file"])
+        in_file_path = Path(self.io.data["in_file"])
         out_val = int(in_file_path.read_text()) + 1
         out_path = in_file_path.parent / "out_file.txt"
         out_path.write_text(str(out_val), encoding="utf8")
 
-        self.local_data["out_val"] = out_val
-        self.local_data["out_file"] = str(out_path)
+        self.io.data["out_val"] = out_val
+        self.io.data["out_file"] = str(out_path)
