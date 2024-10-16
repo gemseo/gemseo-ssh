@@ -9,7 +9,7 @@ Commons, PO Box 1866, Mountain View, CA 94042, USA.
 
 # gemseo-ssh
 
-[![PyPI - License](https://img.shields.io/pypi/l/gemseo)](https://www.gnu.org/licenses/lgpl-3.0.en.html)
+[![PyPI - License](https://img.shields.io/pypi/l/gemseo-ssh)](https://www.gnu.org/licenses/lgpl-3.0.en.html)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/gemseo-ssh)](https://pypi.org/project/gemseo-ssh/)
 [![PyPI](https://img.shields.io/pypi/v/gemseo-ssh)](https://pypi.org/project/gemseo-ssh/)
 [![Codecov branch](https://img.shields.io/codecov/c/gitlab/gemseo:dev/gemseo-ssh/develop)](https://app.codecov.io/gl/gemseo:dev/gemseo-ssh)
@@ -20,10 +20,7 @@ SSH plugin for GEMSEO
 
 ## Installation
 
-Install the latest stable version with `pip install gemseo-ssh`.
-
-Install the development version with
-`pip install gemseo-ssh@git+https://gitlab.com/gemseo/dev/gemseo-ssh.git@develop`.
+Install the latest version with `pip install gemseo-ssh`.
 
 See [pip](https://pip.pypa.io/en/stable/getting-started/) for more information.
 
