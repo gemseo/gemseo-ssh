@@ -112,7 +112,7 @@ def create_venv(path: Path):
     gemseo_version = "gemseo@git+https://gitlab.com/gemseo/dev/gemseo.git@develop"
 
     subprocess.run(
-        f"{path / VENV_REL_PATH_TO_PYTHON} -m pip " f"install {gemseo_version}".split(),
+        f"{path / VENV_REL_PATH_TO_PYTHON} -m pip install {gemseo_version}".split(),
         check=True,
         capture_output=True,
     )
