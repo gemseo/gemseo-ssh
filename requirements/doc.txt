@@ -37,7 +37,7 @@ dill==0.3.9
     # via openturns
 docstring-inheritance==2.2.1
     # via gemseo
-et-xmlfile==1.1.0
+et-xmlfile==2.0.0
     # via openpyxl
 eval-type-backport==0.2.0
     # via gemseo
@@ -45,7 +45,7 @@ fastjsonschema==2.20.0
     # via gemseo
 fonttools==4.54.1
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@4422da5ecbd5149f59272c2756bde36536f927e1
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@c68768d8671f2e453119d050c8a813bf4c225d90
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
@@ -59,7 +59,7 @@ griffe==1.5.1
     # via
     #   griffe-inherited-docstrings
     #   mkdocstrings-python
-griffe-inherited-docstrings==1.0.1
+griffe-inherited-docstrings==1.1.0
     # via gemseo-ssh (pyproject.toml)
 h5py==3.11.0
     # via gemseo
