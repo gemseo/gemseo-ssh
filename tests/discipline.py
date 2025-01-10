@@ -29,7 +29,7 @@ class DiscWithFiles(Discipline):
         self.input_grammar.update_from_types({"in_file": str, "discipline": str})
         self.output_grammar.update_from_types({"out_file": str, "out_val": int})
 
-    def _run(self):
+    def _run(self, input_data):
         in_file_path = Path(self.io.data["in_file"])
         out_val = int(in_file_path.read_text()) + 1
         out_path = in_file_path.parent / "out_file.txt"
