@@ -25,7 +25,7 @@ if TYPE_CHECKING:
 
     from gemseo.core.discipline.discipline import Discipline
 
-    from gemseo_ssh.wrappers.ssh.ssh_wrapped_disc import SSHDisciplineWrapper
+    from gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper import SSHDisciplineWrapper
 
 
 def wrap_discipline_with_ssh(
@@ -34,8 +34,8 @@ def wrap_discipline_with_ssh(
     hostname: str,
     remote_workdir_path: str | Path = "",
     pre_commands: Iterable[str] = (),
-    transfer_input_names: Iterable[str] = (),
-    transfer_output_names: Iterable[str] = (),
+    inputs_to_upload: Iterable[str] = (),
+    outputs_to_download: Iterable[str] = (),
     **ssh_client_parameters: Any,
 ) -> SSHDisciplineWrapper:
     """Wrap the discipline within the SSH transfer discipline.
@@ -55,17 +55,17 @@ def wrap_discipline_with_ssh(
         pre_commands: The commands run on the remote host before deserialization and
             execution of the discipline on the remote host. This can be used to activate
             the Python environment for instance.
-        transfer_input_names: The names of the discipline inputs that correspond
-            to files that must be transferred before execution.
-        transfer_output_names: The names of the discipline outputs that correspond
-            to files that must be transferred after execution.
+        inputs_to_upload: The names of the discipline inputs that correspond
+            to files that must be uploaded before execution.
+        outputs_to_download: The names of the discipline outputs that correspond
+            to files that must be downloaded after execution.
         **ssh_client_parameters: The optional parameters to pass to paramiko.SSHClient.
 
     Raises:
         KeyError: if the transfer_inputs or transfer_outputs arguments are inconsistent
             with the discipline grammars.
     """
-    from gemseo_ssh.wrappers.ssh.ssh_wrapped_disc import SSHDisciplineWrapper
+    from gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper import SSHDisciplineWrapper
 
     return SSHDisciplineWrapper(
         discipline=discipline,
@@ -73,7 +73,7 @@ def wrap_discipline_with_ssh(
         hostname=hostname,
         remote_workdir_path=remote_workdir_path,
         pre_commands=pre_commands,
-        transfer_input_names=transfer_input_names,
-        transfer_output_names=transfer_output_names,
+        inputs_to_upload=inputs_to_upload,
+        outputs_to_download=outputs_to_download,
         **ssh_client_parameters,
     )

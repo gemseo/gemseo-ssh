@@ -32,6 +32,7 @@ from gemseo_ssh.wrappers.ssh.paramiko import SSHClient
 
 if TYPE_CHECKING:
     from collections.abc import Iterable
+    from collections.abc import MutableMapping
 
     from gemseo.typing import JacobianData
     from gemseo.typing import StrKeyMapping
@@ -84,13 +85,13 @@ class SSHDisciplineWrapper(Discipline):
     """The commands run on the remote host before deserialization and execution of the
     discipline on the remote host."""
 
-    __transfer_input_names: Iterable[str]
+    __inputs_to_upload: Iterable[str]
     """The names of the discipline inputs that correspond to files that must be
-    transferred before execution."""
+    uploaded before execution."""
 
-    __transfer_output_names: Iterable[str]
+    __outputs_to_download: Iterable[str]
     """The names of the discipline outputs that correspond to files that must be
-    transferred after execution."""
+    downloaded after execution."""
 
     __ssh_client_parameters: dict[str, Any]
     """The optional parameters for paramiko.SSHClient."""
@@ -102,8 +103,8 @@ class SSHDisciplineWrapper(Discipline):
         hostname: str,
         remote_workdir_path: str | Path = "",
         pre_commands: Iterable[str] = (),
-        transfer_input_names: Iterable[str] = (),
-        transfer_output_names: Iterable[str] = (),
+        inputs_to_upload: Iterable[str] = (),
+        outputs_to_download: Iterable[str] = (),
         **ssh_client_parameters: Any,
     ) -> None:
         """
@@ -116,61 +117,60 @@ class SSHDisciplineWrapper(Discipline):
             pre_commands: The commands run on the remote host before deserialization and
                 execution of the discipline on the remote host.
                 This can be used to activate the Python environment for instance.
-            transfer_input_names: The names of the discipline inputs that correspond
-                to files that must be transferred before execution.
-            transfer_output_names: The names of the discipline outputs that correspond
-                to files that must be transferred after execution.
+            inputs_to_upload: The names of the discipline inputs that correspond
+                to files that must be uploaded before execution.
+            outputs_to_download: The names of the discipline outputs that correspond
+                to files that must be downloaded after execution.
             **ssh_client_parameters: The optional parameters to pass to
                 paramiko.SSHClient.
 
         Raises:
-            KeyError: if the transfer_input_names or transfer_output_names arguments
+            KeyError: if the inputs_to_upload or outputs_to_download arguments
                 are inconsistent with the discipline grammars.
         """  # noqa: D205, D212, D415
         super().__init__(discipline.name)
 
         self.input_grammar = discipline.input_grammar
         self.output_grammar = discipline.output_grammar
-        self.default_input_data = discipline.default_input_data
 
         self.__discipline = discipline
         self.__local_root_wd_path = Path(local_workdir_path)
         self.__pre_commands = pre_commands
         self.__hostname = hostname
         self.__remote_root_wd_path = Path(remote_workdir_path)
-        self.__set_transfer_io_names(transfer_input_names, transfer_output_names)
+        self.__set_io_to_transfer(inputs_to_upload, outputs_to_download)
         self.__ssh_client_parameters = ssh_client_parameters
         self.__execute_at_linearize = False
 
-    def __set_transfer_io_names(
+    def __set_io_to_transfer(
         self,
-        transfer_input_names: Iterable[str],
-        transfer_output_names: Iterable[str],
+        inputs_to_upload: Iterable[str],
+        outputs_to_download: Iterable[str],
     ) -> None:
-        """Check and set the transfer inputs and outputs names.
+        """Set the inputs and outputs to upload and download.
 
         Args:
-            transfer_input_names: The names of the inputs to transfer.
-            transfer_output_names: The names of the outputs to transfer.
+            inputs_to_upload: The names of the inputs to upload.
+            outputs_to_download: The names of the outputs to download.
 
         Raises:
             ValueError: If a name is not in the corresponding grammar.
         """
-        missing_in = set(transfer_input_names) - self.input_grammar.keys()
+        missing_in = set(inputs_to_upload).difference(self.input_grammar)
         if missing_in:
-            msg = f"Invalid transfer_input_names: {missing_in}"
+            msg = f"Invalid input names to upload: {', '.join(missing_in)}"
             raise ValueError(msg)
 
-        self.__transfer_input_names = transfer_input_names
+        self.__inputs_to_upload = inputs_to_upload
 
-        missing_out = set(transfer_output_names) - self.output_grammar.keys()
+        missing_out = set(outputs_to_download).difference(self.output_grammar)
         if missing_out:
-            msg = f"Invalid transfer_output_names: {missing_out}"
+            msg = f"Invalid output names to download: {', '.join(missing_out)}"
             raise ValueError(msg)
 
-        self.__transfer_output_names = transfer_output_names
+        self.__outputs_to_download = outputs_to_download
 
-    def _send_serialized_files(
+    def _upload_serialized_files(
         self,
         sftp_client: SFTPClient,
         discipline_path: Path,
@@ -186,17 +186,17 @@ class SSHDisciplineWrapper(Discipline):
         sftp_client.put(discipline_path, self.SERIALIZED_DISC_FILE_NAME)
         sftp_client.put(input_path, self.SERIALIZED_INPUTS_FILE_NAME)
 
-    def _send_transfer_inputs(self, sftp_client: SFTPClient) -> None:
+    def _upload_inputs(self, sftp_client: SFTPClient) -> None:
         """Send the input files to the remote host.
 
         Args:
             sftp_client: The FTP client.
         """
-        for data_name in self.__transfer_input_names:
+        for data_name in self.__inputs_to_upload:
             local_path = Path(self.io.data[data_name])
             sftp_client.put(local_path, local_path.name)
 
-    def _retrieve_serialized_outputs(
+    def _download_serialized_files(
         self,
         sftp_client: SFTPClient,
     ) -> None:
@@ -210,16 +210,20 @@ class SSHDisciplineWrapper(Discipline):
             self.__local_cwd_path / self.SERIALIZED_OUTPUTS_FILE_NAME,
         )
 
-    def _retrieve_transfer_outputs(self, sftp_client: SFTPClient) -> None:
+    def _download_outputs(
+        self,
+        sftp_client: SFTPClient,
+        output_data: MutableMapping[str, Any],
+    ) -> None:
         """Retrieve the output files to the remote host after execution.
 
         Args:
             sftp_client: The FTP client.
         """
-        for data_name in self.__transfer_output_names:
-            file_name = Path(self.io.data[data_name]).name
+        for data_name in self.__outputs_to_download:
+            file_name = Path(output_data[data_name]).name
             local_path = self.__local_root_wd_path / file_name
-            self.io.data[data_name] = local_path.as_posix()
+            output_data[data_name] = local_path.as_posix()
             sftp_client.get(file_name, local_path)
 
     def _execute_on_remote(
@@ -249,7 +253,7 @@ class SSHDisciplineWrapper(Discipline):
 
         ssh_client.execute(cmd_lines)
 
-    def _handle_outputs(self) -> None:
+    def _handle_outputs(self) -> StrKeyMapping:
         """Deserialize the output data and updates the discipline's local data."""
         outputs_path = self.__local_cwd_path / self.SERIALIZED_OUTPUTS_FILE_NAME
 
@@ -277,9 +281,10 @@ class SSHDisciplineWrapper(Discipline):
             self.__local_cwd_path,
         )
 
-        self.io.data.update(output_data[0])
         if output_data[1]:
             self.jac = output_data[1]
+
+        return output_data[0]
 
     def __create_cwd_paths(self, sftp_client: SFTPClient) -> None:
         """Create the unique current local and remote work directory paths."""
@@ -308,9 +313,9 @@ class SSHDisciplineWrapper(Discipline):
         discipline_path = self.__local_cwd_path / self.SERIALIZED_DISC_FILE_NAME
         discipline_path.write_bytes(pickle.dumps(self.__discipline))
 
-        if self.__transfer_input_names:
+        if self.__inputs_to_upload:
             local_data = self.io.data.copy()
-            for data_name in self.__transfer_input_names:
+            for data_name in self.__inputs_to_upload:
                 local_path = Path(self.io.data[data_name])
                 local_data[data_name] = (
                     self.__remote_cwd_path / local_path.name
@@ -325,8 +330,8 @@ class SSHDisciplineWrapper(Discipline):
 
         return discipline_path, inputs_path
 
-    def _run(self) -> None:
-        self._run_or_compute_jac(False)
+    def _run(self, input_data: StrKeyMapping) -> StrKeyMapping:
+        return self._run_or_compute_jac(False)
 
     def linearize(  # noqa: D102
         self,
@@ -377,15 +382,16 @@ class SSHDisciplineWrapper(Discipline):
             differentiated_inputs, differentiated_outputs
         )
         sftp_client.chdir(self.__remote_cwd_path)
-        self._send_serialized_files(
+        self._upload_serialized_files(
             sftp_client, serialized_disc_path, serialized_inputs_path
         )
-        self._send_transfer_inputs(sftp_client)
+        self._upload_inputs(sftp_client)
         self._execute_on_remote(ssh_client, linearize)
-        self._retrieve_serialized_outputs(sftp_client)
-        self._handle_outputs()
-        self._retrieve_transfer_outputs(sftp_client)
+        self._download_serialized_files(sftp_client)
+        output_data = self._handle_outputs()
+        self._download_outputs(sftp_client, output_data)
 
         ssh_client.close()
 
         LOGGER.debug("Job execution ended in %s", self.__local_cwd_path)
+        return output_data

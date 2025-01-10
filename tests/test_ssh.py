@@ -59,9 +59,9 @@ class SFTP:
 
 def exec_command(self, cmd: str) -> tuple:
     """Mock the related command of the ssh client."""
-    os.system(cmd)
+    exit_code = os.system(cmd)
     stdout = MagicMock()
-    stdout.channel.recv_exit_status = MagicMock(return_value=0)
+    stdout.channel.recv_exit_status = lambda: exit_code
     return None, stdout, MagicMock()
 
 
@@ -107,7 +107,7 @@ def create_venv(path: Path):
     Args:
         path: The path to the virtualenv root directory.
     """
-    venv.create(path, with_pip=True)
+    venv.create(path, with_pip=True, symlinks=True)
 
     gemseo_version = "gemseo@git+https://gitlab.com/gemseo/dev/gemseo.git@develop"
 
@@ -185,8 +185,8 @@ def test_linux_transfer(tmp_path, remote_setup, monkeypatch):
         pre_commands=pre_commands,
         # The discipline module is transfered along with its inputs,
         # but it is not used by itself.
-        transfer_input_names=["in_file", "discipline"],
-        transfer_output_names=["out_file"],
+        inputs_to_upload=["in_file", "discipline"],
+        outputs_to_download=["out_file"],
     )
 
     data = remote_disc.execute(
@@ -251,3 +251,27 @@ def test_linearize_at_exe(tmp_path, remote_setup) -> None:
     data = remote_disc.jac
     assert "volume fraction" in data
     assert compare_dict_of_arrays(data, local_disc.jac)
+
+
+def test_inputs_names_error(tmp_path):
+    """Verify the error when the inputs_to_upload is bad."""
+    msg = "Invalid input names to upload: bad-name"
+    with pytest.raises(ValueError, match=msg):
+        wrap_discipline_with_ssh(
+            create_discipline("SobieskiMission"),
+            tmp_path,
+            HOSTNAME,
+            inputs_to_upload=["bad-name"],
+        )
+
+
+def test_outputs_names_error(tmp_path):
+    """Verify the error when the outputs_to_upload is bad."""
+    msg = "Invalid output names to download: .+-name, .+-name"
+    with pytest.raises(ValueError, match=msg):
+        wrap_discipline_with_ssh(
+            create_discipline("SobieskiMission"),
+            tmp_path,
+            HOSTNAME,
+            outputs_to_download=["bad-name", "ko-name"],
+        )
