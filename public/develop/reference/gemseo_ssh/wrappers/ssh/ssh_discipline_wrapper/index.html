@@ -8,7 +8,7 @@
       
       
       
-        <link rel="canonical" href="https://gemseo.gitlab.io/gemseo-ssh/latest/reference/gemseo_ssh/wrappers/ssh/ssh_wrapped_disc/">
+        <link rel="canonical" href="https://gemseo.gitlab.io/gemseo-ssh/latest/reference/gemseo_ssh/wrappers/ssh/ssh_discipline_wrapper/">
       
       
         <link rel="prev" href="../paramiko/">
@@ -16,15 +16,15 @@
       
       
       <link rel="icon" href="../../../../../images/favicon.ico">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.42">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
     
     
       
-        <title>Ssh wrapped disc - gemseo-ssh</title>
+        <title>Ssh discipline wrapper - gemseo-ssh</title>
       
     
     
-      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.0253249f.min.css">
+      <link rel="stylesheet" href="../../../../../assets/stylesheets/main.6f8fc17f.min.css">
       
         
         <link rel="stylesheet" href="../../../../../assets/stylesheets/palette.06af60db.min.css">
@@ -86,7 +86,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc" class="md-skip">
+        <a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper" class="md-skip">
           Skip to content
         </a>
       
@@ -124,7 +124,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Ssh wrapped disc
+              Ssh discipline wrapper
             
           </span>
         </div>
@@ -204,7 +204,7 @@
         <a href="https://gitlab.com/gemseo/dev/gemseo-ssh" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="m503.5 204.6-.7-1.8-69.7-181.78c-1.4-3.57-3.9-6.59-7.2-8.64-2.4-1.55-5.1-2.515-8-2.81s-5.7.083-8.4 1.11c-2.7 1.02-5.1 2.66-7.1 4.78-1.9 2.12-3.3 4.67-4.1 7.44l-47 144H160.8l-47.1-144c-.8-2.77-2.2-5.31-4.1-7.43-2-2.12-4.4-3.75-7.1-4.77a18.1 18.1 0 0 0-8.38-1.113 18.4 18.4 0 0 0-8.04 2.793 18.1 18.1 0 0 0-7.16 8.64L9.267 202.8l-.724 1.8a129.57 129.57 0 0 0-3.52 82c7.747 26.9 24.047 50.7 46.447 67.6l.27.2.59.4 105.97 79.5 52.6 39.7 32 24.2c3.7 1.9 8.3 4.3 13 4.3s9.3-2.4 13-4.3l32-24.2 52.6-39.7 106.7-79.9.3-.3c22.4-16.9 38.7-40.6 45.6-67.5 8.6-27 7.4-55.8-2.6-82"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="m503.5 204.6-.7-1.8-69.7-181.78c-1.4-3.57-3.9-6.59-7.2-8.64-2.4-1.55-5.1-2.515-8-2.81s-5.7.083-8.4 1.11c-2.7 1.02-5.1 2.66-7.1 4.78-1.9 2.12-3.3 4.67-4.1 7.44l-47 144H160.8l-47.1-144c-.8-2.77-2.2-5.31-4.1-7.43-2-2.12-4.4-3.75-7.1-4.77a18.1 18.1 0 0 0-8.38-1.113 18.4 18.4 0 0 0-8.04 2.793 18.1 18.1 0 0 0-7.16 8.64L9.267 202.8l-.724 1.8a129.57 129.57 0 0 0-3.52 82c7.747 26.9 24.047 50.7 46.447 67.6l.27.2.59.4 105.97 79.5 52.6 39.7 32 24.2c3.7 1.9 8.3 4.3 13 4.3s9.3-2.4 13-4.3l32-24.2 52.6-39.7 106.7-79.9.3-.3c22.4-16.9 38.7-40.6 45.6-67.5 8.6-27 7.4-55.8-2.6-82"/></svg>
   </div>
   <div class="md-source__repository">
     gemseo-ssh
@@ -317,7 +317,7 @@
       <a href="https://gitlab.com/gemseo/dev/gemseo-ssh" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="m503.5 204.6-.7-1.8-69.7-181.78c-1.4-3.57-3.9-6.59-7.2-8.64-2.4-1.55-5.1-2.515-8-2.81s-5.7.083-8.4 1.11c-2.7 1.02-5.1 2.66-7.1 4.78-1.9 2.12-3.3 4.67-4.1 7.44l-47 144H160.8l-47.1-144c-.8-2.77-2.2-5.31-4.1-7.43-2-2.12-4.4-3.75-7.1-4.77a18.1 18.1 0 0 0-8.38-1.113 18.4 18.4 0 0 0-8.04 2.793 18.1 18.1 0 0 0-7.16 8.64L9.267 202.8l-.724 1.8a129.57 129.57 0 0 0-3.52 82c7.747 26.9 24.047 50.7 46.447 67.6l.27.2.59.4 105.97 79.5 52.6 39.7 32 24.2c3.7 1.9 8.3 4.3 13 4.3s9.3-2.4 13-4.3l32-24.2 52.6-39.7 106.7-79.9.3-.3c22.4-16.9 38.7-40.6 45.6-67.5 8.6-27 7.4-55.8-2.6-82"/></svg>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="m503.5 204.6-.7-1.8-69.7-181.78c-1.4-3.57-3.9-6.59-7.2-8.64-2.4-1.55-5.1-2.515-8-2.81s-5.7.083-8.4 1.11c-2.7 1.02-5.1 2.66-7.1 4.78-1.9 2.12-3.3 4.67-4.1 7.44l-47 144H160.8l-47.1-144c-.8-2.77-2.2-5.31-4.1-7.43-2-2.12-4.4-3.75-7.1-4.77a18.1 18.1 0 0 0-8.38-1.113 18.4 18.4 0 0 0-8.04 2.793 18.1 18.1 0 0 0-7.16 8.64L9.267 202.8l-.724 1.8a129.57 129.57 0 0 0-3.52 82c7.747 26.9 24.047 50.7 46.447 67.6l.27.2.59.4 105.97 79.5 52.6 39.7 32 24.2c3.7 1.9 8.3 4.3 13 4.3s9.3-2.4 13-4.3l32-24.2 52.6-39.7 106.7-79.9.3-.3c22.4-16.9 38.7-40.6 45.6-67.5 8.6-27 7.4-55.8-2.6-82"/></svg>
   </div>
   <div class="md-source__repository">
     gemseo-ssh
@@ -681,7 +681,7 @@
           
   
   <span class="md-ellipsis">
-    Ssh wrapped disc
+    Ssh discipline wrapper
   </span>
   
 
@@ -692,7 +692,7 @@
         
   
   <span class="md-ellipsis">
-    Ssh wrapped disc
+    Ssh discipline wrapper
   </span>
   
 
@@ -712,17 +712,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc" class="md-nav__link">
+  <a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper" class="md-nav__link">
     <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-module"></code>&nbsp;ssh_wrapped_disc
+      <code class="doc-symbol doc-symbol-toc doc-symbol-module"></code>&nbsp;ssh_discipline_wrapper
     </span>
   </a>
   
-    <nav class="md-nav" aria-label=" ssh_wrapped_disc">
+    <nav class="md-nav" aria-label=" ssh_discipline_wrapper">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc-classes" class="md-nav__link">
+  <a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper-classes" class="md-nav__link">
     <span class="md-ellipsis">
       Classes
     </span>
@@ -732,7 +732,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper" class="md-nav__link">
+  <a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper" class="md-nav__link">
     <span class="md-ellipsis">
       <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;SSHDisciplineWrapper
     </span>
@@ -742,7 +742,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper-attributes" class="md-nav__link">
+  <a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper-attributes" class="md-nav__link">
     <span class="md-ellipsis">
       Attributes
     </span>
@@ -752,7 +752,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper.SERIALIZED_DISC_FILE_NAME" class="md-nav__link">
+  <a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper.SERIALIZED_DISC_FILE_NAME" class="md-nav__link">
     <span class="md-ellipsis">
       <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;SERIALIZED_DISC_FILE_NAME
     </span>
@@ -761,7 +761,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper.SERIALIZED_INPUTS_FILE_NAME" class="md-nav__link">
+  <a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper.SERIALIZED_INPUTS_FILE_NAME" class="md-nav__link">
     <span class="md-ellipsis">
       <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;SERIALIZED_INPUTS_FILE_NAME
     </span>
@@ -770,7 +770,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper.SERIALIZED_OUTPUTS_FILE_NAME" class="md-nav__link">
+  <a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper.SERIALIZED_OUTPUTS_FILE_NAME" class="md-nav__link">
     <span class="md-ellipsis">
       <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;SERIALIZED_OUTPUTS_FILE_NAME
     </span>
@@ -779,7 +779,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper.SSH_KEEP_ALIVE_INTERVAL" class="md-nav__link">
+  <a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper.SSH_KEEP_ALIVE_INTERVAL" class="md-nav__link">
     <span class="md-ellipsis">
       <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;SSH_KEEP_ALIVE_INTERVAL
     </span>
@@ -793,7 +793,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper-functions" class="md-nav__link">
+  <a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper-functions" class="md-nav__link">
     <span class="md-ellipsis">
       Functions
     </span>
@@ -803,7 +803,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper.linearize" class="md-nav__link">
+  <a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper.linearize" class="md-nav__link">
     <span class="md-ellipsis">
       <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;linearize
     </span>
@@ -888,17 +888,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc" class="md-nav__link">
+  <a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper" class="md-nav__link">
     <span class="md-ellipsis">
-      <code class="doc-symbol doc-symbol-toc doc-symbol-module"></code>&nbsp;ssh_wrapped_disc
+      <code class="doc-symbol doc-symbol-toc doc-symbol-module"></code>&nbsp;ssh_discipline_wrapper
     </span>
   </a>
   
-    <nav class="md-nav" aria-label=" ssh_wrapped_disc">
+    <nav class="md-nav" aria-label=" ssh_discipline_wrapper">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc-classes" class="md-nav__link">
+  <a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper-classes" class="md-nav__link">
     <span class="md-ellipsis">
       Classes
     </span>
@@ -908,7 +908,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper" class="md-nav__link">
+  <a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper" class="md-nav__link">
     <span class="md-ellipsis">
       <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;SSHDisciplineWrapper
     </span>
@@ -918,7 +918,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper-attributes" class="md-nav__link">
+  <a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper-attributes" class="md-nav__link">
     <span class="md-ellipsis">
       Attributes
     </span>
@@ -928,7 +928,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper.SERIALIZED_DISC_FILE_NAME" class="md-nav__link">
+  <a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper.SERIALIZED_DISC_FILE_NAME" class="md-nav__link">
     <span class="md-ellipsis">
       <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;SERIALIZED_DISC_FILE_NAME
     </span>
@@ -937,7 +937,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper.SERIALIZED_INPUTS_FILE_NAME" class="md-nav__link">
+  <a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper.SERIALIZED_INPUTS_FILE_NAME" class="md-nav__link">
     <span class="md-ellipsis">
       <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;SERIALIZED_INPUTS_FILE_NAME
     </span>
@@ -946,7 +946,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper.SERIALIZED_OUTPUTS_FILE_NAME" class="md-nav__link">
+  <a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper.SERIALIZED_OUTPUTS_FILE_NAME" class="md-nav__link">
     <span class="md-ellipsis">
       <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;SERIALIZED_OUTPUTS_FILE_NAME
     </span>
@@ -955,7 +955,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper.SSH_KEEP_ALIVE_INTERVAL" class="md-nav__link">
+  <a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper.SSH_KEEP_ALIVE_INTERVAL" class="md-nav__link">
     <span class="md-ellipsis">
       <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;SSH_KEEP_ALIVE_INTERVAL
     </span>
@@ -969,7 +969,7 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper-functions" class="md-nav__link">
+  <a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper-functions" class="md-nav__link">
     <span class="md-ellipsis">
       Functions
     </span>
@@ -979,7 +979,7 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper.linearize" class="md-nav__link">
+  <a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper.linearize" class="md-nav__link">
     <span class="md-ellipsis">
       <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;linearize
     </span>
@@ -1025,17 +1025,17 @@
   
 
 
-  <h1>Ssh wrapped disc</h1>
+  <h1>Ssh discipline wrapper</h1>
 
 <div class="doc doc-object doc-module">
 
 
 
-<h2 id="gemseo_ssh.wrappers.ssh.ssh_wrapped_disc" class="doc doc-heading">
-<code class="doc-symbol doc-symbol-heading doc-symbol-module"></code>            <span class="doc doc-object-name doc-module-name">ssh_wrapped_disc</span>
+<h2 id="gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-module"></code>            <span class="doc doc-object-name doc-module-name">ssh_discipline_wrapper</span>
 
 
-<a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc" class="headerlink" title="Permanent link">&para;</a></h2>
+<a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper" class="headerlink" title="Permanent link">&para;</a></h2>
 
     <div class="doc doc-contents first">
 
@@ -1055,32 +1055,32 @@
 
 
 
-<h3 id="gemseo_ssh.wrappers.ssh.ssh_wrapped_disc-classes">Classes<a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc-classes" class="headerlink" title="Permanent link">&para;</a></h3>
+<h3 id="gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper-classes">Classes<a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper-classes" class="headerlink" title="Permanent link">&para;</a></h3>
 
 <div class="doc doc-object doc-class">
 
 
 
-<h4 id="gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper" class="doc doc-heading">
+<h4 id="gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper" class="doc doc-heading">
 <code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <span class="doc doc-object-name doc-class-name">SSHDisciplineWrapper</span>
 
 
-<a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper" class="headerlink" title="Permanent link">&para;</a></h4>
+<a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper" class="headerlink" title="Permanent link">&para;</a></h4>
 <div class="doc-signature highlight"><pre><span></span><code><span class="nf">SSHDisciplineWrapper</span><span class="p">(</span>
-    <span class="n">discipline</span><span class="p">:</span> <span class="n"><span title="gemseo.core.discipline.discipline.Discipline">Discipline</span></span><span class="p">,</span>
+    <span class="n">discipline</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="gemseo.core.discipline.discipline.Discipline" href="https://gemseo.readthedocs.io/en/stable/modules/gemseo.core.discipline.discipline.html#gemseo.core.discipline.discipline.Discipline">Discipline</a></span><span class="p">,</span>
     <span class="n">local_workdir_path</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span> <span class="o">|</span> <span class="n"><a class="autorefs autorefs-external" title="pathlib.Path" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path">Path</a></span><span class="p">,</span>
     <span class="n">hostname</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span><span class="p">,</span>
     <span class="n">remote_workdir_path</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span> <span class="o">|</span> <span class="n"><a class="autorefs autorefs-external" title="pathlib.Path" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path">Path</a></span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">pre_commands</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="collections.abc.Iterable" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable">Iterable</a></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
-    <span class="n">transfer_input_names</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="collections.abc.Iterable" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable">Iterable</a></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
-    <span class="n">transfer_output_names</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="collections.abc.Iterable" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable">Iterable</a></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+    <span class="n">inputs_to_upload</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="collections.abc.Iterable" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable">Iterable</a></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+    <span class="n">outputs_to_download</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="collections.abc.Iterable" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable">Iterable</a></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
     <span class="o">**</span><span class="n">ssh_client_parameters</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Any" href="https://docs.python.org/3/library/typing.html#typing.Any">Any</a></span>
 <span class="p">)</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
             <p class="doc doc-class-bases">
-              Bases: <code><span title="gemseo.core.discipline.discipline.Discipline">Discipline</span></code></p>
+              Bases: <code><a class="autorefs autorefs-external" title="gemseo.core.discipline.discipline.Discipline" href="https://gemseo.readthedocs.io/en/stable/modules/gemseo.core.discipline.discipline.html#gemseo.core.discipline.discipline.Discipline">Discipline</a></code></p>
 
 
         <p>A discipline to execute another discipline via ssh.</p>
@@ -1097,7 +1097,7 @@ by the wrapper.</p>
     <ul>
         <li class="doc-section-item field-body">
             <b><code>discipline</code></b>
-              (<code><span title="gemseo.core.discipline.discipline.Discipline">Discipline</span></code>)
+              (<code><a class="autorefs autorefs-external" title="gemseo.core.discipline.discipline.Discipline" href="https://gemseo.readthedocs.io/en/stable/modules/gemseo.core.discipline.discipline.html#gemseo.core.discipline.discipline.Discipline">Discipline</a></code>)
           –
           <div class="doc-md-description">
             <p>The discipline to wrap and execute on the remote host.</p>
@@ -1143,25 +1143,25 @@ This can be used to activate the Python environment for instance.</p>
           </div>
         </li>
         <li class="doc-section-item field-body">
-            <b><code>transfer_input_names</code></b>
+            <b><code>inputs_to_upload</code></b>
               (<code><a class="autorefs autorefs-external" title="collections.abc.Iterable" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable">Iterable</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>]</code>, default:
                   <code>()</code>
 )
           –
           <div class="doc-md-description">
             <p>The names of the discipline inputs that correspond
-to files that must be transferred before execution.</p>
+to files that must be uploaded before execution.</p>
           </div>
         </li>
         <li class="doc-section-item field-body">
-            <b><code>transfer_output_names</code></b>
+            <b><code>outputs_to_download</code></b>
               (<code><a class="autorefs autorefs-external" title="collections.abc.Iterable" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable">Iterable</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>]</code>, default:
                   <code>()</code>
 )
           –
           <div class="doc-md-description">
             <p>The names of the discipline outputs that correspond
-to files that must be transferred after execution.</p>
+to files that must be downloaded after execution.</p>
           </div>
         </li>
         <li class="doc-section-item field-body">
@@ -1184,7 +1184,7 @@ paramiko.SSHClient.</p>
               <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/exceptions.html#KeyError">KeyError</a></code>
             –
           <div class="doc-md-description">
-            <p>if the transfer_input_names or transfer_output_names arguments
+            <p>if the inputs_to_upload or outputs_to_download arguments
 are inconsistent with the discipline grammars.</p>
           </div>
         </li>
@@ -1196,9 +1196,8 @@ are inconsistent with the discipline grammars.</p>
 
 
                   <details class="quote">
-                    <summary>Source code in <code>src/gemseo_ssh/wrappers/ssh/ssh_wrapped_disc.py</code></summary>
-                    <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 98</span>
-<span class="normal"> 99</span>
+                    <summary>Source code in <code>src/gemseo_ssh/wrappers/ssh/ssh_discipline_wrapper.py</code></summary>
+                    <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 99</span>
 <span class="normal">100</span>
 <span class="normal">101</span>
 <span class="normal">102</span>
@@ -1242,15 +1241,15 @@ are inconsistent with the discipline grammars.</p>
 <span class="normal">140</span>
 <span class="normal">141</span>
 <span class="normal">142</span>
-<span class="normal">143</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+<span class="normal">143</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">discipline</span><span class="p">:</span> <span class="n">Discipline</span><span class="p">,</span>
     <span class="n">local_workdir_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">,</span>
     <span class="n">hostname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">remote_workdir_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
     <span class="n">pre_commands</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
-    <span class="n">transfer_input_names</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
-    <span class="n">transfer_output_names</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+    <span class="n">inputs_to_upload</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+    <span class="n">outputs_to_download</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
     <span class="o">**</span><span class="n">ssh_client_parameters</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1263,29 +1262,28 @@ are inconsistent with the discipline grammars.</p>
 <span class="sd">        pre_commands: The commands run on the remote host before deserialization and</span>
 <span class="sd">            execution of the discipline on the remote host.</span>
 <span class="sd">            This can be used to activate the Python environment for instance.</span>
-<span class="sd">        transfer_input_names: The names of the discipline inputs that correspond</span>
-<span class="sd">            to files that must be transferred before execution.</span>
-<span class="sd">        transfer_output_names: The names of the discipline outputs that correspond</span>
-<span class="sd">            to files that must be transferred after execution.</span>
+<span class="sd">        inputs_to_upload: The names of the discipline inputs that correspond</span>
+<span class="sd">            to files that must be uploaded before execution.</span>
+<span class="sd">        outputs_to_download: The names of the discipline outputs that correspond</span>
+<span class="sd">            to files that must be downloaded after execution.</span>
 <span class="sd">        **ssh_client_parameters: The optional parameters to pass to</span>
 <span class="sd">            paramiko.SSHClient.</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">        KeyError: if the transfer_input_names or transfer_output_names arguments</span>
+<span class="sd">        KeyError: if the inputs_to_upload or outputs_to_download arguments</span>
 <span class="sd">            are inconsistent with the discipline grammars.</span>
 <span class="sd">    &quot;&quot;&quot;</span>  <span class="c1"># noqa: D205, D212, D415</span>
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">discipline</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
     <span class="bp">self</span><span class="o">.</span><span class="n">input_grammar</span> <span class="o">=</span> <span class="n">discipline</span><span class="o">.</span><span class="n">input_grammar</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">output_grammar</span> <span class="o">=</span> <span class="n">discipline</span><span class="o">.</span><span class="n">output_grammar</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">default_input_data</span> <span class="o">=</span> <span class="n">discipline</span><span class="o">.</span><span class="n">default_input_data</span>
 
     <span class="bp">self</span><span class="o">.</span><span class="n">__discipline</span> <span class="o">=</span> <span class="n">discipline</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">__local_root_wd_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">local_workdir_path</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">__pre_commands</span> <span class="o">=</span> <span class="n">pre_commands</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">__hostname</span> <span class="o">=</span> <span class="n">hostname</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">__remote_root_wd_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">remote_workdir_path</span><span class="p">)</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">__set_transfer_io_names</span><span class="p">(</span><span class="n">transfer_input_names</span><span class="p">,</span> <span class="n">transfer_output_names</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">__set_io_to_transfer</span><span class="p">(</span><span class="n">inputs_to_upload</span><span class="p">,</span> <span class="n">outputs_to_download</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">__ssh_client_parameters</span> <span class="o">=</span> <span class="n">ssh_client_parameters</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">__execute_at_linearize</span> <span class="o">=</span> <span class="kc">False</span>
 </code></pre></div></td></tr></table></div>
@@ -1299,13 +1297,13 @@ are inconsistent with the discipline grammars.</p>
 
 
 
-<h5 id="gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper-attributes">Attributes<a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper-attributes" class="headerlink" title="Permanent link">&para;</a></h5>
+<h5 id="gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper-attributes">Attributes<a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper-attributes" class="headerlink" title="Permanent link">&para;</a></h5>
 
 <div class="doc doc-object doc-attribute">
 
 
 
-<h6 id="gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper.SERIALIZED_DISC_FILE_NAME" class="doc doc-heading">
+<h6 id="gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper.SERIALIZED_DISC_FILE_NAME" class="doc doc-heading">
 <code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">SERIALIZED_DISC_FILE_NAME</span>
 
 
@@ -1313,7 +1311,7 @@ are inconsistent with the discipline grammars.</p>
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
   </span>
 
-<a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper.SERIALIZED_DISC_FILE_NAME" class="headerlink" title="Permanent link">&para;</a></h6>
+<a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper.SERIALIZED_DISC_FILE_NAME" class="headerlink" title="Permanent link">&para;</a></h6>
 <div class="doc-signature highlight"><pre><span></span><code><span class="n">SERIALIZED_DISC_FILE_NAME</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span> <span class="o">=</span> <span class="s1">&#39;discipline.pckl&#39;</span>
 </code></pre></div>
 
@@ -1328,7 +1326,7 @@ are inconsistent with the discipline grammars.</p>
 
 
 
-<h6 id="gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper.SERIALIZED_INPUTS_FILE_NAME" class="doc doc-heading">
+<h6 id="gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper.SERIALIZED_INPUTS_FILE_NAME" class="doc doc-heading">
 <code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">SERIALIZED_INPUTS_FILE_NAME</span>
 
 
@@ -1336,7 +1334,7 @@ are inconsistent with the discipline grammars.</p>
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
   </span>
 
-<a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper.SERIALIZED_INPUTS_FILE_NAME" class="headerlink" title="Permanent link">&para;</a></h6>
+<a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper.SERIALIZED_INPUTS_FILE_NAME" class="headerlink" title="Permanent link">&para;</a></h6>
 <div class="doc-signature highlight"><pre><span></span><code><span class="n">SERIALIZED_INPUTS_FILE_NAME</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span> <span class="o">=</span> <span class="s1">&#39;input_data.pckl&#39;</span>
 </code></pre></div>
 
@@ -1351,7 +1349,7 @@ are inconsistent with the discipline grammars.</p>
 
 
 
-<h6 id="gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper.SERIALIZED_OUTPUTS_FILE_NAME" class="doc doc-heading">
+<h6 id="gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper.SERIALIZED_OUTPUTS_FILE_NAME" class="doc doc-heading">
 <code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">SERIALIZED_OUTPUTS_FILE_NAME</span>
 
 
@@ -1359,7 +1357,7 @@ are inconsistent with the discipline grammars.</p>
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
   </span>
 
-<a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper.SERIALIZED_OUTPUTS_FILE_NAME" class="headerlink" title="Permanent link">&para;</a></h6>
+<a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper.SERIALIZED_OUTPUTS_FILE_NAME" class="headerlink" title="Permanent link">&para;</a></h6>
 <div class="doc-signature highlight"><pre><span></span><code><span class="n">SERIALIZED_OUTPUTS_FILE_NAME</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span> <span class="o">=</span> <span class="s1">&#39;output_data.pckl&#39;</span>
 </code></pre></div>
 
@@ -1374,7 +1372,7 @@ are inconsistent with the discipline grammars.</p>
 
 
 
-<h6 id="gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper.SSH_KEEP_ALIVE_INTERVAL" class="doc doc-heading">
+<h6 id="gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper.SSH_KEEP_ALIVE_INTERVAL" class="doc doc-heading">
 <code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">SSH_KEEP_ALIVE_INTERVAL</span>
 
 
@@ -1382,7 +1380,7 @@ are inconsistent with the discipline grammars.</p>
       <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
   </span>
 
-<a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper.SSH_KEEP_ALIVE_INTERVAL" class="headerlink" title="Permanent link">&para;</a></h6>
+<a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper.SSH_KEEP_ALIVE_INTERVAL" class="headerlink" title="Permanent link">&para;</a></h6>
 <div class="doc-signature highlight"><pre><span></span><code><span class="n">SSH_KEEP_ALIVE_INTERVAL</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></span> <span class="o">=</span> <span class="mi">600</span>
 </code></pre></div>
 
@@ -1393,21 +1391,21 @@ are inconsistent with the discipline grammars.</p>
 
 </div>
 
-<h5 id="gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper-functions">Functions<a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper-functions" class="headerlink" title="Permanent link">&para;</a></h5>
+<h5 id="gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper-functions">Functions<a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper-functions" class="headerlink" title="Permanent link">&para;</a></h5>
 
 <div class="doc doc-object doc-function">
 
 
-<h6 id="gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper.linearize" class="doc doc-heading">
+<h6 id="gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper.linearize" class="doc doc-heading">
 <code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">linearize</span>
 
 
-<a href="#gemseo_ssh.wrappers.ssh.ssh_wrapped_disc.SSHDisciplineWrapper.linearize" class="headerlink" title="Permanent link">&para;</a></h6>
+<a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper.linearize" class="headerlink" title="Permanent link">&para;</a></h6>
 <div class="doc-signature highlight"><pre><span></span><code><span class="nf">linearize</span><span class="p">(</span>
-    <span class="n">input_data</span><span class="p">:</span> <span class="n"><span title="gemseo.typing.StrKeyMapping">StrKeyMapping</span></span> <span class="o">=</span> <span class="n"><a class="autorefs autorefs-external" title="gemseo.utils.constants.READ_ONLY_EMPTY_DICT" href="https://gemseo.readthedocs.io/en/stable/_modules/gemseo.utils.constants.html#gemseo.utils.constants.READ_ONLY_EMPTY_DICT">READ_ONLY_EMPTY_DICT</a></span><span class="p">,</span>
+    <span class="n">input_data</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="gemseo.typing.StrKeyMapping" href="https://gemseo.readthedocs.io/en/stable/modules/gemseo.typing.html#gemseo.typing.StrKeyMapping">StrKeyMapping</a></span> <span class="o">=</span> <span class="n"><a class="autorefs autorefs-external" title="gemseo.utils.constants.READ_ONLY_EMPTY_DICT" href="https://gemseo.readthedocs.io/en/stable/modules/gemseo.utils.constants.html#gemseo.utils.constants.READ_ONLY_EMPTY_DICT">READ_ONLY_EMPTY_DICT</a></span><span class="p">,</span>
     <span class="n">compute_all_jacobians</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">execute</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-external" title="gemseo.typing.JacobianData" href="https://gemseo.readthedocs.io/en/stable/_modules/gemseo.typing.html#gemseo.typing.JacobianData">JacobianData</a></span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-external" title="gemseo.typing.JacobianData" href="https://gemseo.readthedocs.io/en/stable/modules/gemseo.typing.html#gemseo.typing.JacobianData">JacobianData</a></span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1419,8 +1417,8 @@ are inconsistent with the discipline grammars.</p>
     <ul>
         <li class="doc-section-item field-body">
             <b><code>input_data</code></b>
-              (<code><span title="gemseo.typing.StrKeyMapping">StrKeyMapping</span></code>, default:
-                  <code><a class="autorefs autorefs-external" title="gemseo.utils.constants.READ_ONLY_EMPTY_DICT" href="https://gemseo.readthedocs.io/en/stable/_modules/gemseo.utils.constants.html#gemseo.utils.constants.READ_ONLY_EMPTY_DICT">READ_ONLY_EMPTY_DICT</a></code>
+              (<code><a class="autorefs autorefs-external" title="gemseo.typing.StrKeyMapping" href="https://gemseo.readthedocs.io/en/stable/modules/gemseo.typing.html#gemseo.typing.StrKeyMapping">StrKeyMapping</a></code>, default:
+                  <code><a class="autorefs autorefs-external" title="gemseo.utils.constants.READ_ONLY_EMPTY_DICT" href="https://gemseo.readthedocs.io/en/stable/modules/gemseo.utils.constants.html#gemseo.utils.constants.READ_ONLY_EMPTY_DICT">READ_ONLY_EMPTY_DICT</a></code>
 )
           –
           <div class="doc-md-description">
@@ -1440,7 +1438,7 @@ all the outputs with respect to all the inputs.
 Otherwise,
 set the output variables to differentiate
 with :meth:<code>.add_differentiated_outputs</code>
-and the input variables against which to differentiate them
+and the input variables with respect to which to differentiate them
 with :meth:<code>.add_differentiated_inputs</code>.</p>
           </div>
         </li>
@@ -1464,7 +1462,7 @@ have been stored in the :attr:<code>.cache</code>.</p>
 <p><span class="doc-section-title">Returns:</span></p>
     <ul>
         <li class="doc-section-item field-body">
-              <code><a class="autorefs autorefs-external" title="gemseo.typing.JacobianData" href="https://gemseo.readthedocs.io/en/stable/_modules/gemseo.typing.html#gemseo.typing.JacobianData">JacobianData</a></code>
+              <code><a class="autorefs autorefs-external" title="gemseo.typing.JacobianData" href="https://gemseo.readthedocs.io/en/stable/modules/gemseo.typing.html#gemseo.typing.JacobianData">JacobianData</a></code>
           –
           <div class="doc-md-description">
             <p>The Jacobian matrices
@@ -1490,19 +1488,19 @@ or the outputs to differentiate are missing.</p>
     </ul>
 
             <details class="quote">
-              <summary>Source code in <code>src/gemseo_ssh/wrappers/ssh/ssh_wrapped_disc.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">331</span>
-<span class="normal">332</span>
-<span class="normal">333</span>
-<span class="normal">334</span>
-<span class="normal">335</span>
-<span class="normal">336</span>
+              <summary>Source code in <code>src/gemseo_ssh/wrappers/ssh/ssh_discipline_wrapper.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">336</span>
 <span class="normal">337</span>
 <span class="normal">338</span>
 <span class="normal">339</span>
 <span class="normal">340</span>
 <span class="normal">341</span>
-<span class="normal">342</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">linearize</span><span class="p">(</span>  <span class="c1"># noqa: D102</span>
+<span class="normal">342</span>
+<span class="normal">343</span>
+<span class="normal">344</span>
+<span class="normal">345</span>
+<span class="normal">346</span>
+<span class="normal">347</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">linearize</span><span class="p">(</span>  <span class="c1"># noqa: D102</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">input_data</span><span class="p">:</span> <span class="n">StrKeyMapping</span> <span class="o">=</span> <span class="n">READ_ONLY_EMPTY_DICT</span><span class="p">,</span>
     <span class="n">compute_all_jacobians</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
@@ -1585,7 +1583,7 @@ or the outputs to differentiate are missing.</p>
     <script id="__config" type="application/json">{"base": "../../../../..", "features": ["navigation.tabs", "navigation.instant", "navigation.indexes"], "search": "../../../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../../../../assets/javascripts/bundle.83f73b43.min.js"></script>
+      <script src="../../../../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
       
         <script src="../../../../../assets/_markdown_exec_pyodide.js"></script>
       
