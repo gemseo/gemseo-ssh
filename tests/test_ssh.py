@@ -14,24 +14,19 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 from __future__ import annotations
 
-import os
-import shutil
 import subprocess
 import venv
 from pathlib import Path
 from typing import NamedTuple
-from unittest.mock import MagicMock
 
 import pytest
-from filelock import FileLock
 from gemseo import create_discipline
 from gemseo.problems.topology_optimization.volume_fraction_disc import VolumeFraction
 from gemseo.utils.comparisons import compare_dict_of_arrays
 from gemseo.utils.platform import PLATFORM_IS_WINDOWS
-from paramiko import SSHClient as ParamikoSSHCLIENT
+from gemseo.utils.testing.pytest_conftest import *  # noqa: F401,F403
 
 from gemseo_ssh import wrap_discipline_with_ssh
-from gemseo_ssh.wrappers.ssh.paramiko import SSHClient as GemseoSSHClient
 
 CURRENT_DIR_PATH = Path(__file__).parent
 
@@ -46,32 +41,6 @@ else:
     VENV_REL_PATH_TO_PYTHON = "bin/python"
     ACTIVATE_CMD = ". {venv_path}/bin/activate"
     SET_PYTHONPATH_CMD = "export PYTHONPATH={workdir_path}:$PYTHONPATH"
-
-
-class SFTP:
-    """Mock of the sftp client."""
-
-    mkdir = os.mkdir
-    chdir = os.chdir
-    get = staticmethod(shutil.copyfile)
-    put = staticmethod(shutil.copyfile)
-
-
-def exec_command(self, cmd: str) -> tuple:
-    """Mock the related command of the ssh client."""
-    exit_code = os.system(cmd)
-    stdout = MagicMock()
-    stdout.channel.recv_exit_status = lambda: exit_code
-    return None, stdout, MagicMock()
-
-
-# Mock the ssh client.
-ParamikoSSHCLIENT.set_missing_host_key_policy = MagicMock()
-ParamikoSSHCLIENT.load_system_host_keys = MagicMock()
-ParamikoSSHCLIENT.connect = MagicMock()
-ParamikoSSHCLIENT.get_transport = MagicMock()
-ParamikoSSHCLIENT.exec_command = exec_command
-GemseoSSHClient.open_sftp = MagicMock(side_effect=SFTP)
 
 
 class RemoteSetup(NamedTuple):
@@ -123,13 +92,14 @@ def remote_setup(tmp_path_factory, worker_id):
     """Create the virtual env for the remote connection on the local host."""
     workdir_path = tmp_path_factory.mktemp("ssh-remote-workdir")
     venv_path = workdir_path / "venv"
+    venv_path = Path("/home/ad/gemseo-ssh/.venv-rpyc-v6")
 
-    # Safely creates the venv when executing the tests in parallel.
-    if worker_id == "master":
-        create_venv(venv_path)
-    else:
-        with FileLock(str(workdir_path / "fixture.lock")):
-            create_venv(venv_path)
+    # # Safely creates the venv when executing the tests in parallel.
+    # if worker_id == "master":
+    #     create_venv(venv_path)
+    # else:
+    #     with FileLock(str(workdir_path / "fixture.lock")):
+    #         create_venv(venv_path)
 
     return RemoteSetup(
         workdir_path,
@@ -141,14 +111,12 @@ def remote_setup(tmp_path_factory, worker_id):
 def test_linux(tmp_path, remote_setup):
     """Test the remote execution on a Linux env."""
     local_disc = create_discipline("SobieskiMission")
-    pre_commands = [remote_setup.activation_cmd]
 
     remote_disc = wrap_discipline_with_ssh(
         local_disc,
         tmp_path,
         HOSTNAME,
         remote_workdir_path=remote_setup.workdir_path.as_posix(),
-        pre_commands=pre_commands,
     )
 
     data = remote_disc.execute()
@@ -157,7 +125,7 @@ def test_linux(tmp_path, remote_setup):
     assert compare_dict_of_arrays(data, ref_data)
 
 
-def test_linux_transfer(tmp_path, remote_setup, monkeypatch):
+def test_linux_transfer(tmp_wd, remote_setup, monkeypatch):
     """Test the remote execution on a Linux env with files transfers."""
     # For the picling to work,
     # the namespace of the discipline shall be accessible on the
@@ -168,21 +136,14 @@ def test_linux_transfer(tmp_path, remote_setup, monkeypatch):
 
     local_disc = DiscWithFiles()
 
-    pre_commands = [
-        remote_setup.activation_cmd,
-        # This allows unpickling the discipline on the remote host.
-        remote_setup.set_python_path_cmd,
-    ]
-
-    in_path = tmp_path / "in_f.txt"
+    in_path = tmp_wd / "in_f.txt"
     in_path.write_text("0")
 
     remote_disc = wrap_discipline_with_ssh(
         local_disc,
-        tmp_path,
+        tmp_wd,
         HOSTNAME,
         remote_workdir_path=remote_setup.workdir_path.as_posix(),
-        pre_commands=pre_commands,
         # The discipline module is transfered along with its inputs,
         # but it is not used by itself.
         inputs_to_upload=["in_file", "discipline"],
@@ -191,7 +152,7 @@ def test_linux_transfer(tmp_path, remote_setup, monkeypatch):
 
     data = remote_disc.execute(
         {
-            "in_file": str(in_path),
+            "in_file": in_path.name,
             "discipline": str(CURRENT_DIR_PATH / "discipline.py"),
         },
     )
@@ -207,13 +168,11 @@ def test_linearize(tmp_path, remote_setup, compute_all_jacobians, execute) -> No
     """Test the linearization of the wrapped discipline."""
 
     local_disc = create_discipline("SobieskiMission")
-    pre_commands = [remote_setup.activation_cmd]
     remote_disc = wrap_discipline_with_ssh(
         local_disc,
         tmp_path,
         HOSTNAME,
         remote_workdir_path=remote_setup.workdir_path.as_posix(),
-        pre_commands=pre_commands,
     )
 
     if not compute_all_jacobians:
@@ -235,14 +194,12 @@ def test_linearize_at_exe(tmp_path, remote_setup) -> None:
 
     # This discipline linearizes at exe
     local_disc = VolumeFraction()
-    pre_commands = [remote_setup.activation_cmd]
 
     remote_disc = wrap_discipline_with_ssh(
         local_disc,
         tmp_path,
         HOSTNAME,
         remote_workdir_path=remote_setup.workdir_path.as_posix(),
-        pre_commands=pre_commands,
     )
 
     remote_disc.execute()
