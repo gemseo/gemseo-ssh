@@ -45,7 +45,7 @@ fastjsonschema==2.20.0
     # via gemseo
 fonttools==4.55.3
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@e9df69caac28e33ca4403b1d6df140db404b555e
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@d3d48bc224c2086c727cae01c529d192f0b51631
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
@@ -55,7 +55,7 @@ ghp-import==2.1.0
     # via mkdocs
 graphviz==0.20.3
     # via gemseo
-griffe==1.5.4
+griffe==1.5.5
     # via
     #   griffe-inherited-docstrings
     #   mkdocstrings-python
@@ -129,7 +129,7 @@ mkdocs-autorefs==1.3.0
     # via
     #   mkdocstrings
     #   mkdocstrings-python
-mkdocs-bibtex==2.16.2
+mkdocs-bibtex==3.0.0
     # via gemseo-ssh (pyproject.toml)
 mkdocs-gallery==0.10.4
     # via gemseo-ssh (pyproject.toml)
@@ -258,6 +258,7 @@ pyyaml==6.0.2
     #   pybtex
     #   pymdown-extensions
     #   pyyaml-env-tag
+    #   responses
 pyyaml-env-tag==0.1
     # via
     #   mike
@@ -269,6 +270,9 @@ requests==2.32.3
     #   gemseo
     #   mkdocs-bibtex
     #   mkdocs-material
+    #   responses
+responses==0.25.6
+    # via mkdocs-bibtex
 scikit-learn==1.5.2
     # via gemseo
 scipy==1.13.1
@@ -306,7 +310,9 @@ typing-extensions==4.12.2
 tzdata==2024.2
     # via pandas
 urllib3==2.3.0
-    # via requests
+    # via
+    #   requests
+    #   responses
 validators==0.34.0
     # via mkdocs-bibtex
 verspec==0.1.0
