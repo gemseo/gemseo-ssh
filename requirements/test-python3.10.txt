@@ -38,9 +38,9 @@ fastjsonschema==2.20.0
     # via gemseo
 filelock==3.17.0
     # via gemseo-ssh (pyproject.toml)
-fonttools==4.55.8
+fonttools==4.56.0
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@f5491f8741ee2a41024972da19679ea53e2228a9
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@e95b346444b50fe96027ca501d0bda42f0c7eec0
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
