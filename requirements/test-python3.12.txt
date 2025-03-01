@@ -2,7 +2,7 @@
 #    uv pip compile --extra test --constraint requirements/test-constraints.in -o requirements/test-python3.12.txt --python-version 3.12 pyproject.toml
 annotated-types==0.7.0
     # via pydantic
-bcrypt==4.2.1
+bcrypt==4.3.0
     # via paramiko
 certifi==2025.1.31
     # via requests
@@ -38,7 +38,7 @@ filelock==3.17.0
     # via gemseo-ssh (pyproject.toml)
 fonttools==4.56.0
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@25694b031b234c9d05fdbd9e6fde8e3bf1ebe7d2
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@184c2d72be48e4b6990a98a8679344f85d5b0c38
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
