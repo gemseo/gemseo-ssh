@@ -40,7 +40,7 @@ filelock==3.18.0
     # via gemseo-ssh (pyproject.toml)
 fonttools==4.56.0
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@64766998d460637ba91d22bab8d33c768feaa789
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@d9e96a3cb58a397e293b48abcc5c9ccf5439e2f6
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
@@ -122,7 +122,7 @@ pydoe3==1.0.4
     # via gemseo
 pynacl==1.5.0
     # via paramiko
-pyparsing==3.2.2
+pyparsing==3.2.3
     # via matplotlib
 pytest==8.3.5
     # via
@@ -137,7 +137,7 @@ python-dateutil==2.9.0.post0
     # via
     #   matplotlib
     #   pandas
-pytz==2025.1
+pytz==2025.2
     # via pandas
 pyxdsm==2.3.1
     # via gemseo
