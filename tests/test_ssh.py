@@ -25,6 +25,9 @@ from unittest.mock import MagicMock
 import pytest
 from filelock import FileLock
 from gemseo import create_discipline
+from gemseo.core.parallel_execution.callable_parallel_execution import (
+    CallableParallelExecution,
+)
 from gemseo.problems.topology_optimization.volume_fraction_disc import VolumeFraction
 from gemseo.utils.comparisons import compare_dict_of_arrays
 from gemseo.utils.platform import PLATFORM_IS_WINDOWS
@@ -32,6 +35,9 @@ from paramiko import SSHClient as ParamikoSSHCLIENT
 
 from gemseo_ssh import wrap_discipline_with_ssh
 from gemseo_ssh.wrappers.ssh.paramiko import SSHClient as GemseoSSHClient
+from gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper import (
+    _generate_unique_directory_name,
+)
 
 CURRENT_DIR_PATH = Path(__file__).parent
 
@@ -109,7 +115,7 @@ def create_venv(path: Path):
     """
     venv.create(path, with_pip=True, symlinks=True)
 
-    gemseo_version = "gemseo@git+https://gitlab.com/gemseo/dev/gemseo.git@develop"
+    gemseo_version = "gemseo[all]@git+https://gitlab.com/gemseo/dev/gemseo.git@develop"
 
     subprocess.run(
         f"{path / VENV_REL_PATH_TO_PYTHON} -m pip install {gemseo_version}".split(),
@@ -275,3 +281,19 @@ def test_outputs_names_error(tmp_path):
             HOSTNAME,
             outputs_to_download=["bad-name", "ko-name"],
         )
+
+
+def f(_):
+    """Helper function to use ine CallableParallelExecution."""
+    return _generate_unique_directory_name()
+
+
+def test_unique_directory_name_in_multiprocessing():
+    """Test of _generate_unique_directory_name in multiprocessing.
+
+    Reproducer of bug #7 when using UUID1, leading to frequent UUID collisions.
+    """
+    parallel_execution = CallableParallelExecution([f], n_processes=5)
+    out = parallel_execution.execute([None] * 100)
+    assert len(out) == 100
+    assert len(set(out)) == 100

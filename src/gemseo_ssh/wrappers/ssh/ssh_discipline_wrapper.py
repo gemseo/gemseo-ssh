@@ -22,7 +22,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import ClassVar
-from uuid import uuid1
+from uuid import uuid4
 
 from gemseo.core.discipline.discipline import Discipline
 from gemseo.utils.constants import READ_ONLY_EMPTY_DICT
@@ -39,6 +39,18 @@ if TYPE_CHECKING:
 
 
 LOGGER = getLogger(__name__)
+
+
+def _generate_unique_directory_name() -> str:
+    """Generate a unique directory name.
+
+    Note: UUID4 is used instead of UUID1 to ensure uniqueness,
+    especially when using multiprocessing.
+
+    Returns:
+        The unique directory name.
+    """
+    return str(uuid4()).split("-")[0]
 
 
 class SSHDisciplineWrapper(Discipline):
@@ -286,9 +298,13 @@ class SSHDisciplineWrapper(Discipline):
 
         return output_data[0]
 
-    def __create_cwd_paths(self, sftp_client: SFTPClient) -> None:
-        """Create the unique current local and remote work directory paths."""
-        dir_name = str(uuid1()).split("-")[0]
+    def _create_local_and_distant_directories(self, sftp_client: SFTPClient) -> None:
+        """Create the unique current local and remote work directories.
+
+        Args:
+             sftp_client: The FTP client.
+        """
+        dir_name = _generate_unique_directory_name()
         self.__local_cwd_path = self.__local_root_wd_path / dir_name
         self.__local_cwd_path.mkdir()
         self.__remote_cwd_path = self.__remote_root_wd_path / dir_name
@@ -375,13 +391,12 @@ class SSHDisciplineWrapper(Discipline):
             self.SSH_KEEP_ALIVE_INTERVAL,
             **self.__ssh_client_parameters,
         )
-
         sftp_client = ssh_client.open_sftp()
-        self.__create_cwd_paths(sftp_client)
+        self._create_local_and_distant_directories(sftp_client)
         serialized_disc_path, serialized_inputs_path = self._write_serialized_files(
             differentiated_inputs, differentiated_outputs
         )
-        sftp_client.chdir(self.__remote_cwd_path)
+        sftp_client.chdir(str(self.__remote_cwd_path))
         self._upload_serialized_files(
             sftp_client, serialized_disc_path, serialized_inputs_path
         )
