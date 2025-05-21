@@ -109,7 +109,7 @@ def create_venv(path: Path):
     """
     venv.create(path, with_pip=True, symlinks=True)
 
-    gemseo_version = "gemseo@git+https://gitlab.com/gemseo/dev/gemseo.git@develop"
+    gemseo_version = "gemseo[all]@git+https://gitlab.com/gemseo/dev/gemseo.git@develop"
 
     subprocess.run(
         f"{path / VENV_REL_PATH_TO_PYTHON} -m pip install {gemseo_version}".split(),
