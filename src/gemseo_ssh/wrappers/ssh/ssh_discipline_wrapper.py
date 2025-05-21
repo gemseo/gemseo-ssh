@@ -22,10 +22,10 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import ClassVar
-from uuid import uuid1
 
 from gemseo.core.discipline.discipline import Discipline
 from gemseo.utils.constants import READ_ONLY_EMPTY_DICT
+from gemseo.utils.directory_creator import DirectoryCreator
 
 from gemseo_ssh.wrappers.ssh.paramiko import SFTPClient
 from gemseo_ssh.wrappers.ssh.paramiko import SSHClient
@@ -96,6 +96,9 @@ class SSHDisciplineWrapper(Discipline):
     __ssh_client_parameters: dict[str, Any]
     """The optional parameters for paramiko.SSHClient."""
 
+    __directory_creator: DirectoryCreator
+    """The directory creator to create and generate unique folder names."""
+
     def __init__(
         self,
         discipline: Discipline,
@@ -141,6 +144,10 @@ class SSHDisciplineWrapper(Discipline):
         self.__set_io_to_transfer(inputs_to_upload, outputs_to_download)
         self.__ssh_client_parameters = ssh_client_parameters
         self.__execute_at_linearize = False
+        self.__directory_creator = DirectoryCreator(
+            directory_naming_method=DirectoryCreator.Naming.UUID,
+            root_directory=Path(local_workdir_path),
+        )
 
     def __set_io_to_transfer(
         self,
@@ -286,11 +293,14 @@ class SSHDisciplineWrapper(Discipline):
 
         return output_data[0]
 
-    def __create_cwd_paths(self, sftp_client: SFTPClient) -> None:
-        """Create the unique current local and remote work directory paths."""
-        dir_name = str(uuid1()).split("-")[0]
-        self.__local_cwd_path = self.__local_root_wd_path / dir_name
-        self.__local_cwd_path.mkdir()
+    def _create_local_and_remote_directories(self, sftp_client: SFTPClient) -> None:
+        """Create the unique current local and remote work directories.
+
+        Args:
+             sftp_client: The FTP client.
+        """
+        self.__local_cwd_path = self.__directory_creator.create()
+        dir_name = self.__directory_creator.last_directory.name
         self.__remote_cwd_path = self.__remote_root_wd_path / dir_name
         sftp_client.mkdir(self.__remote_cwd_path)
 
@@ -375,9 +385,8 @@ class SSHDisciplineWrapper(Discipline):
             self.SSH_KEEP_ALIVE_INTERVAL,
             **self.__ssh_client_parameters,
         )
-
         sftp_client = ssh_client.open_sftp()
-        self.__create_cwd_paths(sftp_client)
+        self._create_local_and_remote_directories(sftp_client)
         serialized_disc_path, serialized_inputs_path = self._write_serialized_files(
             differentiated_inputs, differentiated_outputs
         )
