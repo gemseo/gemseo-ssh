@@ -22,7 +22,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 from typing import Any
 from typing import ClassVar
-from uuid import uuid1
+from uuid import uuid4
 
 from gemseo.core.discipline import MDODiscipline
 
@@ -261,7 +261,7 @@ class SSHDisciplineWrapper(MDODiscipline):
 
     def __create_cwd_paths(self, sftp_client: SFTPClient) -> None:
         """Create the unique current local and remote work directory paths."""
-        dir_name = str(uuid1()).split("-")[0]
+        dir_name = str(uuid4()).split("-")[0]
         self.__local_cwd_path = self.__local_root_wd_path / dir_name
         self.__local_cwd_path.mkdir()
         self.__remote_cwd_path = self.__remote_root_wd_path / dir_name
