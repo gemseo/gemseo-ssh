@@ -20,7 +20,7 @@ coverage==7.8.2
     # via
     #   covdefaults
     #   pytest-cov
-cryptography==45.0.2
+cryptography==45.0.3
     # via paramiko
 cycler==0.12.1
     # via matplotlib
@@ -38,7 +38,7 @@ filelock==3.18.0
     # via gemseo-ssh (pyproject.toml)
 fonttools==4.58.0
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@16afb690a738150df9df87dc3fe654500af3f0a2
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@9c0535860ef70109aed4a8efa6356d849e8442e2
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
@@ -61,6 +61,8 @@ kiwisolver==1.4.8
 markupsafe==3.0.2
     # via jinja2
 matplotlib==3.10.1
+    # via gemseo
+minisom==2.3.5
     # via gemseo
 mock-ssh-server==0.9.1
     # via gemseo-ssh (pyproject.toml)
@@ -129,7 +131,7 @@ pytest==8.3.5
     #   pytest-xdist
 pytest-cov==6.1.1
     # via gemseo-ssh (pyproject.toml)
-pytest-xdist==3.6.1
+pytest-xdist==3.7.0
     # via gemseo-ssh (pyproject.toml)
 python-dateutil==2.9.0.post0
     # via
