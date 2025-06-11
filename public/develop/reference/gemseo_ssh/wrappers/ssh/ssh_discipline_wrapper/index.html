@@ -1227,8 +1227,7 @@ are inconsistent with the discipline grammars.</p>
 
                   <details class="quote">
                     <summary>Source code in <code>src/gemseo_ssh/wrappers/ssh/ssh_discipline_wrapper.py</code></summary>
-                    <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">102</span>
-<span class="normal">103</span>
+                    <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">103</span>
 <span class="normal">104</span>
 <span class="normal">105</span>
 <span class="normal">106</span>
@@ -1275,7 +1274,8 @@ are inconsistent with the discipline grammars.</p>
 <span class="normal">147</span>
 <span class="normal">148</span>
 <span class="normal">149</span>
-<span class="normal">150</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+<span class="normal">150</span>
+<span class="normal">151</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">discipline</span><span class="p">:</span> <span class="n">Discipline</span><span class="p">,</span>
     <span class="n">local_workdir_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">,</span>
@@ -1321,7 +1321,7 @@ are inconsistent with the discipline grammars.</p>
     <span class="bp">self</span><span class="o">.</span><span class="n">__ssh_client_parameters</span> <span class="o">=</span> <span class="n">ssh_client_parameters</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">__execute_at_linearize</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">__directory_creator</span> <span class="o">=</span> <span class="n">DirectoryCreator</span><span class="p">(</span>
-        <span class="n">directory_naming_method</span><span class="o">=</span><span class="n">DirectoryCreator</span><span class="o">.</span><span class="n">Naming</span><span class="o">.</span><span class="n">UUID</span><span class="p">,</span>
+        <span class="n">directory_naming_method</span><span class="o">=</span><span class="n">DirectoryNamingMethod</span><span class="o">.</span><span class="n">UUID</span><span class="p">,</span>
         <span class="n">root_directory</span><span class="o">=</span><span class="n">Path</span><span class="p">(</span><span class="n">local_workdir_path</span><span class="p">),</span>
     <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
@@ -1532,8 +1532,7 @@ or the outputs to differentiate are missing.</p>
 
             <details class="quote">
               <summary>Source code in <code>src/gemseo_ssh/wrappers/ssh/ssh_discipline_wrapper.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">346</span>
-<span class="normal">347</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">347</span>
 <span class="normal">348</span>
 <span class="normal">349</span>
 <span class="normal">350</span>
@@ -1543,7 +1542,8 @@ or the outputs to differentiate are missing.</p>
 <span class="normal">354</span>
 <span class="normal">355</span>
 <span class="normal">356</span>
-<span class="normal">357</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">linearize</span><span class="p">(</span>  <span class="c1"># noqa: D102</span>
+<span class="normal">357</span>
+<span class="normal">358</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">linearize</span><span class="p">(</span>  <span class="c1"># noqa: D102</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">input_data</span><span class="p">:</span> <span class="n">StrKeyMapping</span> <span class="o">=</span> <span class="n">READ_ONLY_EMPTY_DICT</span><span class="p">,</span>
     <span class="n">compute_all_jacobians</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
