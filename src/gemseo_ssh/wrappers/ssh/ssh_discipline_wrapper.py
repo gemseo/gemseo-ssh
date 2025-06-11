@@ -26,6 +26,7 @@ from typing import ClassVar
 from gemseo.core.discipline.discipline import Discipline
 from gemseo.utils.constants import READ_ONLY_EMPTY_DICT
 from gemseo.utils.directory_creator import DirectoryCreator
+from gemseo.utils.directory_creator import DirectoryNamingMethod
 
 from gemseo_ssh.wrappers.ssh.paramiko import SFTPClient
 from gemseo_ssh.wrappers.ssh.paramiko import SSHClient
@@ -145,7 +146,7 @@ class SSHDisciplineWrapper(Discipline):
         self.__ssh_client_parameters = ssh_client_parameters
         self.__execute_at_linearize = False
         self.__directory_creator = DirectoryCreator(
-            directory_naming_method=DirectoryCreator.Naming.UUID,
+            directory_naming_method=DirectoryNamingMethod.UUID,
             root_directory=Path(local_workdir_path),
         )
 
