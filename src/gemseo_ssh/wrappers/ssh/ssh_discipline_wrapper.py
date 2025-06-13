@@ -134,8 +134,8 @@ class SSHDisciplineWrapper(Discipline):
         """  # noqa: D205, D212, D415
         super().__init__(discipline.name)
 
-        self.input_grammar = discipline.input_grammar
-        self.output_grammar = discipline.output_grammar
+        self.input_grammar = discipline.input_grammar.copy()
+        self.output_grammar = discipline.output_grammar.copy()
 
         self.__discipline = discipline
         self.__local_root_wd_path = Path(local_workdir_path)

@@ -25,9 +25,13 @@ from unittest.mock import MagicMock
 import pytest
 from filelock import FileLock
 from gemseo import create_discipline
+from gemseo.disciplines.wrappers.job_schedulers.discipline_wrapper import (  # noqa: E501
+    JobSchedulerDisciplineWrapper,
+)
 from gemseo.problems.topology_optimization.volume_fraction_disc import VolumeFraction
 from gemseo.utils.comparisons import compare_dict_of_arrays
 from gemseo.utils.platform import PLATFORM_IS_WINDOWS
+from gemseo.utils.testing.pytest_conftest import tmp_wd  # noqa: F401
 from paramiko import SSHClient as ParamikoSSHCLIENT
 
 from gemseo_ssh import wrap_discipline_with_ssh
@@ -152,7 +156,6 @@ def test_linux(tmp_path, remote_setup):
     )
 
     data = remote_disc.execute()
-
     ref_data = local_disc.execute()
     assert compare_dict_of_arrays(data, ref_data)
 
@@ -275,3 +278,54 @@ def test_outputs_names_error(tmp_path):
             HOSTNAME,
             outputs_to_download=["bad-name", "ko-name"],
         )
+
+
+@pytest.fixture
+def discipline_mocked_js(tmp_wd) -> JobSchedulerDisciplineWrapper:  # noqa: F811
+    """Creates a JobSchedulerDisciplineWrapper based on JobSchedulerDisciplineWrapper
+    using the mock template.
+
+    Returns:
+        The wrapped discipline
+    """
+    return JobSchedulerDisciplineWrapper(
+        create_discipline("SobieskiMission"),
+        job_template_path=Path(__file__).parent / "mock_job_scheduler.py",
+        workdir_path=tmp_wd,
+        job_out_filename="run_disc.py",
+        scheduler_run_command="python",
+    )
+
+
+@pytest.mark.parametrize("use_namespaces", [True, False])
+def test_job_scheduler_discipline_wrapper(
+    tmp_path, remote_setup, monkeypatch, discipline_mocked_js, use_namespaces
+):
+    """Test the SSHDiscipline with a Job Scheduler Discipline wrapped inside."""
+
+    monkeypatch.syspath_prepend(CURRENT_DIR_PATH)
+
+    pre_commands = [
+        remote_setup.activation_cmd,
+        # This allows unpickling the discipline on the remote host.
+        remote_setup.set_python_path_cmd,
+    ]
+
+    remote_disc = wrap_discipline_with_ssh(
+        discipline_mocked_js,
+        tmp_path,
+        HOSTNAME,
+        remote_workdir_path=remote_setup.workdir_path.as_posix(),
+        pre_commands=pre_commands,
+    )
+
+    sobieski_mission_disc = create_discipline("SobieskiMission")
+    if use_namespaces:
+        remote_disc.input_grammar.add_namespace("y_14", "ns1")
+        remote_disc.output_grammar.add_namespace("y_4", "ns1")
+        sobieski_mission_disc.input_grammar.add_namespace("y_14", "ns1")
+        sobieski_mission_disc.output_grammar.add_namespace("y_4", "ns1")
+
+    data = remote_disc.execute()
+    data_local = sobieski_mission_disc.execute()
+    assert compare_dict_of_arrays(data, data_local)
