@@ -46,7 +46,7 @@ fastjsonschema==2.21.1
     # via gemseo
 fonttools==4.58.4
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@8bc9a8b00e555499e36d3129d7cff8635213f592
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@7af32dddb9b34eb530b72147105d46d5a6dc0bc1
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
@@ -91,7 +91,7 @@ kiwisolver==1.4.7
     # via matplotlib
 latexcodec==3.0.1
     # via pybtex
-markdown==3.8
+markdown==3.8.2
     # via
     #   mkdocs
     #   mkdocs-autorefs
@@ -309,7 +309,7 @@ typing-extensions==4.14.0
     #   pydantic-core
 tzdata==2025.2
     # via pandas
-urllib3==2.4.0
+urllib3==2.5.0
     # via
     #   requests
     #   responses
