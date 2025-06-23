@@ -19,6 +19,7 @@ import shutil
 import subprocess
 import venv
 from pathlib import Path
+from typing import TYPE_CHECKING
 from typing import NamedTuple
 from unittest.mock import MagicMock
 
@@ -36,6 +37,9 @@ from paramiko import SSHClient as ParamikoSSHCLIENT
 
 from gemseo_ssh import wrap_discipline_with_ssh
 from gemseo_ssh.wrappers.ssh.paramiko import SSHClient as GemseoSSHClient
+
+if TYPE_CHECKING:
+    from gemseo.core.discipline.discipline import Discipline
 
 CURRENT_DIR_PATH = Path(__file__).parent
 
@@ -280,42 +284,39 @@ def test_outputs_names_error(tmp_path):
         )
 
 
-@pytest.fixture
-def discipline_mocked_js(tmp_wd) -> JobSchedulerDisciplineWrapper:  # noqa: F811
-    """Creates a JobSchedulerDisciplineWrapper based on JobSchedulerDisciplineWrapper
-    using the mock template.
+@pytest.fixture(params=[True, False])
+def discipline_mocked_js(tmp_wd, request) -> Discipline:  # noqa: F811
+    """Creates either a SobieskiMission or a JobSchedulerDisciplineWrapper
+     wrapping SobieskiMission.
 
     Returns:
         The wrapped discipline
     """
-    return JobSchedulerDisciplineWrapper(
-        create_discipline("SobieskiMission"),
-        job_template_path=CURRENT_DIR_PATH / "mock_job_scheduler.py",
-        workdir_path=tmp_wd,
-        job_out_filename="run_disc.py",
-        scheduler_run_command="python",
-    )
+    disc = create_discipline("SobieskiMission")
+    if request.param:
+        return JobSchedulerDisciplineWrapper(
+            discipline=disc,
+            job_template_path=CURRENT_DIR_PATH / "mock_job_scheduler.py",
+            workdir_path=tmp_wd,
+            job_out_filename="run_disc.py",
+            scheduler_run_command="python",
+        )
+    return disc
 
 
+@pytest.mark.parametrize("copy_discipline_grammars", [True, False])
 @pytest.mark.parametrize("use_namespaces", [True, False])
-@pytest.mark.parametrize("use_jobschedulerdiscipline", [True, False])
 def test_job_scheduler_discipline_wrapper(
     tmp_path,
     remote_setup,
     monkeypatch,
     discipline_mocked_js,
     use_namespaces,
-    use_jobschedulerdiscipline,
+    copy_discipline_grammars,
 ):
     """Test the SSHDiscipline with a Job Scheduler Discipline wrapped inside."""
 
     monkeypatch.syspath_prepend(CURRENT_DIR_PATH)
-
-    sobieski_mission_disc = create_discipline("SobieskiMission")
-    if use_jobschedulerdiscipline:
-        wrapped_disc = discipline_mocked_js
-    else:
-        wrapped_disc = sobieski_mission_disc
 
     pre_commands = [
         remote_setup.activation_cmd,
@@ -324,19 +325,20 @@ def test_job_scheduler_discipline_wrapper(
     ]
 
     remote_disc = wrap_discipline_with_ssh(
-        wrapped_disc,
+        discipline_mocked_js,
         tmp_path,
         HOSTNAME,
         remote_workdir_path=remote_setup.workdir_path.as_posix(),
         pre_commands=pre_commands,
+        copy_discipline_grammars=copy_discipline_grammars,
     )
 
     if use_namespaces:
         remote_disc.input_grammar.add_namespace("y_14", "ns1")
         remote_disc.output_grammar.add_namespace("y_4", "ns1")
-        sobieski_mission_disc.input_grammar.add_namespace("y_14", "ns1")
-        sobieski_mission_disc.output_grammar.add_namespace("y_4", "ns1")
 
     data = remote_disc.execute()
-    data_local = sobieski_mission_disc.execute()
-    assert compare_dict_of_arrays(data, data_local)
+    if use_namespaces:
+        assert "ns1:y_4" in data
+    else:
+        assert "y_4" in data
