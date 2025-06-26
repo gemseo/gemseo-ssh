@@ -46,7 +46,7 @@ fastjsonschema==2.21.1
     # via gemseo
 fonttools==4.58.4
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@9d7db2f545399eba1cb2d5110d3299a661e64a9a
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@64982e97cee74fe9d4eafab90fb27b9036b638d7
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
@@ -215,7 +215,7 @@ prettytable==3.15.1
     # via gemseo
 psutil==7.0.0
     # via openturns
-pybtex==0.25.0
+pybtex==0.25.1
     # via mkdocs-bibtex
 pycparser==2.22
     # via cffi
