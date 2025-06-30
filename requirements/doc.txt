@@ -133,7 +133,7 @@ mkdocs-autorefs==1.4.2
     # via
     #   mkdocstrings
     #   mkdocstrings-python
-mkdocs-bibtex==4.2.10
+mkdocs-bibtex==4.3.0
     # via gemseo-ssh (pyproject.toml)
 mkdocs-gallery==0.10.4
     # via gemseo-ssh (pyproject.toml)
