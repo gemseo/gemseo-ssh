@@ -117,7 +117,7 @@ def create_venv(path: Path):
     """
     venv.create(path, with_pip=True, symlinks=True)
 
-    gemseo_version = "gemseo[all]@git+https://gitlab.com/gemseo/dev/gemseo.git@develop"
+    gemseo_version = "gemseo[all]@git+https://gitlab.com/gemseo/dev/gemseo.git@6.1.0"
 
     subprocess.run(
         f"{path / VENV_REL_PATH_TO_PYTHON} -m pip install {gemseo_version}".split(),
@@ -304,7 +304,7 @@ def discipline_mocked_js(tmp_wd, request) -> Discipline:  # noqa: F811
     return disc
 
 
-@pytest.mark.parametrize("copy_discipline_grammars", [True, False])
+@pytest.mark.parametrize("copy_grammars_from_discipline", [True, False])
 @pytest.mark.parametrize("use_namespaces", [True, False])
 def test_job_scheduler_discipline_wrapper(
     tmp_path,
@@ -312,7 +312,7 @@ def test_job_scheduler_discipline_wrapper(
     monkeypatch,
     discipline_mocked_js,
     use_namespaces,
-    copy_discipline_grammars,
+    copy_grammars_from_discipline,
 ):
     """Test the SSHDiscipline with a Job Scheduler Discipline wrapped inside."""
 
@@ -330,7 +330,7 @@ def test_job_scheduler_discipline_wrapper(
         HOSTNAME,
         remote_workdir_path=remote_setup.workdir_path.as_posix(),
         pre_commands=pre_commands,
-        copy_discipline_grammars=copy_discipline_grammars,
+        copy_grammars_from_discipline=copy_grammars_from_discipline,
     )
 
     if use_namespaces:
