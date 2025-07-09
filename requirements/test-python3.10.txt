@@ -4,7 +4,7 @@ annotated-types==0.7.0
     # via pydantic
 bcrypt==4.3.0
     # via paramiko
-certifi==2025.6.15
+certifi==2025.7.9
     # via requests
 cffi==1.17.1
     # via
@@ -40,7 +40,7 @@ filelock==3.18.0
     # via gemseo-ssh (pyproject.toml:dev)
 fonttools==4.58.5
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@02873591c0419df401e0df33966463fc7769344d
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@15d4ca4842bf1239416fba77afed841b8c58214a
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
