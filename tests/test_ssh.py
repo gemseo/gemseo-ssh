@@ -19,19 +19,27 @@ import shutil
 import subprocess
 import venv
 from pathlib import Path
+from typing import TYPE_CHECKING
 from typing import NamedTuple
 from unittest.mock import MagicMock
 
 import pytest
 from filelock import FileLock
 from gemseo import create_discipline
+from gemseo.disciplines.wrappers.job_schedulers.discipline_wrapper import (
+    JobSchedulerDisciplineWrapper,
+)
 from gemseo.problems.topology_optimization.volume_fraction_disc import VolumeFraction
 from gemseo.utils.comparisons import compare_dict_of_arrays
 from gemseo.utils.platform import PLATFORM_IS_WINDOWS
+from gemseo.utils.testing.pytest_conftest import tmp_wd  # noqa: F401
 from paramiko import SSHClient as ParamikoSSHCLIENT
 
 from gemseo_ssh import wrap_discipline_with_ssh
 from gemseo_ssh.wrappers.ssh.paramiko import SSHClient as GemseoSSHClient
+
+if TYPE_CHECKING:
+    from gemseo.core.discipline.discipline import Discipline
 
 CURRENT_DIR_PATH = Path(__file__).parent
 
@@ -134,7 +142,7 @@ def remote_setup(tmp_path_factory, worker_id):
     return RemoteSetup(
         workdir_path,
         ACTIVATE_CMD.format(venv_path=venv_path),
-        SET_PYTHONPATH_CMD.format(workdir_path=workdir_path),
+        SET_PYTHONPATH_CMD.format(workdir_path=CURRENT_DIR_PATH),
     )
 
 
@@ -152,14 +160,13 @@ def test_linux(tmp_path, remote_setup):
     )
 
     data = remote_disc.execute()
-
     ref_data = local_disc.execute()
     assert compare_dict_of_arrays(data, ref_data)
 
 
 def test_linux_transfer(tmp_path, remote_setup, monkeypatch):
     """Test the remote execution on a Linux env with files transfers."""
-    # For the picling to work,
+    # For the pickling to work,
     # the namespace of the discipline shall be accessible on the
     # remote host, this can be done by importing it absolutely the both
     # on local and remote hosts.
@@ -183,7 +190,7 @@ def test_linux_transfer(tmp_path, remote_setup, monkeypatch):
         HOSTNAME,
         remote_workdir_path=remote_setup.workdir_path.as_posix(),
         pre_commands=pre_commands,
-        # The discipline module is transfered along with its inputs,
+        # The discipline module is transferred along with its inputs,
         # but it is not used by itself.
         inputs_to_upload=["in_file", "discipline"],
         outputs_to_download=["out_file"],
@@ -275,3 +282,63 @@ def test_outputs_names_error(tmp_path):
             HOSTNAME,
             outputs_to_download=["bad-name", "ko-name"],
         )
+
+
+@pytest.fixture(params=[True, False])
+def discipline_mocked_js(tmp_wd, request) -> Discipline:  # noqa: F811
+    """Creates either a SobieskiMission or a JobSchedulerDisciplineWrapper
+     wrapping SobieskiMission.
+
+    Returns:
+        The wrapped discipline
+    """
+    disc = create_discipline("SobieskiMission")
+    if request.param:
+        return JobSchedulerDisciplineWrapper(
+            discipline=disc,
+            job_template_path=CURRENT_DIR_PATH / "mock_job_scheduler.py",
+            workdir_path=tmp_wd,
+            job_out_filename="run_disc.py",
+            scheduler_run_command="python",
+        )
+    return disc
+
+
+@pytest.mark.parametrize("copy_grammars_from_discipline", [True, False])
+@pytest.mark.parametrize("use_namespaces", [True, False])
+def test_job_scheduler_discipline_wrapper(
+    tmp_path,
+    remote_setup,
+    monkeypatch,
+    discipline_mocked_js,
+    use_namespaces,
+    copy_grammars_from_discipline,
+):
+    """Test the SSHDiscipline with a Job Scheduler Discipline wrapped inside."""
+
+    monkeypatch.syspath_prepend(CURRENT_DIR_PATH)
+
+    pre_commands = [
+        remote_setup.activation_cmd,
+        # This allows unpickling the discipline on the remote host.
+        remote_setup.set_python_path_cmd,
+    ]
+
+    remote_disc = wrap_discipline_with_ssh(
+        discipline_mocked_js,
+        tmp_path,
+        HOSTNAME,
+        remote_workdir_path=remote_setup.workdir_path.as_posix(),
+        pre_commands=pre_commands,
+        copy_grammars_from_discipline=copy_grammars_from_discipline,
+    )
+
+    if use_namespaces:
+        remote_disc.input_grammar.add_namespace("y_14", "ns1")
+        remote_disc.output_grammar.add_namespace("y_4", "ns1")
+
+    data = remote_disc.execute()
+    if use_namespaces:
+        assert "ns1:y_4" in data
+    else:
+        assert "y_4" in data
