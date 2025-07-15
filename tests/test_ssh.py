@@ -159,7 +159,7 @@ def test_linux(tmp_path, remote_setup):
 
 def test_linux_transfer(tmp_path, remote_setup, monkeypatch):
     """Test the remote execution on a Linux env with files transfers."""
-    # For the picling to work,
+    # For the pickling to work,
     # the namespace of the discipline shall be accessible on the
     # remote host, this can be done by importing it absolutely the both
     # on local and remote hosts.
@@ -183,7 +183,7 @@ def test_linux_transfer(tmp_path, remote_setup, monkeypatch):
         HOSTNAME,
         remote_workdir_path=remote_setup.workdir_path.as_posix(),
         pre_commands=pre_commands,
-        # The discipline module is transfered along with its inputs,
+        # The discipline module is transferred along with its inputs,
         # but it is not used by itself.
         inputs_to_upload=["in_file", "discipline"],
         outputs_to_download=["out_file"],
