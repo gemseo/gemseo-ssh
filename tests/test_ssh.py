@@ -26,7 +26,7 @@ from unittest.mock import MagicMock
 import pytest
 from filelock import FileLock
 from gemseo import create_discipline
-from gemseo.disciplines.wrappers.job_schedulers.discipline_wrapper import (  # noqa: E501
+from gemseo.disciplines.wrappers.job_schedulers.discipline_wrapper import (
     JobSchedulerDisciplineWrapper,
 )
 from gemseo.problems.topology_optimization.volume_fraction_disc import VolumeFraction
@@ -117,7 +117,7 @@ def create_venv(path: Path):
     """
     venv.create(path, with_pip=True, symlinks=True)
 
-    gemseo_version = "gemseo[all]@git+https://gitlab.com/gemseo/dev/gemseo.git@6.1.0"
+    gemseo_version = "gemseo[all]@git+https://gitlab.com/gemseo/dev/gemseo.git@develop"
 
     subprocess.run(
         f"{path / VENV_REL_PATH_TO_PYTHON} -m pip install {gemseo_version}".split(),
@@ -142,7 +142,7 @@ def remote_setup(tmp_path_factory, worker_id):
     return RemoteSetup(
         workdir_path,
         ACTIVATE_CMD.format(venv_path=venv_path),
-        SET_PYTHONPATH_CMD.format(workdir_path=Path(__file__).parent),
+        SET_PYTHONPATH_CMD.format(workdir_path=CURRENT_DIR_PATH),
     )
 
 
