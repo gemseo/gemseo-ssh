@@ -52,6 +52,8 @@ class SSHDisciplineWrapper(Discipline):
     by the wrapper.
     """
 
+    default_grammar_type = Discipline.GrammarType.SIMPLER
+
     SERIALIZED_DISC_FILE_NAME: ClassVar[str] = "discipline.pckl"
     """The name of the file with the serialized discipline."""
 
@@ -109,6 +111,7 @@ class SSHDisciplineWrapper(Discipline):
         pre_commands: Iterable[str] = (),
         inputs_to_upload: Iterable[str] = (),
         outputs_to_download: Iterable[str] = (),
+        copy_grammars: bool = False,
         **ssh_client_parameters: Any,
     ) -> None:
         """
@@ -125,6 +128,11 @@ class SSHDisciplineWrapper(Discipline):
                 to files that must be uploaded before execution.
             outputs_to_download: The names of the discipline outputs that correspond
                 to files that must be downloaded after execution.
+            copy_grammars: Whether to copy the grammars from the wrapped discipline.
+                Copying the grammars ensures that the inputs and outputs are verified
+                with the same levels of strictness as in the original discipline.
+                Otherwise, a :class:`.SimplerGrammar` is used, which only verifies
+                the names of the inputs and outputs.
             **ssh_client_parameters: The optional parameters to pass to
                 paramiko.SSHClient.
 
@@ -134,8 +142,12 @@ class SSHDisciplineWrapper(Discipline):
         """  # noqa: D205, D212, D415
         super().__init__(discipline.name)
 
-        self.input_grammar = discipline.input_grammar
-        self.output_grammar = discipline.output_grammar
+        if copy_grammars:
+            self.input_grammar = discipline.input_grammar.copy()
+            self.output_grammar = discipline.output_grammar.copy()
+        else:
+            self.input_grammar.update(discipline.input_grammar)
+            self.output_grammar.update(discipline.output_grammar)
 
         self.__discipline = discipline
         self.__local_root_wd_path = Path(local_workdir_path)
