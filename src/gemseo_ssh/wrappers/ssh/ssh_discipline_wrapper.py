@@ -118,7 +118,7 @@ class SSHDisciplineWrapper(Discipline):
         Args:
             discipline: The discipline to wrap and execute on the remote host.
             local_workdir_path: The path to the work directory on the local host.
-            username: The user name on the remote host.
+            hostname: The name of the remote host to delegate the execution.
             remote_workdir_path: The path to the work directory on the remote host.
                 If empty, use the default ssh remote directory (usually user's home).
             pre_commands: The commands run on the remote host before deserialization and

@@ -146,8 +146,9 @@ def remote_setup(tmp_path_factory, worker_id):
     )
 
 
-def test_linux(tmp_path, remote_setup):
-    """Test the remote execution on a Linux env."""
+@pytest.mark.parametrize("copy_grammars", [True, False])
+def test_execution(tmp_path, remote_setup, copy_grammars):
+    """Test the remote execution."""
     local_disc = create_discipline("SobieskiMission")
     pre_commands = [remote_setup.activation_cmd]
 
@@ -157,6 +158,7 @@ def test_linux(tmp_path, remote_setup):
         HOSTNAME,
         remote_workdir_path=remote_setup.workdir_path.as_posix(),
         pre_commands=pre_commands,
+        copy_grammars=copy_grammars,
     )
 
     data = remote_disc.execute()
@@ -164,8 +166,8 @@ def test_linux(tmp_path, remote_setup):
     assert compare_dict_of_arrays(data, ref_data)
 
 
-def test_linux_transfer(tmp_path, remote_setup, monkeypatch):
-    """Test the remote execution on a Linux env with files transfers."""
+def test_execution_with_transfer(tmp_path, remote_setup, monkeypatch):
+    """Test the remote execution with files transfers."""
     # For the pickling to work,
     # the namespace of the discipline shall be accessible on the
     # remote host, this can be done by importing it absolutely the both
@@ -304,7 +306,7 @@ def discipline_mocked_js(tmp_wd, request) -> Discipline:  # noqa: F811
     return disc
 
 
-@pytest.mark.parametrize("copy_grammars_from_discipline", [True, False])
+@pytest.mark.parametrize("copy_grammars", [True, False])
 @pytest.mark.parametrize("use_namespaces", [True, False])
 def test_job_scheduler_discipline_wrapper(
     tmp_path,
@@ -312,7 +314,7 @@ def test_job_scheduler_discipline_wrapper(
     monkeypatch,
     discipline_mocked_js,
     use_namespaces,
-    copy_grammars_from_discipline,
+    copy_grammars,
 ):
     """Test the SSHDiscipline with a Job Scheduler Discipline wrapped inside."""
 
@@ -330,7 +332,7 @@ def test_job_scheduler_discipline_wrapper(
         HOSTNAME,
         remote_workdir_path=remote_setup.workdir_path.as_posix(),
         pre_commands=pre_commands,
-        copy_grammars_from_discipline=copy_grammars_from_discipline,
+        copy_grammars=copy_grammars,
     )
 
     if use_namespaces:
