@@ -134,7 +134,7 @@ def remote_setup(tmp_path_factory, worker_id):
     return RemoteSetup(
         workdir_path,
         ACTIVATE_CMD.format(venv_path=venv_path),
-        SET_PYTHONPATH_CMD.format(workdir_path=workdir_path),
+        SET_PYTHONPATH_CMD.format(workdir_path=Path(__file__).parent),
     )
 
 
