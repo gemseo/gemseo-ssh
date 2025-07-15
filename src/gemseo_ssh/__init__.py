@@ -36,6 +36,7 @@ def wrap_discipline_with_ssh(
     pre_commands: Iterable[str] = (),
     inputs_to_upload: Iterable[str] = (),
     outputs_to_download: Iterable[str] = (),
+    copy_grammars: bool = False,
     **ssh_client_parameters: Any,
 ) -> SSHDisciplineWrapper:
     """Wrap the discipline within the SSH transfer discipline.
@@ -59,6 +60,11 @@ def wrap_discipline_with_ssh(
             to files that must be uploaded before execution.
         outputs_to_download: The names of the discipline outputs that correspond
             to files that must be downloaded after execution.
+        copy_grammars: Whether to copy the grammars from the wrapped discipline.
+            Copying the grammars ensures that the inputs and outputs are verified
+            with the same levels of strictness as in the original discipline.
+            Otherwise, a :class:`.SimplerGrammar` is used, which only verifies
+            the names of the inputs and outputs.
         **ssh_client_parameters: The optional parameters to pass to paramiko.SSHClient.
 
     Raises:
