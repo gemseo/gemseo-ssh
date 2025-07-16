@@ -1103,6 +1103,7 @@
     <span class="n">pre_commands</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="collections.abc.Iterable" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable">Iterable</a></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
     <span class="n">inputs_to_upload</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="collections.abc.Iterable" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable">Iterable</a></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
     <span class="n">outputs_to_download</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="collections.abc.Iterable" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable">Iterable</a></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+    <span class="n">copy_grammars</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="o">**</span><span class="n">ssh_client_parameters</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Any" href="https://docs.python.org/3/library/typing.html#typing.Any">Any</a></span>
 <span class="p">)</span>
 </code></pre></div>
@@ -1145,7 +1146,7 @@ by the wrapper.</p>
               (<code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>)
           –
           <div class="doc-md-description">
-            <p>The description is missing.</p>
+            <p>The name of the remote host to delegate the execution.</p>
           </div>
         </li>
         <li class="doc-section-item field-body">
@@ -1194,6 +1195,20 @@ to files that must be downloaded after execution.</p>
           </div>
         </li>
         <li class="doc-section-item field-body">
+            <b><code>copy_grammars</code></b>
+              (<code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>, default:
+                  <code>False</code>
+)
+          –
+          <div class="doc-md-description">
+            <p>Whether to copy the grammars from the wrapped discipline.
+Copying the grammars ensures that the inputs and outputs are verified
+with the same levels of strictness as in the original discipline.
+Otherwise, a :class:<code>.SimplerGrammar</code> is used, which only verifies
+the names of the inputs and outputs.</p>
+          </div>
+        </li>
+        <li class="doc-section-item field-body">
             <b><code>**ssh_client_parameters</code></b>
               (<code><a class="autorefs autorefs-external" title="typing.Any" href="https://docs.python.org/3/library/typing.html#typing.Any">Any</a></code>, default:
                   <code>{}</code>
@@ -1227,9 +1242,7 @@ are inconsistent with the discipline grammars.</p>
 
                   <details class="quote">
                     <summary>Source code in <code>src/gemseo_ssh/wrappers/ssh/ssh_discipline_wrapper.py</code></summary>
-                    <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">103</span>
-<span class="normal">104</span>
-<span class="normal">105</span>
+                    <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">105</span>
 <span class="normal">106</span>
 <span class="normal">107</span>
 <span class="normal">108</span>
@@ -1275,7 +1288,19 @@ are inconsistent with the discipline grammars.</p>
 <span class="normal">148</span>
 <span class="normal">149</span>
 <span class="normal">150</span>
-<span class="normal">151</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">discipline</span><span class="p">:</span> <span class="n">Discipline</span><span class="p">,</span>
     <span class="n">local_workdir_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">,</span>
@@ -1284,13 +1309,14 @@ are inconsistent with the discipline grammars.</p>
     <span class="n">pre_commands</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
     <span class="n">inputs_to_upload</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
     <span class="n">outputs_to_download</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+    <span class="n">copy_grammars</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="o">**</span><span class="n">ssh_client_parameters</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Args:</span>
 <span class="sd">        discipline: The discipline to wrap and execute on the remote host.</span>
 <span class="sd">        local_workdir_path: The path to the work directory on the local host.</span>
-<span class="sd">        username: The user name on the remote host.</span>
+<span class="sd">        hostname: The name of the remote host to delegate the execution.</span>
 <span class="sd">        remote_workdir_path: The path to the work directory on the remote host.</span>
 <span class="sd">            If empty, use the default ssh remote directory (usually user&#39;s home).</span>
 <span class="sd">        pre_commands: The commands run on the remote host before deserialization and</span>
@@ -1300,6 +1326,11 @@ are inconsistent with the discipline grammars.</p>
 <span class="sd">            to files that must be uploaded before execution.</span>
 <span class="sd">        outputs_to_download: The names of the discipline outputs that correspond</span>
 <span class="sd">            to files that must be downloaded after execution.</span>
+<span class="sd">        copy_grammars: Whether to copy the grammars from the wrapped discipline.</span>
+<span class="sd">            Copying the grammars ensures that the inputs and outputs are verified</span>
+<span class="sd">            with the same levels of strictness as in the original discipline.</span>
+<span class="sd">            Otherwise, a :class:`.SimplerGrammar` is used, which only verifies</span>
+<span class="sd">            the names of the inputs and outputs.</span>
 <span class="sd">        **ssh_client_parameters: The optional parameters to pass to</span>
 <span class="sd">            paramiko.SSHClient.</span>
 
@@ -1309,8 +1340,12 @@ are inconsistent with the discipline grammars.</p>
 <span class="sd">    &quot;&quot;&quot;</span>  <span class="c1"># noqa: D205, D212, D415</span>
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">discipline</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 
-    <span class="bp">self</span><span class="o">.</span><span class="n">input_grammar</span> <span class="o">=</span> <span class="n">discipline</span><span class="o">.</span><span class="n">input_grammar</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">output_grammar</span> <span class="o">=</span> <span class="n">discipline</span><span class="o">.</span><span class="n">output_grammar</span>
+    <span class="k">if</span> <span class="n">copy_grammars</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_grammar</span> <span class="o">=</span> <span class="n">discipline</span><span class="o">.</span><span class="n">input_grammar</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_grammar</span> <span class="o">=</span> <span class="n">discipline</span><span class="o">.</span><span class="n">output_grammar</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_grammar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">discipline</span><span class="o">.</span><span class="n">input_grammar</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_grammar</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">discipline</span><span class="o">.</span><span class="n">output_grammar</span><span class="p">)</span>
 
     <span class="bp">self</span><span class="o">.</span><span class="n">__discipline</span> <span class="o">=</span> <span class="n">discipline</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">__local_root_wd_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">local_workdir_path</span><span class="p">)</span>
@@ -1532,18 +1567,18 @@ or the outputs to differentiate are missing.</p>
 
             <details class="quote">
               <summary>Source code in <code>src/gemseo_ssh/wrappers/ssh/ssh_discipline_wrapper.py</code></summary>
-              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">347</span>
-<span class="normal">348</span>
-<span class="normal">349</span>
-<span class="normal">350</span>
-<span class="normal">351</span>
-<span class="normal">352</span>
-<span class="normal">353</span>
-<span class="normal">354</span>
-<span class="normal">355</span>
-<span class="normal">356</span>
-<span class="normal">357</span>
-<span class="normal">358</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">linearize</span><span class="p">(</span>  <span class="c1"># noqa: D102</span>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">359</span>
+<span class="normal">360</span>
+<span class="normal">361</span>
+<span class="normal">362</span>
+<span class="normal">363</span>
+<span class="normal">364</span>
+<span class="normal">365</span>
+<span class="normal">366</span>
+<span class="normal">367</span>
+<span class="normal">368</span>
+<span class="normal">369</span>
+<span class="normal">370</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">linearize</span><span class="p">(</span>  <span class="c1"># noqa: D102</span>
     <span class="bp">self</span><span class="p">,</span>
     <span class="n">input_data</span><span class="p">:</span> <span class="n">StrKeyMapping</span> <span class="o">=</span> <span class="n">READ_ONLY_EMPTY_DICT</span><span class="p">,</span>
     <span class="n">compute_all_jacobians</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
