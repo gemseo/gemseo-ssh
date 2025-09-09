@@ -14,7 +14,7 @@ bracex==2.6
     # via wcmatch
 certifi==2025.8.3
     # via requests
-cffi==1.17.1
+cffi==2.0.0
     # via
     #   cryptography
     #   pynacl
@@ -45,7 +45,7 @@ fastjsonschema==2.21.1
     # via gemseo
 fonttools==4.59.2
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@9be33cec53c2c836a6afc299437a11167c17b00e
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@6e9f9b21d527de4843d79aead40f47253346dd4b
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
@@ -207,7 +207,7 @@ psutil==7.0.0
     # via openturns
 pybtex==0.25.1
     # via mkdocs-bibtex
-pycparser==2.22
+pycparser==2.23
     # via cffi
 pydantic==2.11.7
     # via gemseo
