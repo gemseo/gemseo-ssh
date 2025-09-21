@@ -235,7 +235,7 @@ pynacl==1.6.0
     # via paramiko
 pypandoc==1.15
     # via mkdocs-bibtex
-pyparsing==3.2.4
+pyparsing==3.2.5
     # via
     #   matplotlib
     #   mike
