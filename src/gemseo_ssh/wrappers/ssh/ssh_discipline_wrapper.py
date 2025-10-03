@@ -28,7 +28,6 @@ from gemseo.utils.constants import READ_ONLY_EMPTY_DICT
 from gemseo.utils.directory_creator import DirectoryCreator
 from gemseo.utils.directory_creator import DirectoryNamingMethod
 
-from gemseo_ssh.wrappers.ssh.paramiko import SFTPClient
 from gemseo_ssh.wrappers.ssh.paramiko import SSHClient
 
 if TYPE_CHECKING:
@@ -37,6 +36,8 @@ if TYPE_CHECKING:
 
     from gemseo.typing import JacobianData
     from gemseo.typing import StrKeyMapping
+
+    from gemseo_ssh.wrappers.ssh.paramiko import SFTPClient
 
 
 LOGGER = getLogger(__name__)

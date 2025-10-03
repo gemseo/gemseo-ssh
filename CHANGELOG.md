@@ -31,6 +31,11 @@ and this project adheres to
 ### Added
 
 - Support to discipline linearization, so Jacobians can be computed via SSH.
+- Support for Python 3.13.
+
+### Removed
+
+- Support for Python 3.9.
 
 ## Version 1.0.0 (July 2023)
 
