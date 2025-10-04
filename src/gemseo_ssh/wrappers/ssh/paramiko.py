@@ -14,19 +14,25 @@
 # Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 """Specialized and improved paramiko ssh and sftp clients."""
 
-from collections.abc import Iterator
-from collections.abc import Sequence
+from __future__ import annotations
+
 from contextlib import contextmanager
 from logging import getLogger
 from pathlib import Path
 from time import perf_counter
+from typing import TYPE_CHECKING
 from typing import Any
 
 from paramiko import AutoAddPolicy
 from paramiko.client import SSHClient as _SSHClient
 from paramiko.common import o777
 from paramiko.sftp_client import SFTPClient as _SFTPClient
-from typing_extensions import Self
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
+    from collections.abc import Sequence
+
+    from typing_extensions import Self
 
 LOGGER = getLogger(__name__)
 
