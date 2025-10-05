@@ -4,7 +4,7 @@ annotated-types==0.7.0
     # via pydantic
 bcrypt==5.0.0
     # via paramiko
-certifi==2025.8.3
+certifi==2025.10.5
     # via requests
 cffi==2.0.0
     # via

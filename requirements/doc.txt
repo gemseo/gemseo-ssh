@@ -12,7 +12,7 @@ black==25.9.0
     # via gemseo-ssh (pyproject.toml:doc)
 bracex==2.6
     # via wcmatch
-certifi==2025.8.3
+certifi==2025.10.5
     # via requests
 cffi==2.0.0
     # via
