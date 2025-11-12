@@ -4,7 +4,7 @@ annotated-types==0.7.0
     # via pydantic
 bcrypt==5.0.0
     # via paramiko
-certifi==2025.10.5
+certifi==2025.11.12
     # via requests
 cffi==2.0.0
     # via
@@ -30,7 +30,7 @@ docstring-inheritance==2.2.2
     # via gemseo
 et-xmlfile==2.0.0
     # via openpyxl
-execnet==2.1.1
+execnet==2.1.2
     # via pytest-xdist
 fastjsonschema==2.21.2
     # via gemseo
@@ -38,7 +38,7 @@ filelock==3.20.0
     # via gemseo-ssh (pyproject.toml:dev)
 fonttools==4.60.1
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@a64cd9f4f17c4e4d8bcc89c1bdbe2ceefd429a90
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@75f2687fc52dfb01df45d082d69660a7ecb5a0cb
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
