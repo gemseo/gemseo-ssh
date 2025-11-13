@@ -1619,7 +1619,8 @@ are inconsistent with the discipline grammars.</p>
           –
           <div class="doc-md-description">
             <p>The input data.
-If empty, use the :attr:<code>.</code>default_input_data`.</p>
+If empty, use the
+[default_input_data][gemseo.core.discipline.discipline.Discipline.default_input_data].</p>
           </div>
         </li>
         <li class="doc-section-item field-body">
@@ -1633,9 +1634,11 @@ If empty, use the :attr:<code>.</code>default_input_data`.</p>
 all the outputs with respect to all the inputs.
 Otherwise,
 set the output variables to differentiate
-with :meth:<code>.add_differentiated_outputs</code>
+with
+<a class="autorefs autorefs-external" href="https://gemseo.readthedocs.io/en/stable/modules/gemseo.core.discipline.discipline.html#gemseo.core.discipline.discipline.Discipline.add_differentiated_outputs">add_differentiated_outputs()</a>
 and the input variables with respect to which to differentiate them
-with :meth:<code>.add_differentiated_inputs</code>.</p>
+with
+<a class="autorefs autorefs-external" href="https://gemseo.readthedocs.io/en/stable/modules/gemseo.core.discipline.discipline.html#gemseo.core.discipline.discipline.Discipline.add_differentiated_inputs">add_differentiated_inputs()</a>.</p>
           </div>
         </li>
         <li class="doc-section-item field-body">
@@ -1649,7 +1652,8 @@ with :meth:<code>.add_differentiated_inputs</code>.</p>
 to ensure that the discipline was executed
 with the right input data;
 it can be almost free if the corresponding output data
-have been stored in the :attr:<code>.cache</code>.</p>
+have been stored in the
+[cache][gemseo.core.discipline.discipline.Discipline.cache].</p>
           </div>
         </li>
     </ul>
