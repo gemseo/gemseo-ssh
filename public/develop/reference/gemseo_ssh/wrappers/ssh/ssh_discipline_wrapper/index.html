@@ -1212,21 +1212,21 @@
 
 <a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper" class="headerlink" title="Permanent link">&para;</a></h4>
 <div class="doc-signature highlight"><pre><span></span><code><span class="nf">SSHDisciplineWrapper</span><span class="p">(</span>
-    <span class="n">discipline</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="gemseo.core.discipline.discipline.Discipline" href="https://gemseo.readthedocs.io/en/stable/modules/gemseo.core.discipline.discipline.html#gemseo.core.discipline.discipline.Discipline">Discipline</a></span><span class="p">,</span>
-    <span class="n">local_workdir_path</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span> <span class="o">|</span> <span class="n"><a class="autorefs autorefs-external" title="pathlib.Path" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path">Path</a></span><span class="p">,</span>
-    <span class="n">hostname</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span><span class="p">,</span>
-    <span class="n">remote_workdir_path</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span> <span class="o">|</span> <span class="n"><a class="autorefs autorefs-external" title="pathlib.Path" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path">Path</a></span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-    <span class="n">pre_commands</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="collections.abc.Iterable" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable">Iterable</a></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
-    <span class="n">inputs_to_upload</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="collections.abc.Iterable" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable">Iterable</a></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
-    <span class="n">outputs_to_download</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="collections.abc.Iterable" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable">Iterable</a></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
-    <span class="n">copy_grammars</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="o">**</span><span class="n">ssh_client_parameters</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Any" href="https://docs.python.org/3/library/typing.html#typing.Any">Any</a></span>
+    <span class="n">discipline</span><span class="p">:</span> <span class="n"><span title="gemseo.core.discipline.discipline.Discipline">Discipline</span></span><span class="p">,</span>
+    <span class="n">local_workdir_path</span><span class="p">:</span> <span class="n"><span title="str">str</span></span> <span class="o">|</span> <span class="n"><span title="pathlib.Path">Path</span></span><span class="p">,</span>
+    <span class="n">hostname</span><span class="p">:</span> <span class="n"><span title="str">str</span></span><span class="p">,</span>
+    <span class="n">remote_workdir_path</span><span class="p">:</span> <span class="n"><span title="str">str</span></span> <span class="o">|</span> <span class="n"><span title="pathlib.Path">Path</span></span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">pre_commands</span><span class="p">:</span> <span class="n"><span title="collections.abc.Iterable">Iterable</span></span><span class="p">[</span><span class="n"><span title="str">str</span></span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+    <span class="n">inputs_to_upload</span><span class="p">:</span> <span class="n"><span title="collections.abc.Iterable">Iterable</span></span><span class="p">[</span><span class="n"><span title="str">str</span></span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+    <span class="n">outputs_to_download</span><span class="p">:</span> <span class="n"><span title="collections.abc.Iterable">Iterable</span></span><span class="p">[</span><span class="n"><span title="str">str</span></span><span class="p">]</span> <span class="o">=</span> <span class="p">(),</span>
+    <span class="n">copy_grammars</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">ssh_client_parameters</span><span class="p">:</span> <span class="n"><span title="typing.Any">Any</span></span>
 <span class="p">)</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
             <p class="doc doc-class-bases">
-              Bases: <code><a class="autorefs autorefs-external" title="gemseo.core.discipline.discipline.Discipline" href="https://gemseo.readthedocs.io/en/stable/modules/gemseo.core.discipline.discipline.html#gemseo.core.discipline.discipline.Discipline">Discipline</a></code></p>
+              Bases: <code><span title="gemseo.core.discipline.discipline.Discipline">Discipline</span></code></p>
 
 
 
@@ -1244,7 +1244,7 @@ by the wrapper.</p>
     <ul>
         <li class="doc-section-item field-body">
             <b><code>discipline</code></b>
-              (<code><a class="autorefs autorefs-external" title="gemseo.core.discipline.discipline.Discipline" href="https://gemseo.readthedocs.io/en/stable/modules/gemseo.core.discipline.discipline.html#gemseo.core.discipline.discipline.Discipline">Discipline</a></code>)
+              (<code><span title="gemseo.core.discipline.discipline.Discipline">Discipline</span></code>)
           –
           <div class="doc-md-description">
             <p>The discipline to wrap and execute on the remote host.</p>
@@ -1252,7 +1252,7 @@ by the wrapper.</p>
         </li>
         <li class="doc-section-item field-body">
             <b><code>local_workdir_path</code></b>
-              (<code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a> | <a class="autorefs autorefs-external" title="pathlib.Path" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path">Path</a></code>)
+              (<code><span title="str">str</span> | <span title="pathlib.Path">Path</span></code>)
           –
           <div class="doc-md-description">
             <p>The path to the work directory on the local host.</p>
@@ -1260,7 +1260,7 @@ by the wrapper.</p>
         </li>
         <li class="doc-section-item field-body">
             <b><code>hostname</code></b>
-              (<code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>)
+              (<code><span title="str">str</span></code>)
           –
           <div class="doc-md-description">
             <p>The name of the remote host to delegate the execution.</p>
@@ -1268,7 +1268,7 @@ by the wrapper.</p>
         </li>
         <li class="doc-section-item field-body">
             <b><code>remote_workdir_path</code></b>
-              (<code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a> | <a class="autorefs autorefs-external" title="pathlib.Path" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path">Path</a></code>, default:
+              (<code><span title="str">str</span> | <span title="pathlib.Path">Path</span></code>, default:
                   <code>&#39;&#39;</code>
 )
           –
@@ -1279,7 +1279,7 @@ If empty, use the default ssh remote directory (usually user's home).</p>
         </li>
         <li class="doc-section-item field-body">
             <b><code>pre_commands</code></b>
-              (<code><a class="autorefs autorefs-external" title="collections.abc.Iterable" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable">Iterable</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>]</code>, default:
+              (<code><span title="collections.abc.Iterable">Iterable</span>[<span title="str">str</span>]</code>, default:
                   <code>()</code>
 )
           –
@@ -1291,7 +1291,7 @@ This can be used to activate the Python environment for instance.</p>
         </li>
         <li class="doc-section-item field-body">
             <b><code>inputs_to_upload</code></b>
-              (<code><a class="autorefs autorefs-external" title="collections.abc.Iterable" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable">Iterable</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>]</code>, default:
+              (<code><span title="collections.abc.Iterable">Iterable</span>[<span title="str">str</span>]</code>, default:
                   <code>()</code>
 )
           –
@@ -1302,7 +1302,7 @@ to files that must be uploaded before execution.</p>
         </li>
         <li class="doc-section-item field-body">
             <b><code>outputs_to_download</code></b>
-              (<code><a class="autorefs autorefs-external" title="collections.abc.Iterable" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterable">Iterable</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>]</code>, default:
+              (<code><span title="collections.abc.Iterable">Iterable</span>[<span title="str">str</span>]</code>, default:
                   <code>()</code>
 )
           –
@@ -1313,7 +1313,7 @@ to files that must be downloaded after execution.</p>
         </li>
         <li class="doc-section-item field-body">
             <b><code>copy_grammars</code></b>
-              (<code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>, default:
+              (<code><span title="bool">bool</span></code>, default:
                   <code>False</code>
 )
           –
@@ -1327,7 +1327,7 @@ the names of the inputs and outputs.</p>
         </li>
         <li class="doc-section-item field-body">
             <b><code>**ssh_client_parameters</code></b>
-              (<code><a class="autorefs autorefs-external" title="typing.Any" href="https://docs.python.org/3/library/typing.html#typing.Any">Any</a></code>, default:
+              (<code><span title="typing.Any">Any</span></code>, default:
                   <code>{}</code>
 )
           –
@@ -1342,7 +1342,7 @@ paramiko.SSHClient.</p>
 <p><span class="doc-section-title">Raises:</span></p>
     <ul>
         <li class="doc-section-item field-body">
-              <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/exceptions.html#KeyError">KeyError</a></code>
+              <code><span title="KeyError">KeyError</span></code>
             –
           <div class="doc-md-description">
             <p>if the inputs_to_upload or outputs_to_download arguments
@@ -1503,7 +1503,7 @@ are inconsistent with the discipline grammars.</p>
   </span>
 
 <a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper.SERIALIZED_DISC_FILE_NAME" class="headerlink" title="Permanent link">&para;</a></h6>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">SERIALIZED_DISC_FILE_NAME</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span> <span class="o">=</span> <span class="s1">&#39;discipline.pckl&#39;</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">SERIALIZED_DISC_FILE_NAME</span><span class="p">:</span> <span class="n"><span title="str">str</span></span> <span class="o">=</span> <span class="s1">&#39;discipline.pckl&#39;</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1527,7 +1527,7 @@ are inconsistent with the discipline grammars.</p>
   </span>
 
 <a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper.SERIALIZED_INPUTS_FILE_NAME" class="headerlink" title="Permanent link">&para;</a></h6>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">SERIALIZED_INPUTS_FILE_NAME</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span> <span class="o">=</span> <span class="s1">&#39;input_data.pckl&#39;</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">SERIALIZED_INPUTS_FILE_NAME</span><span class="p">:</span> <span class="n"><span title="str">str</span></span> <span class="o">=</span> <span class="s1">&#39;input_data.pckl&#39;</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1551,7 +1551,7 @@ are inconsistent with the discipline grammars.</p>
   </span>
 
 <a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper.SERIALIZED_OUTPUTS_FILE_NAME" class="headerlink" title="Permanent link">&para;</a></h6>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">SERIALIZED_OUTPUTS_FILE_NAME</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span> <span class="o">=</span> <span class="s1">&#39;output_data.pckl&#39;</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">SERIALIZED_OUTPUTS_FILE_NAME</span><span class="p">:</span> <span class="n"><span title="str">str</span></span> <span class="o">=</span> <span class="s1">&#39;output_data.pckl&#39;</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1575,7 +1575,7 @@ are inconsistent with the discipline grammars.</p>
   </span>
 
 <a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper.SSH_KEEP_ALIVE_INTERVAL" class="headerlink" title="Permanent link">&para;</a></h6>
-<div class="doc-signature highlight"><pre><span></span><code><span class="n">SSH_KEEP_ALIVE_INTERVAL</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></span> <span class="o">=</span> <span class="mi">600</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="n">SSH_KEEP_ALIVE_INTERVAL</span><span class="p">:</span> <span class="n"><span title="int">int</span></span> <span class="o">=</span> <span class="mi">600</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1598,10 +1598,10 @@ are inconsistent with the discipline grammars.</p>
 
 <a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper.linearize" class="headerlink" title="Permanent link">&para;</a></h6>
 <div class="doc-signature highlight"><pre><span></span><code><span class="nf">linearize</span><span class="p">(</span>
-    <span class="n">input_data</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="gemseo.typing.StrKeyMapping" href="https://gemseo.readthedocs.io/en/stable/modules/gemseo.typing.html#gemseo.typing.StrKeyMapping">StrKeyMapping</a></span> <span class="o">=</span> <span class="n"><a class="autorefs autorefs-external" title="gemseo.utils.constants.READ_ONLY_EMPTY_DICT" href="https://gemseo.readthedocs.io/en/stable/modules/gemseo.utils.constants.html#gemseo.utils.constants.READ_ONLY_EMPTY_DICT">READ_ONLY_EMPTY_DICT</a></span><span class="p">,</span>
-    <span class="n">compute_all_jacobians</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
-    <span class="n">execute</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
-<span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-external" title="gemseo.typing.JacobianData" href="https://gemseo.readthedocs.io/en/stable/modules/gemseo.typing.html#gemseo.typing.JacobianData">JacobianData</a></span>
+    <span class="n">input_data</span><span class="p">:</span> <span class="n"><span title="gemseo.typing.StrKeyMapping">StrKeyMapping</span></span> <span class="o">=</span> <span class="n"><span title="gemseo.utils.constants.READ_ONLY_EMPTY_DICT">READ_ONLY_EMPTY_DICT</span></span><span class="p">,</span>
+    <span class="n">compute_all_jacobians</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">execute</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="gemseo.typing.JacobianData">JacobianData</span></span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1613,8 +1613,8 @@ are inconsistent with the discipline grammars.</p>
     <ul>
         <li class="doc-section-item field-body">
             <b><code>input_data</code></b>
-              (<code><a class="autorefs autorefs-external" title="gemseo.typing.StrKeyMapping" href="https://gemseo.readthedocs.io/en/stable/modules/gemseo.typing.html#gemseo.typing.StrKeyMapping">StrKeyMapping</a></code>, default:
-                  <code><a class="autorefs autorefs-external" title="gemseo.utils.constants.READ_ONLY_EMPTY_DICT" href="https://gemseo.readthedocs.io/en/stable/modules/gemseo.utils.constants.html#gemseo.utils.constants.READ_ONLY_EMPTY_DICT">READ_ONLY_EMPTY_DICT</a></code>
+              (<code><span title="gemseo.typing.StrKeyMapping">StrKeyMapping</span></code>, default:
+                  <code><span title="gemseo.utils.constants.READ_ONLY_EMPTY_DICT">READ_ONLY_EMPTY_DICT</span></code>
 )
           –
           <div class="doc-md-description">
@@ -1625,7 +1625,7 @@ If empty, use the
         </li>
         <li class="doc-section-item field-body">
             <b><code>compute_all_jacobians</code></b>
-              (<code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>, default:
+              (<code><span title="bool">bool</span></code>, default:
                   <code>False</code>
 )
           –
@@ -1635,15 +1635,15 @@ all the outputs with respect to all the inputs.
 Otherwise,
 set the output variables to differentiate
 with
-<a class="autorefs autorefs-external" href="https://gemseo.readthedocs.io/en/stable/modules/gemseo.core.discipline.discipline.html#gemseo.core.discipline.discipline.Discipline.add_differentiated_outputs">add_differentiated_outputs()</a>
+[add_differentiated_outputs()][gemseo.core.discipline.discipline.Discipline.add_differentiated_outputs]
 and the input variables with respect to which to differentiate them
 with
-<a class="autorefs autorefs-external" href="https://gemseo.readthedocs.io/en/stable/modules/gemseo.core.discipline.discipline.html#gemseo.core.discipline.discipline.Discipline.add_differentiated_inputs">add_differentiated_inputs()</a>.</p>
+[add_differentiated_inputs()][gemseo.core.discipline.discipline.Discipline.add_differentiated_inputs].</p>
           </div>
         </li>
         <li class="doc-section-item field-body">
             <b><code>execute</code></b>
-              (<code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#bool">bool</a></code>, default:
+              (<code><span title="bool">bool</span></code>, default:
                   <code>True</code>
 )
           –
@@ -1662,7 +1662,7 @@ have been stored in the
 <p><span class="doc-section-title">Returns:</span></p>
     <ul>
         <li class="doc-section-item field-body">
-              <code><a class="autorefs autorefs-external" title="gemseo.typing.JacobianData" href="https://gemseo.readthedocs.io/en/stable/modules/gemseo.typing.html#gemseo.typing.JacobianData">JacobianData</a></code>
+              <code><span title="gemseo.typing.JacobianData">JacobianData</span></code>
           –
           <div class="doc-md-description">
             <p>The Jacobian matrices
@@ -1677,7 +1677,7 @@ the partial derivative of <code>output_name[i]</code> wrt <code>input_name[j]</c
 <p><span class="doc-section-title">Raises:</span></p>
     <ul>
         <li class="doc-section-item field-body">
-              <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/exceptions.html#ValueError">ValueError</a></code>
+              <code><span title="ValueError">ValueError</span></code>
             –
           <div class="doc-md-description">
             <p>When either the inputs

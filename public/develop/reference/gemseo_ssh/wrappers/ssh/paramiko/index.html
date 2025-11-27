@@ -1284,9 +1284,9 @@
 
 <a href="#gemseo_ssh.wrappers.ssh.paramiko.SSHClient.create_connection" class="headerlink" title="Permanent link">&para;</a></h6>
 <div class="doc-signature highlight"><pre><span></span><code><span class="nf">create_connection</span><span class="p">(</span>
-    <span class="n">hostname</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span><span class="p">,</span>
-    <span class="n">keep_alive_interval</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></span><span class="p">,</span>
-    <span class="o">**</span><span class="n">connection_options</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="typing.Any" href="https://docs.python.org/3/library/typing.html#typing.Any">Any</a></span>
+    <span class="n">hostname</span><span class="p">:</span> <span class="n"><span title="str">str</span></span><span class="p">,</span>
+    <span class="n">keep_alive_interval</span><span class="p">:</span> <span class="n"><span title="int">int</span></span><span class="p">,</span>
+    <span class="o">**</span><span class="n">connection_options</span><span class="p">:</span> <span class="n"><span title="typing.Any">Any</span></span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="typing_extensions.Self">Self</span></span>
 </code></pre></div>
 
@@ -1299,7 +1299,7 @@
     <ul>
         <li class="doc-section-item field-body">
             <b><code>hostname</code></b>
-              (<code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>)
+              (<code><span title="str">str</span></code>)
           –
           <div class="doc-md-description">
             <p>The hostname.</p>
@@ -1307,7 +1307,7 @@
         </li>
         <li class="doc-section-item field-body">
             <b><code>keep_alive_interval</code></b>
-              (<code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/functions.html#int">int</a></code>)
+              (<code><span title="int">int</span></code>)
           –
           <div class="doc-md-description">
             <p>The time interval to keep the conenction alive.</p>
@@ -1315,7 +1315,7 @@
         </li>
         <li class="doc-section-item field-body">
             <b><code>**connection_options</code></b>
-              (<code><a class="autorefs autorefs-external" title="typing.Any" href="https://docs.python.org/3/library/typing.html#typing.Any">Any</a></code>, default:
+              (<code><span title="typing.Any">Any</span></code>, default:
                   <code>{}</code>
 )
           –
@@ -1329,7 +1329,7 @@
 <p><span class="doc-section-title">Raises:</span></p>
     <ul>
         <li class="doc-section-item field-body">
-              <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError">RuntimeError</a></code>
+              <code><span title="RuntimeError">RuntimeError</span></code>
             –
           <div class="doc-md-description">
             <p>If the client transport is not existing.</p>
@@ -1411,7 +1411,7 @@
 
 
 <a href="#gemseo_ssh.wrappers.ssh.paramiko.SSHClient.execute" class="headerlink" title="Permanent link">&para;</a></h6>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">execute</span><span class="p">(</span><span class="n">cmd_lines</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" title="collections.abc.Sequence" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence">Sequence</a></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">execute</span><span class="p">(</span><span class="n">cmd_lines</span><span class="p">:</span> <span class="n"><span title="collections.abc.Sequence">Sequence</span></span><span class="p">[</span><span class="n"><span title="str">str</span></span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1423,7 +1423,7 @@
     <ul>
         <li class="doc-section-item field-body">
             <b><code>cmd_lines</code></b>
-              (<code><a class="autorefs autorefs-external" title="collections.abc.Sequence" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Sequence">Sequence</a>[<a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a>]</code>)
+              (<code><span title="collections.abc.Sequence">Sequence</span>[<span title="str">str</span>]</code>)
           –
           <div class="doc-md-description">
             <p>The command lines to execute.</p>
@@ -1435,7 +1435,7 @@
 <p><span class="doc-section-title">Raises:</span></p>
     <ul>
         <li class="doc-section-item field-body">
-              <code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError">RuntimeError</a></code>
+              <code><span title="RuntimeError">RuntimeError</span></code>
             –
           <div class="doc-md-description">
             <p>If the execution failed.</p>
@@ -1532,7 +1532,7 @@
 
 
 <a href="#gemseo_ssh.wrappers.ssh.paramiko.timing" class="headerlink" title="Permanent link">&para;</a></h4>
-<div class="doc-signature highlight"><pre><span></span><code><span class="nf">timing</span><span class="p">(</span><span class="n">logging_prefix</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-external" title="collections.abc.Iterator" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.Iterator">Iterator</a></span><span class="p">[</span><span class="kc">None</span><span class="p">]</span>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">timing</span><span class="p">(</span><span class="n">logging_prefix</span><span class="p">:</span> <span class="n"><span title="str">str</span></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="collections.abc.Iterator">Iterator</span></span><span class="p">[</span><span class="kc">None</span><span class="p">]</span>
 </code></pre></div>
 
     <div class="doc doc-contents ">
@@ -1544,7 +1544,7 @@
     <ul>
         <li class="doc-section-item field-body">
             <b><code>logging_prefix</code></b>
-              (<code><a class="autorefs autorefs-external" href="https://docs.python.org/3/library/stdtypes.html#str">str</a></code>)
+              (<code><span title="str">str</span></code>)
           –
           <div class="doc-md-description">
             <p>The prefix for the logging message.</p>
