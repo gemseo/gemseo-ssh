@@ -267,9 +267,11 @@ class SSHDisciplineWrapper(Discipline):
         cmd_lines = [
             f"cd {self.__remote_cwd_path.as_posix()}",
             *list(self.__pre_commands),
-            f"gemseo-deserialize-run"
-            f" {self.SERIALIZED_DISC_FILE_NAME} {self.SERIALIZED_INPUTS_FILE_NAME}"
-            f" {self.SERIALIZED_OUTPUTS_FILE_NAME} {linearization_options}",
+            (
+                f"gemseo-deserialize-run"
+                f" {self.SERIALIZED_DISC_FILE_NAME} {self.SERIALIZED_INPUTS_FILE_NAME}"
+                f" {self.SERIALIZED_OUTPUTS_FILE_NAME} {linearization_options}"
+            ),
         ]
 
         ssh_client.execute(cmd_lines)
