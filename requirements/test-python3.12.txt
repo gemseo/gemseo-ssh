@@ -4,7 +4,7 @@ annotated-types==0.7.0
     # via pydantic
 bcrypt==5.0.0
     # via paramiko
-certifi==2025.11.12
+certifi==2026.1.4
     # via requests
 cffi==2.0.0
     # via
@@ -16,7 +16,7 @@ contourpy==1.3.3
     # via matplotlib
 covdefaults==2.3.0
     # via gemseo-ssh (pyproject.toml:dev)
-coverage==7.13.0
+coverage==7.13.1
     # via
     #   covdefaults
     #   pytest-cov
@@ -34,11 +34,11 @@ execnet==2.1.2
     # via pytest-xdist
 fastjsonschema==2.21.2
     # via gemseo
-filelock==3.20.1
+filelock==3.20.2
     # via gemseo-ssh (pyproject.toml:dev)
 fonttools==4.61.1
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@ecc0c864b6d0845f021e890a39f60b9d6037fed8
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@154b8b2ebdb410266610f25c17d81f427bfcc9c5
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
@@ -46,7 +46,7 @@ genson==1.3.0
     # via gemseo
 graphviz==0.21
     # via gemseo
-h5py==3.14.0
+h5py==3.15.1
     # via gemseo
 idna==3.11
     # via requests
@@ -60,7 +60,7 @@ kiwisolver==1.4.9
     # via matplotlib
 markupsafe==3.0.3
     # via jinja2
-matplotlib==3.10.6
+matplotlib==3.10.8
     # via gemseo
 minisom==2.3.5
     # via gemseo
@@ -70,11 +70,11 @@ mpmath==1.3.0
     # via sympy
 narwhals==2.14.0
     # via plotly
-networkx==3.5
+networkx==3.6.1
     # via gemseo
-nlopt==2.9.1
+nlopt==2.10.0
     # via gemseo
-numpy==2.3.3
+numpy==2.4.0
     # via
     #   contourpy
     #   gemseo
@@ -97,25 +97,25 @@ packaging==25.0
     #   matplotlib
     #   plotly
     #   pytest
-pandas==2.3.2
+pandas==2.3.3
     # via gemseo
 paramiko==3.2.0
     # via
     #   gemseo-ssh (pyproject.toml)
     #   mock-ssh-server
-pillow==11.3.0
+pillow==12.0.0
     # via
     #   gemseo
     #   matplotlib
-plotly==6.3.0
+plotly==6.5.0
     # via gemseo
 pluggy==1.6.0
     # via
     #   pytest
     #   pytest-cov
-prettytable==3.16.0
+prettytable==3.17.0
     # via gemseo
-psutil==7.2.0
+psutil==7.2.1
     # via openturns
 pycparser==2.23
     # via cffi
@@ -127,11 +127,11 @@ pydantic-core==2.41.5
     # via pydantic
 pydantic-settings==2.12.0
     # via gemseo
-pydoe3==1.4.0
+pydoe3==1.6.1
     # via gemseo
 pygments==2.19.2
     # via pytest
-pynacl==1.6.1
+pynacl==1.6.2
     # via paramiko
 pyparsing==3.3.1
     # via matplotlib
@@ -156,7 +156,7 @@ pyxdsm==2.3.1
     # via gemseo
 requests==2.32.5
     # via gemseo
-scikit-learn==1.7.2
+scikit-learn==1.8.0
     # via gemseo
 scipy==1.15.2
     # via
@@ -197,5 +197,5 @@ wcwidth==0.2.14
     # via prettytable
 xdsmjs==2.0.0
     # via gemseo
-xxhash==3.5.0
+xxhash==3.6.0
     # via gemseo
