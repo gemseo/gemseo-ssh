@@ -908,6 +908,34 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Functions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper.linearize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;linearize
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1065,6 +1093,34 @@
     <span class="md-ellipsis">
       
         <code class="doc-symbol doc-symbol-toc doc-symbol-attribute"></code>&nbsp;SSH_KEEP_ALIVE_INTERVAL
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Functions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper.linearize" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-method"></code>&nbsp;linearize
       
     </span>
   </a>
@@ -1530,7 +1586,137 @@ are inconsistent with the discipline grammars.</p>
 </div>
 
 
+<h5 id="gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper-functions">Functions<a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper-functions" class="headerlink" title="Permanent link">&para;</a></h5>
 
+<div class="doc doc-object doc-function">
+
+
+<h6 id="gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper.linearize" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">linearize</span>
+
+
+<a href="#gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHDisciplineWrapper.linearize" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature highlight"><pre><span></span><code><span class="nf">linearize</span><span class="p">(</span>
+    <span class="n">input_data</span><span class="p">:</span> <span class="n"><span title="gemseo.typing.StrKeyMapping">StrKeyMapping</span></span> <span class="o">=</span> <span class="n"><span title="gemseo.utils.constants.READ_ONLY_EMPTY_DICT">READ_ONLY_EMPTY_DICT</span></span><span class="p">,</span>
+    <span class="n">compute_all_jacobians</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">execute</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="gemseo.typing.JacobianData">JacobianData</span></span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Compute the Jacobians of some outputs with respect to some inputs.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <ul>
+        <li class="doc-section-item field-body">
+            <b><code>input_data</code></b>
+              (<code><span title="gemseo.typing.StrKeyMapping">StrKeyMapping</span></code>, default:
+                  <code><span title="gemseo.utils.constants.READ_ONLY_EMPTY_DICT">READ_ONLY_EMPTY_DICT</span></code>
+)
+          –
+          <div class="doc-md-description">
+            <p>The input data.
+If empty, use the
+[default_input_data][gemseo.core.discipline.discipline.Discipline.default_input_data].</p>
+          </div>
+        </li>
+        <li class="doc-section-item field-body">
+            <b><code>compute_all_jacobians</code></b>
+              (<code><span title="bool">bool</span></code>, default:
+                  <code>False</code>
+)
+          –
+          <div class="doc-md-description">
+            <p>Whether to compute the Jacobians of
+all the outputs with respect to all the inputs.
+Otherwise,
+set the output variables to differentiate
+with
+[add_differentiated_outputs()][gemseo.core.discipline.discipline.Discipline.add_differentiated_outputs]
+and the input variables with respect to which to differentiate them
+with
+[add_differentiated_inputs()][gemseo.core.discipline.discipline.Discipline.add_differentiated_inputs].</p>
+          </div>
+        </li>
+        <li class="doc-section-item field-body">
+            <b><code>execute</code></b>
+              (<code><span title="bool">bool</span></code>, default:
+                  <code>True</code>
+)
+          –
+          <div class="doc-md-description">
+            <p>Whether to start by executing the discipline
+to ensure that the discipline was executed
+with the right input data;
+it can be almost free if the corresponding output data
+have been stored in the
+[cache][gemseo.core.discipline.discipline.Discipline.cache].</p>
+          </div>
+        </li>
+    </ul>
+
+
+<p><span class="doc-section-title">Returns:</span></p>
+    <ul>
+        <li class="doc-section-item field-body">
+              <code><span title="gemseo.typing.JacobianData">JacobianData</span></code>
+          –
+          <div class="doc-md-description">
+            <p>The Jacobian matrices
+in the dictionary form <code>{output_name: {input_name: jacobian_matrix}}</code>
+where <code>jacobian_matrix[i, j]</code> is
+the partial derivative of <code>output_name[i]</code> wrt <code>input_name[j]</code>.</p>
+          </div>
+        </li>
+    </ul>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <ul>
+        <li class="doc-section-item field-body">
+              <code><span title="ValueError">ValueError</span></code>
+            –
+          <div class="doc-md-description">
+            <p>When either the inputs
+for which to differentiate the outputs
+or the outputs to differentiate are missing.</p>
+          </div>
+        </li>
+    </ul>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/gemseo_ssh/wrappers/ssh/ssh_discipline_wrapper.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">362</span>
+<span class="normal">363</span>
+<span class="normal">364</span>
+<span class="normal">365</span>
+<span class="normal">366</span>
+<span class="normal">367</span>
+<span class="normal">368</span>
+<span class="normal">369</span>
+<span class="normal">370</span>
+<span class="normal">371</span>
+<span class="normal">372</span>
+<span class="normal">373</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">linearize</span><span class="p">(</span>  <span class="c1"># noqa: D102</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">input_data</span><span class="p">:</span> <span class="n">StrKeyMapping</span> <span class="o">=</span> <span class="n">READ_ONLY_EMPTY_DICT</span><span class="p">,</span>
+    <span class="n">compute_all_jacobians</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">execute</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">JacobianData</span><span class="p">:</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">__execute_at_linearize</span> <span class="o">=</span> <span class="n">execute</span>
+    <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">linearize</span><span class="p">(</span>
+        <span class="n">input_data</span><span class="o">=</span><span class="n">input_data</span><span class="p">,</span>
+        <span class="n">compute_all_jacobians</span><span class="o">=</span><span class="n">compute_all_jacobians</span><span class="p">,</span>
+        <span class="n">execute</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
 
 
 
