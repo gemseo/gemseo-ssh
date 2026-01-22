@@ -2,46 +2,46 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://gemseo.gitlab.io/gemseo-ssh/latest/</loc>
-         <lastmod>2026-01-19</lastmod>
+         <lastmod>2026-01-22</lastmod>
     </url>
     <url>
          <loc>https://gemseo.gitlab.io/gemseo-ssh/latest/changelog/</loc>
-         <lastmod>2026-01-19</lastmod>
+         <lastmod>2026-01-22</lastmod>
     </url>
     <url>
          <loc>https://gemseo.gitlab.io/gemseo-ssh/latest/credits/</loc>
-         <lastmod>2026-01-19</lastmod>
+         <lastmod>2026-01-22</lastmod>
     </url>
     <url>
          <loc>https://gemseo.gitlab.io/gemseo-ssh/latest/licenses/</loc>
-         <lastmod>2026-01-19</lastmod>
+         <lastmod>2026-01-22</lastmod>
     </url>
     <url>
          <loc>https://gemseo.gitlab.io/gemseo-ssh/latest/reference/SUMMARY/</loc>
-         <lastmod>2026-01-19</lastmod>
+         <lastmod>2026-01-22</lastmod>
     </url>
     <url>
          <loc>https://gemseo.gitlab.io/gemseo-ssh/latest/reference/gemseo_ssh/</loc>
-         <lastmod>2026-01-19</lastmod>
+         <lastmod>2026-01-22</lastmod>
     </url>
     <url>
          <loc>https://gemseo.gitlab.io/gemseo-ssh/latest/reference/gemseo_ssh/wrappers/</loc>
-         <lastmod>2026-01-19</lastmod>
+         <lastmod>2026-01-22</lastmod>
     </url>
     <url>
          <loc>https://gemseo.gitlab.io/gemseo-ssh/latest/reference/gemseo_ssh/wrappers/ssh/</loc>
-         <lastmod>2026-01-19</lastmod>
+         <lastmod>2026-01-22</lastmod>
     </url>
     <url>
          <loc>https://gemseo.gitlab.io/gemseo-ssh/latest/reference/gemseo_ssh/wrappers/ssh/paramiko/</loc>
-         <lastmod>2026-01-19</lastmod>
+         <lastmod>2026-01-22</lastmod>
     </url>
     <url>
          <loc>https://gemseo.gitlab.io/gemseo-ssh/latest/reference/gemseo_ssh/wrappers/ssh/ssh_discipline_wrapper/</loc>
-         <lastmod>2026-01-19</lastmod>
+         <lastmod>2026-01-22</lastmod>
     </url>
     <url>
          <loc>https://gemseo.gitlab.io/gemseo-ssh/latest/user_guide/</loc>
-         <lastmod>2026-01-19</lastmod>
+         <lastmod>2026-01-22</lastmod>
     </url>
 </urlset>
