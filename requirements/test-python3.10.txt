@@ -40,7 +40,7 @@ filelock==3.20.3
     # via gemseo-ssh (pyproject.toml:dev)
 fonttools==4.61.1
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@5d4a9e60d67a8d336dbaefaae9f5d15be94401c3
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@478faa940db40d2444fa68f6406c2a17c2a7b590
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
@@ -70,7 +70,7 @@ mock-ssh-server==0.9.1
     # via gemseo-ssh (pyproject.toml:dev)
 mpmath==1.3.0
     # via sympy
-narwhals==2.15.0
+narwhals==2.16.0
     # via plotly
 networkx==3.4.2
     # via gemseo
