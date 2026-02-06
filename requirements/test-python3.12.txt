@@ -26,6 +26,8 @@ cycler==0.12.1
     # via matplotlib
 dill==0.4.1
     # via openturns
+docker==7.1.0
+    # via testcontainers
 docstring-inheritance==3.0.0
     # via gemseo
 et-xmlfile==2.0.0
@@ -149,13 +151,17 @@ python-dateutil==2.9.0.post0
     #   matplotlib
     #   pandas
 python-dotenv==1.2.1
-    # via pydantic-settings
+    # via
+    #   pydantic-settings
+    #   testcontainers
 pytz==2025.2
     # via pandas
 pyxdsm==2.3.1
     # via gemseo
 requests==2.32.5
-    # via gemseo
+    # via
+    #   docker
+    #   gemseo
 scikit-learn==1.8.0
     # via gemseo
 scipy==1.17.0
@@ -172,6 +178,8 @@ strenum==0.4.15
     # via gemseo
 sympy==1.14.0
     # via gemseo
+testcontainers==4.14.1
+    # via gemseo-ssh (pyproject.toml:dev)
 threadpoolctl==3.6.0
     # via scikit-learn
 tomli==2.4.0
@@ -184,6 +192,7 @@ typing-extensions==4.15.0
     #   gemseo
     #   pydantic
     #   pydantic-core
+    #   testcontainers
     #   typing-inspection
 typing-inspection==0.4.2
     # via
@@ -192,9 +201,14 @@ typing-inspection==0.4.2
 tzdata==2025.3
     # via pandas
 urllib3==2.6.3
-    # via requests
+    # via
+    #   docker
+    #   requests
+    #   testcontainers
 wcwidth==0.6.0
     # via prettytable
+wrapt==2.1.1
+    # via testcontainers
 xdsmjs==2.0.0
     # via gemseo
 xxhash==3.6.0
