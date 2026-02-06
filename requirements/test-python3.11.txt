@@ -38,7 +38,7 @@ filelock==3.20.3
     # via gemseo-ssh (pyproject.toml:dev)
 fonttools==4.61.1
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@ab5a606436f8023db6969fa7fbe3e12dd6ffd086
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@268c1c96008a696d220a6c6dc3e62b945576d65a
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
@@ -195,7 +195,7 @@ tzdata==2025.3
     # via pandas
 urllib3==2.6.3
     # via requests
-wcwidth==0.5.3
+wcwidth==0.6.0
     # via prettytable
 xdsmjs==2.0.0
     # via gemseo
