@@ -22,6 +22,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 from typing import NamedTuple
 from unittest.mock import MagicMock
+from unittest.mock import patch
 
 import pytest
 from filelock import FileLock
@@ -33,12 +34,12 @@ from gemseo.problems.topology_optimization.volume_fraction_disc import VolumeFra
 from gemseo.utils.comparisons import compare_dict_of_arrays
 from gemseo.utils.platform import PLATFORM_IS_WINDOWS
 from gemseo.utils.testing.pytest_conftest import tmp_wd  # noqa: F401
-from paramiko import SSHClient as ParamikoSSHCLIENT
 
 from gemseo_ssh import wrap_discipline_with_ssh
-from gemseo_ssh.wrappers.ssh.paramiko import SSHClient as GemseoSSHClient
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from gemseo.core.discipline.discipline import Discipline
 
 CURRENT_DIR_PATH = Path(__file__).parent
@@ -63,23 +64,42 @@ class SFTP:
     chdir = os.chdir
     get = staticmethod(shutil.copyfile)
     put = staticmethod(shutil.copyfile)
+    getcwd = os.getcwd
 
 
-def exec_command(self, cmd: str) -> tuple:
+# def mock_execute(cmd_lines) -> None:
+#     """Mock execute that runs commands locally like SSHClient.execute."""
+#     cmd = " && ".join(cmd_lines)
+#     os.system(cmd)
+
+
+def mock_execute(cmd_lines: Sequence[str]) -> tuple:
     """Mock the related command of the ssh client."""
+    cmd = " && ".join(cmd_lines)
     exit_code = os.system(cmd)
     stdout = MagicMock()
     stdout.channel.recv_exit_status = lambda: exit_code
     return None, stdout, MagicMock()
 
 
-# Mock the ssh client.
-ParamikoSSHCLIENT.set_missing_host_key_policy = MagicMock()
-ParamikoSSHCLIENT.load_system_host_keys = MagicMock()
-ParamikoSSHCLIENT.connect = MagicMock()
-ParamikoSSHCLIENT.get_transport = MagicMock()
-ParamikoSSHCLIENT.exec_command = exec_command
-GemseoSSHClient.open_sftp = MagicMock(side_effect=SFTP)
+def create_mock_ssh_client_instance():
+    """Create a mock SSH client instance with proper SFTP and execute behavior."""
+    instance = MagicMock()
+    instance.open_sftp = SFTP
+    instance.execute = mock_execute
+    return instance
+
+
+MockParamikoSSHCLIENT = MagicMock()
+MockParamikoSSHCLIENT.set_missing_host_key_policy = MagicMock()
+MockParamikoSSHCLIENT.load_system_host_keys = MagicMock()
+MockParamikoSSHCLIENT.connect = MagicMock()
+MockParamikoSSHCLIENT.get_transport = MagicMock()
+
+MockGemseoSSHClient = MagicMock()
+MockGemseoSSHClient.create_connection = MagicMock(
+    side_effect=lambda *args, **kwargs: create_mock_ssh_client_instance()
+)
 
 
 class RemoteSetup(NamedTuple):
@@ -90,9 +110,11 @@ class RemoteSetup(NamedTuple):
     set_python_path_cmd: str
 
 
+@patch("paramiko.SSHClient", MockParamikoSSHCLIENT)
+@patch("gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHClient", MockGemseoSSHClient)
 def test_helper_discipline(tmp_path):
     """Test execution."""
-    from .discipline import DiscWithFiles
+    from .disc_with_files import DiscWithFiles
 
     disc = DiscWithFiles()
 
@@ -147,6 +169,7 @@ def remote_setup(tmp_path_factory, worker_id):
 
 
 @pytest.mark.parametrize("copy_grammars", [True, False])
+@patch("gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHClient", MockGemseoSSHClient)
 def test_execution(tmp_path, remote_setup, copy_grammars):
     """Test the remote execution."""
     local_disc = create_discipline("SobieskiMission")
@@ -166,6 +189,7 @@ def test_execution(tmp_path, remote_setup, copy_grammars):
     assert compare_dict_of_arrays(data, ref_data)
 
 
+@patch("gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHClient", MockGemseoSSHClient)
 def test_execution_with_transfer(tmp_path, remote_setup, monkeypatch):
     """Test the remote execution with files transfers."""
     # For the pickling to work,
@@ -173,7 +197,7 @@ def test_execution_with_transfer(tmp_path, remote_setup, monkeypatch):
     # remote host, this can be done by importing it absolutely the both
     # on local and remote hosts.
     monkeypatch.syspath_prepend(CURRENT_DIR_PATH)
-    from discipline import DiscWithFiles
+    from disc_with_files import DiscWithFiles
 
     local_disc = DiscWithFiles()
 
@@ -201,7 +225,7 @@ def test_execution_with_transfer(tmp_path, remote_setup, monkeypatch):
     data = remote_disc.execute(
         {
             "in_file": str(in_path),
-            "discipline": str(CURRENT_DIR_PATH / "discipline.py"),
+            "discipline": str(CURRENT_DIR_PATH / "disc_with_files.py"),
         },
     )
 
@@ -210,6 +234,7 @@ def test_execution_with_transfer(tmp_path, remote_setup, monkeypatch):
     assert int(out_file_path.read_text("utf8")) == 1
 
 
+@patch("gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHClient", MockGemseoSSHClient)
 @pytest.mark.parametrize("compute_all_jacobians", [False, True])
 @pytest.mark.parametrize("execute", [False, True])
 def test_linearize(tmp_path, remote_setup, compute_all_jacobians, execute) -> None:
@@ -239,6 +264,7 @@ def test_linearize(tmp_path, remote_setup, compute_all_jacobians, execute) -> No
     assert compare_dict_of_arrays(data, local_disc.jac)
 
 
+@patch("gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHClient", MockGemseoSSHClient)
 def test_linearize_at_exe(tmp_path, remote_setup) -> None:
     """Test the linearization at execute."""
 
@@ -262,6 +288,7 @@ def test_linearize_at_exe(tmp_path, remote_setup) -> None:
     assert compare_dict_of_arrays(data, local_disc.jac)
 
 
+@patch("gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHClient", MockGemseoSSHClient)
 def test_inputs_names_error(tmp_path):
     """Verify the error when the inputs_to_upload is bad."""
     msg = "Invalid input names to upload: bad-name"
@@ -274,6 +301,7 @@ def test_inputs_names_error(tmp_path):
         )
 
 
+@patch("gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHClient", MockGemseoSSHClient)
 def test_outputs_names_error(tmp_path):
     """Verify the error when the outputs_to_upload is bad."""
     msg = "Invalid output names to download: .+-name, .+-name"
@@ -284,6 +312,44 @@ def test_outputs_names_error(tmp_path):
             HOSTNAME,
             outputs_to_download=["bad-name", "ko-name"],
         )
+
+
+class TestSSHClientCreateConnection:
+    """Tests for SSHClient.create_connection edge cases."""
+
+    @patch(
+        "gemseo_ssh.wrappers.ssh.paramiko.SSHClient.get_transport", return_value=None
+    )
+    @patch("gemseo_ssh.wrappers.ssh.paramiko.SSHClient.connect")
+    @patch("gemseo_ssh.wrappers.ssh.paramiko.SSHClient.load_system_host_keys")
+    @patch("gemseo_ssh.wrappers.ssh.paramiko.SSHClient.set_missing_host_key_policy")
+    def test_create_connection_no_transport(self, policy, keys, connect, transport):
+        """Test that create_connection raises RuntimeError when transport is None."""
+        from gemseo_ssh.wrappers.ssh.paramiko import SSHClient
+
+        with pytest.raises(RuntimeError, match="Cannot get the ssh transport"):
+            SSHClient.create_connection("hostname", keep_alive_interval=60)
+
+
+class TestSSHClientExecute:
+    """Tests for SSHClient.execute edge cases."""
+
+    def test_execute_undecodable_output(self):
+        """Test execute when stdout/stderr readlines raises an exception."""
+        from gemseo_ssh.wrappers.ssh.paramiko import SSHClient
+
+        client = SSHClient()
+
+        stdout = MagicMock()
+        stdout.readlines.side_effect = UnicodeDecodeError("utf-8", b"", 0, 1, "invalid")
+        stdout.channel.recv_exit_status.return_value = 1
+
+        stderr = MagicMock()
+        stderr.readlines.side_effect = UnicodeDecodeError("utf-8", b"", 0, 1, "invalid")
+
+        with patch.object(client, "exec_command", return_value=(None, stdout, stderr)):
+            # Should not raise, but log an error with fallback messages.
+            client.execute(["echo hello"])
 
 
 @pytest.fixture(params=[True, False])
@@ -306,6 +372,7 @@ def discipline_mocked_js(tmp_wd, request) -> Discipline:  # noqa: F811
     return disc
 
 
+@patch("gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHClient", MockGemseoSSHClient)
 @pytest.mark.parametrize("copy_grammars", [True, False])
 @pytest.mark.parametrize("use_namespaces", [True, False])
 def test_job_scheduler_discipline_wrapper(
