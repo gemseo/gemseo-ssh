@@ -1,4 +1,7 @@
 # DinD service is required for Testcontainers
+include:
+  - remote: "https://gitlab.com/gemseo/dev/ci-includes/-/raw/5/main.yml"
+
 services:
   - name: docker:dind
     # explicitly disable tls to avoid docker startup interruption
@@ -6,14 +9,11 @@ services:
 
 variables:
   # Instruct Testcontainers to use the daemon of DinD, use port 2375 for non-tls connections.
-  DOCKER_HOST: "tcp://docker:2375"
+  DOCKER_HOST: tcp://docker:2375
   # Instruct Docker not to start over TLS.
   DOCKER_TLS_CERTDIR: ""
   # Improve performance with overlayfs.
   DOCKER_DRIVER: overlay2
-
-include:
-  - remote: "https://gitlab.com/gemseo/dev/ci-includes/-/raw/5/main.yml"
 
 ####################################################################################################
 # Common settings for the test jobs.
