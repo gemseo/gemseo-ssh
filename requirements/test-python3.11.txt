@@ -38,7 +38,7 @@ filelock==3.20.3
     # via gemseo-ssh (pyproject.toml:dev)
 fonttools==4.61.1
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@268c1c96008a696d220a6c6dc3e62b945576d65a
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@feb8fa9875af01857485e3f48d4bfb044c092daa
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
@@ -74,7 +74,7 @@ networkx==3.6.1
     # via gemseo
 nlopt==2.10.0
     # via gemseo
-numpy==2.4.1
+numpy==2.4.2
     # via
     #   contourpy
     #   gemseo
@@ -178,7 +178,7 @@ tomli==2.4.0
     # via
     #   gemseo-ssh (pyproject.toml:dev)
     #   coverage
-tqdm==4.67.1
+tqdm==4.67.3
     # via gemseo
 typing-extensions==4.15.0
     # via
