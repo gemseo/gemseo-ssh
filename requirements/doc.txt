@@ -26,7 +26,7 @@ click==8.3.1
     #   mkdocs
 colorama==0.4.6
     # via
-    #   griffe
+    #   griffecli
     #   mkdocs-material
 contourpy==1.3.3
     # via matplotlib
@@ -46,7 +46,7 @@ fieldz==0.1.3
     # via griffe-fieldz
 fonttools==4.61.1
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@feb8fa9875af01857485e3f48d4bfb044c092daa
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@ac0793904dcd6c3f95c86b9ec78d62a2459aaa7f
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
@@ -56,7 +56,7 @@ ghp-import==2.1.0
     # via mkdocs
 graphviz==0.21
     # via gemseo
-griffe==1.15.0
+griffe==2.0.0
     # via
     #   griffe-fieldz
     #   griffe-inherited-docstrings
@@ -65,6 +65,12 @@ griffe-fieldz==0.4.0
     # via gemseo-ssh (pyproject.toml:doc)
 griffe-inherited-docstrings==1.1.2
     # via gemseo-ssh (pyproject.toml:doc)
+griffecli==2.0.0
+    # via griffe
+griffelib==2.0.0
+    # via
+    #   griffe
+    #   griffecli
 h5py==3.15.1
     # via gemseo
 idna==3.11
@@ -86,7 +92,7 @@ kiwisolver==1.4.9
     # via matplotlib
 latexcodec==3.0.1
     # via pybtex
-markdown==3.10.1
+markdown==3.10.2
     # via
     #   mkdocs
     #   mkdocs-autorefs
@@ -151,7 +157,7 @@ mkdocstrings==1.0.3
     # via
     #   gemseo-ssh (pyproject.toml:doc)
     #   mkdocstrings-python
-mkdocstrings-python==2.0.1
+mkdocstrings-python==2.0.2
     # via mkdocstrings
 mpmath==1.3.0
     # via sympy
@@ -287,7 +293,7 @@ scipy==1.16.3
     #   pydoe3
     #   scikit-learn
     #   spgl1
-setuptools==81.0.0
+setuptools==82.0.0
     # via mkdocs-bibtex
 six==1.17.0
     # via python-dateutil
