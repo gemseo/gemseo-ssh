@@ -30,7 +30,7 @@ colorama==0.4.6
     #   mkdocs-material
 contourpy==1.3.3
     # via matplotlib
-cryptography==46.0.4
+cryptography==46.0.5
     # via paramiko
 cycler==0.12.1
     # via matplotlib
@@ -46,7 +46,7 @@ fieldz==0.1.3
     # via griffe-fieldz
 fonttools==4.61.1
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@ac0793904dcd6c3f95c86b9ec78d62a2459aaa7f
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@0961b13fbf5e163a6a41c270e05a73abce16e4b1
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
@@ -129,7 +129,7 @@ mkdocs==1.6.1
     #   mkdocs-material
     #   mkdocs-section-index
     #   mkdocstrings
-mkdocs-autorefs==1.4.3
+mkdocs-autorefs==1.4.4
     # via
     #   mkdocstrings
     #   mkdocstrings-python

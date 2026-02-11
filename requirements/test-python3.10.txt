@@ -20,7 +20,7 @@ coverage==7.13.4
     # via
     #   covdefaults
     #   pytest-cov
-cryptography==46.0.4
+cryptography==46.0.5
     # via paramiko
 cycler==0.12.1
     # via matplotlib
@@ -40,7 +40,7 @@ filelock==3.20.3
     # via gemseo-ssh (pyproject.toml:dev)
 fonttools==4.61.1
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@ac0793904dcd6c3f95c86b9ec78d62a2459aaa7f
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@0961b13fbf5e163a6a41c270e05a73abce16e4b1
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
