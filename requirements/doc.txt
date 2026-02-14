@@ -46,7 +46,7 @@ fieldz==0.1.3
     # via griffe-fieldz
 fonttools==4.61.1
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@68940f1448307b63cb09070f44f149a1421e462f
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@bf57c956ce04a0970db088469777dcc89a8ac6db
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
@@ -208,7 +208,7 @@ pillow==12.1.0
     # via
     #   gemseo
     #   matplotlib
-platformdirs==4.7.0
+platformdirs==4.7.1
     # via
     #   black
     #   mkdocs-get-deps
