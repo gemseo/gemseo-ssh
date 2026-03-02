@@ -1,6 +1,6 @@
 FROM public.ecr.aws/docker/library/python:3.12-slim
 
-ARG GEMSEO_URL=gemseo[all]@git+https://gitlab.com/gemseo/dev/gemseo.git@develop
+ARG GEMSEO_PACKAGE_SPEC=gemseo[all]@git+https://gitlab.com/gemseo/dev/gemseo.git@develop
 ARG WORKDIR=/workdir
 
 # Install OpenSSH server
@@ -19,7 +19,7 @@ RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/
 RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
 
 # Install gemseo with the deserialize-run command
-RUN pip install --no-cache-dir "${GEMSEO_URL}"
+RUN pip install --no-cache-dir "${GEMSEO_PACKAGE_SPEC}"
 
 
 # Create test working directory

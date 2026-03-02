@@ -60,7 +60,7 @@ SSH_PORT = 22
 # Either set GEMSEO_URL environment variable or read from test-constraints.in
 GEMSEO_URL_FILE = Path(__file__).parent.parent / "requirements" / "test-constraints.in"
 GEMSEO_URL_FROM_FILE = GEMSEO_URL_FILE.read_text().strip()
-GEMSEO_URL = os.environ.get("GEMSEO_URL", GEMSEO_URL_FROM_FILE)
+GEMSEO_PACKAGE_SPEC = os.environ.get("GEMSEO_PACKAGE_SPEC", GEMSEO_URL_FROM_FILE)
 
 
 class RemoteSetup(NamedTuple):
@@ -142,7 +142,7 @@ def docker_image_built() -> str:
             str(dockerfile_path),
             ".",
             "--build-arg",
-            f"GEMSEO_URL={GEMSEO_URL}",
+            f"GEMSEO_PACKAGE_SPEC={GEMSEO_PACKAGE_SPEC}",
         ],
         cwd=build_context,
         check=True,
@@ -251,7 +251,8 @@ def create_venv(path: Path):
     venv.create(path, with_pip=True, symlinks=True)
 
     subprocess.run(
-        f"{path / VENV_REL_PATH_TO_PYTHON} -m pip install {GEMSEO_URL}".split(),
+        f"{path / VENV_REL_PATH_TO_PYTHON} -m pip install "
+        f"{GEMSEO_PACKAGE_SPEC}".split(),
         check=True,
         capture_output=True,
     )
