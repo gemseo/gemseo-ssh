@@ -251,42 +251,34 @@ def test_outputs_names_error(tmp_path):
         )
 
 
-class TestSSHClientCreateConnection:
-    """Tests for SSHClient.create_connection edge cases."""
+@patch("gemseo_ssh.wrappers.ssh.paramiko.SSHClient.get_transport", return_value=None)
+@patch("gemseo_ssh.wrappers.ssh.paramiko.SSHClient.connect")
+@patch("gemseo_ssh.wrappers.ssh.paramiko.SSHClient.load_system_host_keys")
+@patch("gemseo_ssh.wrappers.ssh.paramiko.SSHClient.set_missing_host_key_policy")
+def test_create_connection_no_transport(policy, keys, connect, transport):
+    """Test that create_connection raises RuntimeError when transport is None."""
+    from gemseo_ssh.wrappers.ssh.paramiko import SSHClient
 
-    @patch(
-        "gemseo_ssh.wrappers.ssh.paramiko.SSHClient.get_transport", return_value=None
-    )
-    @patch("gemseo_ssh.wrappers.ssh.paramiko.SSHClient.connect")
-    @patch("gemseo_ssh.wrappers.ssh.paramiko.SSHClient.load_system_host_keys")
-    @patch("gemseo_ssh.wrappers.ssh.paramiko.SSHClient.set_missing_host_key_policy")
-    def test_create_connection_no_transport(self, policy, keys, connect, transport):
-        """Test that create_connection raises RuntimeError when transport is None."""
-        from gemseo_ssh.wrappers.ssh.paramiko import SSHClient
-
-        with pytest.raises(RuntimeError, match="Cannot get the ssh transport"):
-            SSHClient.create_connection("hostname", keep_alive_interval=60)
+    with pytest.raises(RuntimeError, match="Cannot get the ssh transport"):
+        SSHClient.create_connection("hostname", keep_alive_interval=60)
 
 
-class TestSSHClientExecute:
-    """Tests for SSHClient.execute edge cases."""
+def test_execute_undecodable_output():
+    """Test execute when stdout/stderr readlines raises an exception."""
+    from gemseo_ssh.wrappers.ssh.paramiko import SSHClient
 
-    def test_execute_undecodable_output(self):
-        """Test execute when stdout/stderr readlines raises an exception."""
-        from gemseo_ssh.wrappers.ssh.paramiko import SSHClient
+    client = SSHClient()
 
-        client = SSHClient()
+    stdout = MagicMock()
+    stdout.readlines.side_effect = UnicodeDecodeError("utf-8", b"", 0, 1, "invalid")
+    stdout.channel.recv_exit_status.return_value = 1
 
-        stdout = MagicMock()
-        stdout.readlines.side_effect = UnicodeDecodeError("utf-8", b"", 0, 1, "invalid")
-        stdout.channel.recv_exit_status.return_value = 1
+    stderr = MagicMock()
+    stderr.readlines.side_effect = UnicodeDecodeError("utf-8", b"", 0, 1, "invalid")
 
-        stderr = MagicMock()
-        stderr.readlines.side_effect = UnicodeDecodeError("utf-8", b"", 0, 1, "invalid")
-
-        with patch.object(client, "exec_command", return_value=(None, stdout, stderr)):
-            # Should not raise, but log an error with fallback messages.
-            client.execute(["echo hello"])
+    with patch.object(client, "exec_command", return_value=(None, stdout, stderr)):
+        # Should not raise, but log an error with fallback messages.
+        client.execute(["echo hello"])
 
 
 @pytest.fixture(params=[True, False])
@@ -350,79 +342,74 @@ def test_job_scheduler_discipline_wrapper(
         assert "y_4" in data
 
 
-class TestWindowsPathHandling:
-    """Tests that path conversions always produce POSIX (forward-slash) strings.
+def test_mkdir_converts_windows_path():
+    """Test that SFTPClient.mkdir sends POSIX paths to the underlying SFTP."""
+    from paramiko.sftp_client import SFTPClient as _SFTPClient
 
-    This verifies the `.as_posix()` contract in SFTPClient and SSHDisciplineWrapper
-    when PureWindowsPath objects are involved.
-    """
+    from gemseo_ssh.wrappers.ssh.paramiko import SFTPClient
 
-    def test_mkdir_converts_windows_path(self):
-        """Test that SFTPClient.mkdir sends POSIX paths to the underlying SFTP."""
-        from paramiko.sftp_client import SFTPClient as _SFTPClient
+    sftp = MagicMock(spec=SFTPClient)
+    sftp.stat.side_effect = OSError  # Force mkdir for each parent
 
-        from gemseo_ssh.wrappers.ssh.paramiko import SFTPClient
+    # Mock Path in the paramiko module to simulate Windows (where Path=WindowsPath).
+    with (
+        patch("gemseo_ssh.wrappers.ssh.paramiko.Path", PureWindowsPath),
+        patch.object(_SFTPClient, "mkdir") as parent_mkdir,
+    ):
+        SFTPClient.mkdir(sftp, "C:\\Users\\test\\workdir\\uuid")
 
-        sftp = MagicMock(spec=SFTPClient)
-        sftp.stat.side_effect = OSError  # Force mkdir for each parent
+    assert parent_mkdir.call_count > 0
+    created_paths = [call[0][0] for call in parent_mkdir.call_args_list]
+    for path_str in created_paths:
+        assert "\\" not in path_str, f"Backslash found in path: {path_str}"
+    assert "C:/Users/test/workdir/uuid" in created_paths
 
-        # Mock Path in the paramiko module to simulate Windows (where Path=WindowsPath).
-        with (
-            patch("gemseo_ssh.wrappers.ssh.paramiko.Path", PureWindowsPath),
-            patch.object(_SFTPClient, "mkdir") as parent_mkdir,
-        ):
-            SFTPClient.mkdir(sftp, "C:\\Users\\test\\workdir\\uuid")
 
-        assert parent_mkdir.call_count > 0
-        created_paths = [call[0][0] for call in parent_mkdir.call_args_list]
-        for path_str in created_paths:
-            assert "\\" not in path_str, f"Backslash found in path: {path_str}"
-        assert "C:/Users/test/workdir/uuid" in created_paths
+def test_chdir_converts_windows_path():
+    """Test that SFTPClient.chdir sends a POSIX path to the underlying SFTP."""
+    from paramiko.sftp_client import SFTPClient as _SFTPClient
 
-    def test_chdir_converts_windows_path(self):
-        """Test that SFTPClient.chdir sends a POSIX path to the underlying SFTP."""
-        from paramiko.sftp_client import SFTPClient as _SFTPClient
+    from gemseo_ssh.wrappers.ssh.paramiko import SFTPClient
 
-        from gemseo_ssh.wrappers.ssh.paramiko import SFTPClient
+    sftp = MagicMock(spec=SFTPClient)
 
-        sftp = MagicMock(spec=SFTPClient)
+    # Mock Path in the paramiko module to simulate Windows (where Path=WindowsPath).
+    with (
+        patch("gemseo_ssh.wrappers.ssh.paramiko.Path", PureWindowsPath),
+        patch.object(_SFTPClient, "chdir") as parent_chdir,
+    ):
+        SFTPClient.chdir(sftp, "C:\\Users\\test\\workdir")
 
-        # Mock Path in the paramiko module to simulate Windows (where Path=WindowsPath).
-        with (
-            patch("gemseo_ssh.wrappers.ssh.paramiko.Path", PureWindowsPath),
-            patch.object(_SFTPClient, "chdir") as parent_chdir,
-        ):
-            SFTPClient.chdir(sftp, "C:\\Users\\test\\workdir")
+    parent_chdir.assert_called_once()
+    path_str = parent_chdir.call_args[0][0]
+    assert path_str == "C:/Users/test/workdir"
+    assert "\\" not in path_str
 
-        parent_chdir.assert_called_once()
-        path_str = parent_chdir.call_args[0][0]
-        assert path_str == "C:/Users/test/workdir"
-        assert "\\" not in path_str
 
-    @patch(
-        "gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHClient",
-        MockGemseoSSHClient,
+@patch(
+    "gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHClient",
+    MockGemseoSSHClient,
+)
+def test_execute_on_remote_uses_posix_paths(tmp_path):
+    """Test that _execute_on_remote builds cd commands with forward slashes."""
+    local_disc = create_discipline("SobieskiMission")
+
+    wrapper = wrap_discipline_with_ssh(
+        local_disc,
+        tmp_path,
+        HOSTNAME,
+        remote_workdir_path="C:/Users/test/workdir",
     )
-    def test_execute_on_remote_uses_posix_paths(self, tmp_path):
-        """Test that _execute_on_remote builds cd commands with forward slashes."""
-        local_disc = create_discipline("SobieskiMission")
 
-        wrapper = wrap_discipline_with_ssh(
-            local_disc,
-            tmp_path,
-            HOSTNAME,
-            remote_workdir_path="C:/Users/test/workdir",
-        )
+    # Simulate a PureWindowsPath for the remote current working directory.
+    wrapper._SSHDisciplineWrapper__remote_cwd_path = PureWindowsPath(
+        "C:\\Users\\test\\workdir\\some-uuid"
+    )
 
-        # Simulate a PureWindowsPath for the remote current working directory.
-        wrapper._SSHDisciplineWrapper__remote_cwd_path = PureWindowsPath(
-            "C:\\Users\\test\\workdir\\some-uuid"
-        )
+    mock_ssh = MagicMock()
+    wrapper._execute_on_remote(mock_ssh)
 
-        mock_ssh = MagicMock()
-        wrapper._execute_on_remote(mock_ssh)
-
-        cmd_lines = mock_ssh.execute.call_args[0][0]
-        cd_cmd = cmd_lines[0]
-        assert "C:/Users/test/workdir/some-uuid" in cd_cmd
-        assert "\\" not in cd_cmd
+    cmd_lines = mock_ssh.execute.call_args[0][0]
+    cd_cmd = cmd_lines[0]
+    assert "C:/Users/test/workdir/some-uuid" in cd_cmd
+    assert "\\" not in cd_cmd
