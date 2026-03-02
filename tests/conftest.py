@@ -198,12 +198,6 @@ def sftp_client(ssh_client) -> Generator[SFTPClient, None, None]:
 
 
 @pytest.fixture
-def local_temp_dir(tmp_path) -> Path:
-    """Provide a temporary local directory for test files."""
-    return tmp_path
-
-
-@pytest.fixture
 def remote_temp_dir(ssh_client, sftp_client) -> Generator[str, None, None]:
     """Create a temporary directory on the remote server.
 
@@ -217,33 +211,33 @@ def remote_temp_dir(ssh_client, sftp_client) -> Generator[str, None, None]:
 
 
 @pytest.fixture
-def sample_text_file(local_temp_dir) -> Path:
+def sample_text_file(tmp_path) -> Path:
     """Create a sample text file for upload tests."""
-    file_path = local_temp_dir / "sample.txt"
+    file_path = tmp_path / "sample.txt"
     file_path.write_text("Hello, SSH!")
     return file_path
 
 
 @pytest.fixture
-def sample_binary_file(local_temp_dir) -> Path:
+def sample_binary_file(tmp_path) -> Path:
     """Create a sample binary file for upload tests."""
-    file_path = local_temp_dir / "sample.bin"
+    file_path = tmp_path / "sample.bin"
     file_path.write_bytes(bytes(range(256)))
     return file_path
 
 
 @pytest.fixture
-def large_file(local_temp_dir) -> Path:
+def large_file(tmp_path) -> Path:
     """Create a large file (1MB) for transfer performance tests."""
-    file_path = local_temp_dir / "large_file.bin"
+    file_path = tmp_path / "large_file.bin"
     file_path.write_bytes(os.urandom(1024 * 1024))
     return file_path
 
 
 @pytest.fixture
-def file_with_special_chars(local_temp_dir) -> Path:
+def file_with_special_chars(tmp_path) -> Path:
     """Create a file with special characters in content."""
-    file_path = local_temp_dir / "special_chars.txt"
+    file_path = tmp_path / "special_chars.txt"
     file_path.write_text("Unicode: \u4e2d\u6587 \u00e9\u00e8\u00ea \u2603")
     return file_path
 

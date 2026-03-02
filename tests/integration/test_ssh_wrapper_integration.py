@@ -47,14 +47,14 @@ class TestSSHDisciplineWrapperIntegration:
     """Integration tests for SSHDisciplineWrapper."""
 
     def test_simple_discipline_execution(
-        self, ssh_connection_params, local_temp_dir, remote_temp_dir
+        self, ssh_connection_params, tmp_path, remote_temp_dir
     ):
         """Test basic discipline execution over SSH."""
         local_disc = create_discipline("SobieskiMission")
 
         remote_disc = wrap_discipline_with_ssh(
             local_disc,
-            local_workdir_path=local_temp_dir,
+            local_workdir_path=tmp_path,
             remote_workdir_path=remote_temp_dir,
             **ssh_connection_params,
         )
@@ -66,15 +66,13 @@ class TestSSHDisciplineWrapperIntegration:
         for key in local_result:
             assert key in result
 
-    def test_linearization(
-        self, ssh_connection_params, local_temp_dir, remote_temp_dir
-    ):
+    def test_linearization(self, ssh_connection_params, tmp_path, remote_temp_dir):
         """Test discipline linearization over SSH."""
         local_disc = create_discipline("SobieskiMission")
 
         remote_disc = wrap_discipline_with_ssh(
             local_disc,
-            local_workdir_path=local_temp_dir,
+            local_workdir_path=tmp_path,
             remote_workdir_path=remote_temp_dir,
             **ssh_connection_params,
         )
@@ -92,14 +90,14 @@ class TestSSHDisciplineWrapperIntegration:
             assert out_key in remote_disc.jac
 
     def test_copy_grammars_execution(
-        self, ssh_connection_params, local_temp_dir, remote_temp_dir
+        self, ssh_connection_params, tmp_path, remote_temp_dir
     ):
         """Test copy_grammars=True preserves grammar types and execution works."""
         local_disc = create_discipline("SobieskiMission")
 
         remote_disc = wrap_discipline_with_ssh(
             local_disc,
-            local_workdir_path=local_temp_dir,
+            local_workdir_path=tmp_path,
             remote_workdir_path=remote_temp_dir,
             copy_grammars=True,
             **ssh_connection_params,
@@ -115,14 +113,14 @@ class TestSSHDisciplineWrapperIntegration:
         assert "y_4" in result
 
     def test_linearize_without_execute(
-        self, ssh_connection_params, local_temp_dir, remote_temp_dir
+        self, ssh_connection_params, tmp_path, remote_temp_dir
     ):
         """Test linearize(execute=False) branch."""
         local_disc = create_discipline("SobieskiMission")
 
         remote_disc = wrap_discipline_with_ssh(
             local_disc,
-            local_workdir_path=local_temp_dir,
+            local_workdir_path=tmp_path,
             remote_workdir_path=remote_temp_dir,
             **ssh_connection_params,
         )
@@ -135,30 +133,26 @@ class TestSSHDisciplineWrapperIntegration:
 
         assert "y_4" in remote_disc.jac
 
-    def test_invalid_inputs_to_upload_raises(
-        self, ssh_connection_params, local_temp_dir
-    ):
+    def test_invalid_inputs_to_upload_raises(self, ssh_connection_params, tmp_path):
         """Test ValueError for invalid inputs_to_upload."""
         local_disc = create_discipline("SobieskiMission")
 
         with pytest.raises(ValueError, match="Invalid input names to upload"):
             wrap_discipline_with_ssh(
                 local_disc,
-                local_workdir_path=local_temp_dir,
+                local_workdir_path=tmp_path,
                 inputs_to_upload=["nonexistent_input"],
                 **ssh_connection_params,
             )
 
-    def test_invalid_outputs_to_download_raises(
-        self, ssh_connection_params, local_temp_dir
-    ):
+    def test_invalid_outputs_to_download_raises(self, ssh_connection_params, tmp_path):
         """Test ValueError for invalid outputs_to_download."""
         local_disc = create_discipline("SobieskiMission")
 
         with pytest.raises(ValueError, match="Invalid output names to download"):
             wrap_discipline_with_ssh(
                 local_disc,
-                local_workdir_path=local_temp_dir,
+                local_workdir_path=tmp_path,
                 outputs_to_download=["nonexistent_output"],
                 **ssh_connection_params,
             )
@@ -175,23 +169,23 @@ class TestFileTransferWithDiscWithFiles:
         self,
         disc_with_files_class,
         ssh_connection_params,
-        local_temp_dir,
+        tmp_path,
         remote_temp_dir,
     ):
         """Test discipline with inputs_to_upload and outputs_to_download."""
         local_disc = disc_with_files_class()
 
         # Create input file
-        in_file = local_temp_dir / "input.txt"
+        in_file = tmp_path / "input.txt"
         in_file.write_text("42")
 
         # Create a dummy discipline file (needed by DiscWithFiles)
-        disc_file = local_temp_dir / "discipline.py"
+        disc_file = tmp_path / "discipline.py"
         disc_file.write_text("# dummy")
 
         remote_disc = wrap_discipline_with_ssh(
             local_disc,
-            local_workdir_path=local_temp_dir,
+            local_workdir_path=tmp_path,
             remote_workdir_path=remote_temp_dir,
             inputs_to_upload=["in_file", "discipline"],
             outputs_to_download=["out_file"],
@@ -212,21 +206,21 @@ class TestFileTransferWithDiscWithFiles:
         self,
         disc_with_files_class,
         ssh_connection_params,
-        local_temp_dir,
+        tmp_path,
         remote_temp_dir,
     ):
         """Test discipline with outputs_to_download."""
         local_disc = disc_with_files_class()
 
-        in_file = local_temp_dir / "input.txt"
+        in_file = tmp_path / "input.txt"
         in_file.write_text("100")
 
-        disc_file = local_temp_dir / "disc.py"
+        disc_file = tmp_path / "disc.py"
         disc_file.write_text("")
 
         remote_disc = wrap_discipline_with_ssh(
             local_disc,
-            local_workdir_path=local_temp_dir,
+            local_workdir_path=tmp_path,
             remote_workdir_path=remote_temp_dir,
             inputs_to_upload=["in_file", "discipline"],
             outputs_to_download=["out_file"],
@@ -241,26 +235,26 @@ class TestFileTransferWithDiscWithFiles:
         # Verify the downloaded file path is local
         out_path = Path(result["out_file"])
         assert out_path.exists()
-        assert str(local_temp_dir) in str(out_path)
+        assert str(tmp_path) in str(out_path)
 
     def test_download_numeric_output(
         self,
         disc_with_files_class,
         ssh_connection_params,
-        local_temp_dir,
+        tmp_path,
         remote_temp_dir,
     ):
         """Test that numeric outputs are returned correctly."""
         disc = disc_with_files_class()
-        in_file = local_temp_dir / "input.txt"
+        in_file = tmp_path / "input.txt"
         in_file.write_text("0")
 
-        disc_file = local_temp_dir / "disc.py"
+        disc_file = tmp_path / "disc.py"
         disc_file.write_text("")
 
         remote_disc = wrap_discipline_with_ssh(
             disc,
-            local_workdir_path=local_temp_dir,
+            local_workdir_path=tmp_path,
             remote_workdir_path=remote_temp_dir,
             inputs_to_upload=["in_file", "discipline"],
             outputs_to_download=["out_file"],
@@ -275,7 +269,7 @@ class TestFileTransferWithDiscWithFiles:
         # Verify output path is local and exists
         out_path = Path(result["out_file"])
         assert out_path.is_absolute()
-        assert str(local_temp_dir) in str(out_path)
+        assert str(tmp_path) in str(out_path)
         assert out_path.exists()
         assert out_path.read_text() == "1"
 
@@ -284,14 +278,14 @@ class TestErrorCoverage:
     """Tests covering error handling paths in SSHDisciplineWrapper."""
 
     def test_missing_outputs_file(
-        self, ssh_connection_params, local_temp_dir, remote_temp_dir
+        self, ssh_connection_params, tmp_path, remote_temp_dir
     ):
         """Test FileNotFoundError when output pickle is missing locally."""
         local_disc = create_discipline("SobieskiMission")
 
         remote_disc = wrap_discipline_with_ssh(
             local_disc,
-            local_workdir_path=local_temp_dir,
+            local_workdir_path=tmp_path,
             remote_workdir_path=remote_temp_dir,
             **ssh_connection_params,
         )
@@ -315,7 +309,7 @@ class TestErrorCoverage:
         self,
         disc_with_files_class,
         ssh_connection_params,
-        local_temp_dir,
+        tmp_path,
         remote_temp_dir,
     ):
         """Test that exceptions raised on the remote host are re-raised locally."""
@@ -325,7 +319,7 @@ class TestErrorCoverage:
         # so DiscWithFiles._run will raise FileNotFoundError.
         remote_disc = wrap_discipline_with_ssh(
             local_disc,
-            local_workdir_path=local_temp_dir,
+            local_workdir_path=tmp_path,
             remote_workdir_path=remote_temp_dir,
             **ssh_connection_params,
         )

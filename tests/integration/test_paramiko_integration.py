@@ -57,48 +57,46 @@ class TestSFTPClientGet:
     """Tests for SFTPClient.get() method."""
 
     def test_get_existing_file(
-        self, sftp_client, remote_temp_dir, local_temp_dir, sample_text_file
+        self, sftp_client, remote_temp_dir, tmp_path, sample_text_file
     ):
         """Verify downloading an existing file works."""
         remote_path = f"{remote_temp_dir}/test_file.txt"
         sftp_client.put(str(sample_text_file), remote_path)
 
-        local_path = local_temp_dir / "downloaded.txt"
+        local_path = tmp_path / "downloaded.txt"
         sftp_client.get(remote_path, str(local_path))
 
         assert local_path.exists()
         assert local_path.read_text() == sample_text_file.read_text()
 
     def test_get_binary_file(
-        self, sftp_client, remote_temp_dir, local_temp_dir, sample_binary_file
+        self, sftp_client, remote_temp_dir, tmp_path, sample_binary_file
     ):
         """Verify downloading binary file preserves content."""
         remote_path = f"{remote_temp_dir}/test_file.bin"
         sftp_client.put(str(sample_binary_file), remote_path)
 
-        local_path = local_temp_dir / "downloaded.bin"
+        local_path = tmp_path / "downloaded.bin"
         sftp_client.get(remote_path, str(local_path))
 
         assert local_path.read_bytes() == sample_binary_file.read_bytes()
 
-    def test_get_large_file(
-        self, sftp_client, remote_temp_dir, local_temp_dir, large_file
-    ):
+    def test_get_large_file(self, sftp_client, remote_temp_dir, tmp_path, large_file):
         """Verify downloading large files works correctly."""
         remote_path = f"{remote_temp_dir}/large_file.bin"
         sftp_client.put(str(large_file), remote_path)
 
-        local_path = local_temp_dir / "downloaded_large.bin"
+        local_path = tmp_path / "downloaded_large.bin"
         sftp_client.get(remote_path, str(local_path))
 
         assert local_path.read_bytes() == large_file.read_bytes()
 
     def test_get_nonexistent_file_raises_error(
-        self, sftp_client, remote_temp_dir, local_temp_dir
+        self, sftp_client, remote_temp_dir, tmp_path
     ):
         """Verify FileNotFoundError with proper message for missing remote file."""
         remote_path = f"{remote_temp_dir}/nonexistent_file.txt"
-        local_path = local_temp_dir / "downloaded.txt"
+        local_path = tmp_path / "downloaded.txt"
 
         with pytest.raises(FileNotFoundError) as exc_info:
             sftp_client.get(remote_path, str(local_path))
@@ -107,7 +105,7 @@ class TestSFTPClientGet:
         assert remote_path in str(exc_info.value)
 
     def test_get_with_callback(
-        self, sftp_client, remote_temp_dir, local_temp_dir, sample_text_file
+        self, sftp_client, remote_temp_dir, tmp_path, sample_text_file
     ):
         """Verify callback is invoked during download."""
         remote_path = f"{remote_temp_dir}/test_file.txt"
@@ -118,7 +116,7 @@ class TestSFTPClientGet:
         def progress_callback(transferred, total):
             callback_calls.append((transferred, total))
 
-        local_path = local_temp_dir / "downloaded.txt"
+        local_path = tmp_path / "downloaded.txt"
         sftp_client.get(remote_path, str(local_path), callback=progress_callback)
 
         assert len(callback_calls) > 0
@@ -175,14 +173,14 @@ class TestSFTPClientPut:
         assert len(callback_calls) > 0
 
     def test_put_file_with_special_characters(
-        self, sftp_client, remote_temp_dir, file_with_special_chars, local_temp_dir
+        self, sftp_client, remote_temp_dir, file_with_special_chars, tmp_path
     ):
         """Verify files with unicode content transfer correctly."""
         remote_path = f"{remote_temp_dir}/special.txt"
         sftp_client.put(str(file_with_special_chars), remote_path)
 
         # Download and verify
-        local_path = local_temp_dir / "downloaded_special.txt"
+        local_path = tmp_path / "downloaded_special.txt"
         sftp_client.get(remote_path, str(local_path))
         assert local_path.read_text() == file_with_special_chars.read_text()
 
