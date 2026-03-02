@@ -23,7 +23,7 @@ RUN pip install --no-cache-dir "${GEMSEO_PACKAGE_SPEC}"
 
 
 # Create test working directory
-RUN mkdir -p /workdir
+RUN mkdir -p ${WORKDIR}
 
 # Copy test module for SSH integration tests
 COPY tests/disc_with_files.py ${WORKDIR}/disc_with_files.py
