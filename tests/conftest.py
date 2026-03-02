@@ -39,6 +39,9 @@ SSH_PASSWORD = "testpassword"
 SSH_USER = "root"
 SSH_PORT = 22
 
+GEMSEO_URL_FILE = Path(__file__).parent.parent / "requirements" / "test-constraints.in"
+GEMSEO_URL = GEMSEO_URL_FILE.read_text().strip()
+
 
 class SSHServerContainer(DockerContainer):
     """Custom SSH server container with gemseo installed."""
@@ -102,7 +105,17 @@ def docker_image_built() -> str:
     image_tag = "gemseo-ssh-test:latest"
 
     subprocess.run(
-        ["docker", "build", "-t", image_tag, "-f", str(dockerfile_path), "."],
+        [
+            "docker",
+            "build",
+            "-t",
+            image_tag,
+            "-f",
+            str(dockerfile_path),
+            ".",
+            "--build-arg",
+            f"GEMSEO_URL={GEMSEO_URL}",
+        ],
         cwd=build_context,
         check=True,
         capture_output=True,
