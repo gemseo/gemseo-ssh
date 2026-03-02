@@ -366,8 +366,12 @@ class TestWindowsPathHandling:
         sftp = MagicMock(spec=SFTPClient)
         sftp.stat.side_effect = OSError  # Force mkdir for each parent
 
-        with patch.object(_SFTPClient, "mkdir") as parent_mkdir:
-            SFTPClient.mkdir(sftp, PureWindowsPath("C:/Users/test/workdir/uuid"))
+        # Mock Path in the paramiko module to simulate Windows (where Path=WindowsPath).
+        with (
+            patch("gemseo_ssh.wrappers.ssh.paramiko.Path", PureWindowsPath),
+            patch.object(_SFTPClient, "mkdir") as parent_mkdir,
+        ):
+            SFTPClient.mkdir(sftp, "C:\\Users\\test\\workdir\\uuid")
 
         assert parent_mkdir.call_count > 0
         created_paths = [call[0][0] for call in parent_mkdir.call_args_list]
@@ -383,8 +387,12 @@ class TestWindowsPathHandling:
 
         sftp = MagicMock(spec=SFTPClient)
 
-        with patch.object(_SFTPClient, "chdir") as parent_chdir:
-            SFTPClient.chdir(sftp, PureWindowsPath("C:\\Users\\test\\workdir"))
+        # Mock Path in the paramiko module to simulate Windows (where Path=WindowsPath).
+        with (
+            patch("gemseo_ssh.wrappers.ssh.paramiko.Path", PureWindowsPath),
+            patch.object(_SFTPClient, "chdir") as parent_chdir,
+        ):
+            SFTPClient.chdir(sftp, "C:\\Users\\test\\workdir")
 
         parent_chdir.assert_called_once()
         path_str = parent_chdir.call_args[0][0]
