@@ -16,24 +16,19 @@ from __future__ import annotations
 
 import os
 import shutil
-import subprocess
-import venv
 from pathlib import Path
 from pathlib import PureWindowsPath
 from typing import TYPE_CHECKING
-from typing import NamedTuple
 from unittest.mock import MagicMock
 from unittest.mock import patch
 
 import pytest
-from filelock import FileLock
 from gemseo import create_discipline
 from gemseo.disciplines.wrappers.job_schedulers.discipline_wrapper import (
     JobSchedulerDisciplineWrapper,
 )
 from gemseo.problems.topology_optimization.volume_fraction_disc import VolumeFraction
 from gemseo.utils.comparisons import compare_dict_of_arrays
-from gemseo.utils.platform import PLATFORM_IS_WINDOWS
 from gemseo.utils.testing.pytest_conftest import tmp_wd  # noqa: F401
 
 from gemseo_ssh import wrap_discipline_with_ssh
@@ -43,19 +38,11 @@ if TYPE_CHECKING:
 
     from gemseo.core.discipline.discipline import Discipline
 
+
 CURRENT_DIR_PATH = Path(__file__).parent
 
 # The hostname does not matter since the ssh layer will be mocked.
 HOSTNAME = "dummy"
-
-if PLATFORM_IS_WINDOWS:
-    VENV_REL_PATH_TO_PYTHON = "Scripts/python.exe"
-    ACTIVATE_CMD = r"{venv_path}\Scripts\activate"
-    SET_PYTHONPATH_CMD = "for /f \"delims=\" %a in ('cd') do @set PYTHONPATH=%a"
-else:
-    VENV_REL_PATH_TO_PYTHON = "bin/python"
-    ACTIVATE_CMD = ". {venv_path}/bin/activate"
-    SET_PYTHONPATH_CMD = "export PYTHONPATH={workdir_path}:$PYTHONPATH"
 
 
 class SFTP:
@@ -66,12 +53,6 @@ class SFTP:
     get = staticmethod(shutil.copyfile)
     put = staticmethod(shutil.copyfile)
     getcwd = os.getcwd
-
-
-# def mock_execute(cmd_lines) -> None:
-#     """Mock execute that runs commands locally like SSHClient.execute."""
-#     cmd = " && ".join(cmd_lines)
-#     os.system(cmd)
 
 
 def mock_execute(cmd_lines: Sequence[str]) -> tuple:
@@ -103,14 +84,6 @@ MockGemseoSSHClient.create_connection = MagicMock(
 )
 
 
-class RemoteSetup(NamedTuple):
-    """Settings for the remote."""
-
-    workdir_path: Path
-    activation_cmd: str
-    set_python_path_cmd: str
-
-
 @patch("paramiko.SSHClient", MockParamikoSSHCLIENT)
 @patch("gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHClient", MockGemseoSSHClient)
 def test_helper_discipline(tmp_path):
@@ -130,43 +103,6 @@ def test_helper_discipline(tmp_path):
     assert out["out_val"] == 1
 
     assert Path(out["out_file"]).exists()
-
-
-def create_venv(path: Path):
-    """Create a virtualenv with the same version of GEMSEO.
-
-    Args:
-        path: The path to the virtualenv root directory.
-    """
-    venv.create(path, with_pip=True, symlinks=True)
-
-    gemseo_version = "gemseo[all]@git+https://gitlab.com/gemseo/dev/gemseo.git@develop"
-
-    subprocess.run(
-        f"{path / VENV_REL_PATH_TO_PYTHON} -m pip install {gemseo_version}".split(),
-        check=True,
-        capture_output=True,
-    )
-
-
-@pytest.fixture(scope="session")
-def remote_setup(tmp_path_factory, worker_id):
-    """Create the virtual env for the remote connection on the local host."""
-    workdir_path = tmp_path_factory.mktemp("ssh-remote-workdir")
-    venv_path = workdir_path / "venv"
-
-    # Safely creates the venv when executing the tests in parallel.
-    if worker_id == "master":
-        create_venv(venv_path)
-    else:
-        with FileLock(str(workdir_path / "fixture.lock")):
-            create_venv(venv_path)
-
-    return RemoteSetup(
-        workdir_path,
-        ACTIVATE_CMD.format(venv_path=venv_path),
-        SET_PYTHONPATH_CMD.format(workdir_path=CURRENT_DIR_PATH),
-    )
 
 
 @pytest.mark.parametrize("copy_grammars", [True, False])

@@ -17,15 +17,20 @@
 
 from __future__ import annotations
 
+import logging
 import os
 import socket
 import subprocess
 import time
 import uuid
+import venv
 from pathlib import Path
 from typing import TYPE_CHECKING
+from typing import NamedTuple
 
 import pytest
+from filelock import FileLock
+from gemseo.utils.platform import PLATFORM_IS_WINDOWS
 from testcontainers.core.container import DockerContainer
 
 if TYPE_CHECKING:
@@ -34,13 +39,36 @@ if TYPE_CHECKING:
     from gemseo_ssh.wrappers.ssh.paramiko import SFTPClient
     from gemseo_ssh.wrappers.ssh.paramiko import SSHClient
 
+LOGGER = logging.getLogger(__name__)
+
+CURRENT_DIR_PATH = Path(__file__).parent
+
+if PLATFORM_IS_WINDOWS:
+    VENV_REL_PATH_TO_PYTHON = "Scripts/python.exe"
+    ACTIVATE_CMD = r"{venv_path}\Scripts\activate"
+    SET_PYTHONPATH_CMD = "for /f \"delims=\" %a in ('cd') do @set PYTHONPATH=%a"
+else:
+    VENV_REL_PATH_TO_PYTHON = "bin/python"
+    ACTIVATE_CMD = ". {venv_path}/bin/activate"
+    SET_PYTHONPATH_CMD = "export PYTHONPATH={workdir_path}:$PYTHONPATH"
+
 # Constants for SSH container
 SSH_PASSWORD = "testpassword"
 SSH_USER = "root"
 SSH_PORT = 22
 
+# Either set GEMSEO_URL environment variable or read from test-constraints.in
 GEMSEO_URL_FILE = Path(__file__).parent.parent / "requirements" / "test-constraints.in"
-GEMSEO_URL = GEMSEO_URL_FILE.read_text().strip()
+GEMSEO_URL_FROM_FILE = GEMSEO_URL_FILE.read_text().strip()
+GEMSEO_URL = os.environ.get("GEMSEO_URL", GEMSEO_URL_FROM_FILE)
+
+
+class RemoteSetup(NamedTuple):
+    """Settings for the remote."""
+
+    workdir_path: Path
+    activation_cmd: str
+    set_python_path_cmd: str
 
 
 class SSHServerContainer(DockerContainer):
@@ -218,3 +246,38 @@ def file_with_special_chars(local_temp_dir) -> Path:
     file_path = local_temp_dir / "special_chars.txt"
     file_path.write_text("Unicode: \u4e2d\u6587 \u00e9\u00e8\u00ea \u2603")
     return file_path
+
+
+def create_venv(path: Path):
+    """Create a virtualenv with the same version of GEMSEO.
+
+    Args:
+        path: The path to the virtualenv root directory.
+    """
+    venv.create(path, with_pip=True, symlinks=True)
+
+    subprocess.run(
+        f"{path / VENV_REL_PATH_TO_PYTHON} -m pip install {GEMSEO_URL}".split(),
+        check=True,
+        capture_output=True,
+    )
+
+
+@pytest.fixture(scope="session")
+def remote_setup(tmp_path_factory, worker_id):
+    """Create the virtual env for the remote connection on the local host."""
+    workdir_path = tmp_path_factory.mktemp("ssh-remote-workdir")
+    venv_path = workdir_path / "venv"
+
+    # Safely creates the venv when executing the tests in parallel.
+    if worker_id == "master":
+        create_venv(venv_path)
+    else:
+        with FileLock(str(workdir_path / "fixture.lock")):
+            create_venv(venv_path)
+
+    return RemoteSetup(
+        workdir_path,
+        ACTIVATE_CMD.format(venv_path=venv_path),
+        SET_PYTHONPATH_CMD.format(workdir_path=CURRENT_DIR_PATH),
+    )
