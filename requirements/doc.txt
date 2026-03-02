@@ -44,7 +44,7 @@ fieldz==0.2.0
     # via griffe-fieldz
 fonttools==4.61.1
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@12de833a8bbda6f2490f9e41fffea9eaa4d2946d
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@9ca3790cc0014ad20dc47e15f92d23b2ba356d44
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
@@ -196,7 +196,7 @@ pathspec==1.0.4
     # via
     #   black
     #   mkdocs
-pillow==12.1.0
+pillow==12.1.1
     # via
     #   gemseo
     #   matplotlib
@@ -248,7 +248,7 @@ python-dateutil==2.9.0.post0
     #   ghp-import
     #   matplotlib
     #   pandas
-python-dotenv==1.2.1
+python-dotenv==1.2.2
     # via pydantic-settings
 pytokens==0.4.1
     # via black

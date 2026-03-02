@@ -36,11 +36,11 @@ execnet==2.1.2
     # via pytest-xdist
 fastjsonschema==2.21.2
     # via gemseo
-filelock==3.24.3
+filelock==3.25.0
     # via gemseo-ssh (pyproject.toml:dev)
 fonttools==4.61.1
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@12de833a8bbda6f2490f9e41fffea9eaa4d2946d
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@9ca3790cc0014ad20dc47e15f92d23b2ba356d44
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
@@ -105,7 +105,7 @@ paramiko==3.2.0
     # via
     #   gemseo-ssh (pyproject.toml)
     #   mock-ssh-server
-pillow==12.1.0
+pillow==12.1.1
     # via
     #   gemseo
     #   matplotlib
@@ -150,7 +150,7 @@ python-dateutil==2.9.0.post0
     # via
     #   matplotlib
     #   pandas
-python-dotenv==1.2.1
+python-dotenv==1.2.2
     # via
     #   pydantic-settings
     #   testcontainers
