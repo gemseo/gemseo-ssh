@@ -19,28 +19,8 @@ variables:
 # Common settings for the test jobs.
 ####################################################################################################
 .test-base:
-  stage: test
-  image: $TEST_IMAGE
+  extends: .test-base
   before_script:
     - curl -fsSL https://get.docker.com -o get-docker.sh
     - bash ./get-docker.sh
     - docker info
-  variables:
-    # The prefix is used to avoid name clashes.
-    COVERAGE_FILE: $CI_JOB_NAME_SLUG-coverage.xml
-    REPORT_FILE: report.xml
-  artifacts:
-    paths: [$COVERAGE_FILE]
-    reports:
-      junit: $REPORT_FILE
-      coverage_report:
-        coverage_format: cobertura
-        path: $COVERAGE_FILE
-  # To get the total coverage shown in gitlab UI.
-  coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
-  script:
-    # The junitxml is for showing the number of tests if gitlab UI.
-    # The term report is for providing data to the gitlab coverage keyword.
-    - tox -e py$PY_VERSION-coverage $TOX_OPTIONS -- --junitxml=$REPORT_FILE --cov-report=term:skip-covered --cov-report=xml:$COVERAGE_FILE $PYTEST_OPTIONS
-    # Fix for showing the covered lines in gitlab MR.
-    - sed -i 's#filename=".*/site-packages#filename="src#g' $COVERAGE_FILE
