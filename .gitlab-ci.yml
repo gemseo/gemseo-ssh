@@ -28,9 +28,9 @@ variables:
     - bash ./get-docker.sh
     - docker info
   rules:
-    - if: $CI_COMMIT_REF_NAME =~ '/^(master|release-[0-9]+\.[0-9]+\.[0-9]+\w*)$/' && $CI_PIPELINE_SOURCE != "schedule"
+    - if: $CI_COMMIT_REF_NAME =~ '/^(master|release-[0-9]+\.[0-9]+\.[0-9]+\w*)$/'
       GEMSEO_PACKAGE_SPEC: gemseo[all]
-    - if: $CI_COMMIT_REF_NAME !~ '/^(master|release-[0-9]+\.[0-9]+\.[0-9]+\w*)$/' && $CI_PIPELINE_SOURCE != "schedule"
+    - if: $CI_COMMIT_REF_NAME !~ '/^(master|release-[0-9]+\.[0-9]+\.[0-9]+\w*)$/'
       GEMSEO_PACKAGE_SPEC: gemseo[all]@git+https://gitlab.com/gemseo/dev/gemseo.git@develop
-    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "web"
       GEMSEO_PACKAGE_SPEC: $GEMSEO_PACKAGE_SPEC_PIPELINE
