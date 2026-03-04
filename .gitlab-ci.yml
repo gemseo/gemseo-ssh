@@ -15,7 +15,7 @@ variables:
   # Improve performance with overlayfs.
   DOCKER_DRIVER: overlay2
   # GEMSEO version to install
-  GEMSEO_PACKAGE_SPEC:
+  GEMSEO_PACKAGE_SPEC_PIPELINE:
     value: ""
     description: "GEMSEO version to install (either from PyPI or from a local git repository)"
 
@@ -28,7 +28,9 @@ variables:
     - bash ./get-docker.sh
     - docker info
   rules:
-    - if: $CI_COMMIT_REF_NAME =~ '/^(master|release-[0-9]+\.[0-9]+\.[0-9]+\w*)$/'
+    - if: $CI_COMMIT_REF_NAME =~ '/^(master|release-[0-9]+\.[0-9]+\.[0-9]+\w*)$/' && $CI_PIPELINE_SOURCE != "schedule"
       GEMSEO_PACKAGE_SPEC: gemseo[all]
-    - if: $CI_COMMIT_REF_NAME !~ '/^(master|release-[0-9]+\.[0-9]+\.[0-9]+\w*)$/'
+    - if: $CI_COMMIT_REF_NAME !~ '/^(master|release-[0-9]+\.[0-9]+\.[0-9]+\w*)$/' && $CI_PIPELINE_SOURCE != "schedule"
       GEMSEO_PACKAGE_SPEC: gemseo[all]@git+https://gitlab.com/gemseo/dev/gemseo.git@develop
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      GEMSEO_PACKAGE_SPEC: $GEMSEO_PACKAGE_SPEC_PIPELINE
