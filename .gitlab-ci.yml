@@ -14,8 +14,6 @@ variables:
   DOCKER_TLS_CERTDIR: ""
   # Improve performance with overlayfs.
   DOCKER_DRIVER: overlay2
-  # GEMSEO version to install server-side.
-  GEMSEO_PACKAGE_SPEC: ""
 
 ####################################################################################################
 # Common settings for the test jobs.
@@ -28,6 +26,6 @@ variables:
     - echo "GEMSEO server installation is $GEMSEO_PACKAGE_SPEC"
   rules:
     - if: $CI_COMMIT_REF_NAME =~ '/^(master|release-[0-9]+\.[0-9]+\.[0-9]+\w*)$/'
-      GEMSEO_PACKAGE_SPEC: gemseo[all]
-    - if: $CI_COMMIT_REF_NAME !~ '/^(master|release-[0-9]+\.[0-9]+\.[0-9]+\w*)$/'
-      GEMSEO_PACKAGE_SPEC: gemseo[all]@git+https://gitlab.com/gemseo/dev/gemseo.git@develop
+      variables:
+          GEMSEO_PACKAGE_SPEC: gemseo[all]
+    - when: always
