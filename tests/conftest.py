@@ -57,10 +57,12 @@ SSH_PASSWORD = "testpassword"
 SSH_USER = "root"
 SSH_PORT = 22
 
-# Either set GEMSEO_URL environment variable or read from test-constraints.in
-GEMSEO_URL_FILE = Path(__file__).parent.parent / "requirements" / "test-constraints.in"
-GEMSEO_URL_FROM_FILE = GEMSEO_URL_FILE.read_text().strip()
-GEMSEO_PACKAGE_SPEC = os.environ.get("GEMSEO_PACKAGE_SPEC", GEMSEO_URL_FROM_FILE)
+# Get GEMSEO_PACKAGE_SPEC from environment variable
+# This is either set in tox.ini or by the CI pipeline
+GEMSEO_PACKAGE_SPEC = os.environ.get("GEMSEO_PACKAGE_SPEC")
+if not GEMSEO_PACKAGE_SPEC:
+    msg = "GEMSEO_PACKAGE_SPEC environment variable is not set"
+    raise ValueError(msg)
 
 
 class RemoteSetup(NamedTuple):
