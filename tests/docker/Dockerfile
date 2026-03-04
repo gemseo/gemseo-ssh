@@ -1,6 +1,6 @@
 FROM public.ecr.aws/docker/library/python:3.12-slim
 
-ARG GEMSEO_PACKAGE_SPEC=gemseo[all]@git+https://gitlab.com/gemseo/dev/gemseo.git@develop
+ARG GEMSEO_PACKAGE_SPEC
 ARG WORKDIR=/workdir
 
 # Install OpenSSH server
