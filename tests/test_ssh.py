@@ -16,44 +16,33 @@ from __future__ import annotations
 
 import os
 import shutil
-import subprocess
-import venv
 from pathlib import Path
+from pathlib import PureWindowsPath
 from typing import TYPE_CHECKING
-from typing import NamedTuple
 from unittest.mock import MagicMock
+from unittest.mock import patch
 
 import pytest
-from filelock import FileLock
 from gemseo import create_discipline
 from gemseo.disciplines.wrappers.job_schedulers.discipline_wrapper import (
     JobSchedulerDisciplineWrapper,
 )
 from gemseo.problems.topology_optimization.volume_fraction_disc import VolumeFraction
 from gemseo.utils.comparisons import compare_dict_of_arrays
-from gemseo.utils.platform import PLATFORM_IS_WINDOWS
 from gemseo.utils.testing.pytest_conftest import tmp_wd  # noqa: F401
-from paramiko import SSHClient as ParamikoSSHCLIENT
 
 from gemseo_ssh import wrap_discipline_with_ssh
-from gemseo_ssh.wrappers.ssh.paramiko import SSHClient as GemseoSSHClient
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from gemseo.core.discipline.discipline import Discipline
+
 
 CURRENT_DIR_PATH = Path(__file__).parent
 
 # The hostname does not matter since the ssh layer will be mocked.
 HOSTNAME = "dummy"
-
-if PLATFORM_IS_WINDOWS:
-    VENV_REL_PATH_TO_PYTHON = "Scripts/python.exe"
-    ACTIVATE_CMD = r"{venv_path}\Scripts\activate"
-    SET_PYTHONPATH_CMD = "for /f \"delims=\" %a in ('cd') do @set PYTHONPATH=%a"
-else:
-    VENV_REL_PATH_TO_PYTHON = "bin/python"
-    ACTIVATE_CMD = ". {venv_path}/bin/activate"
-    SET_PYTHONPATH_CMD = "export PYTHONPATH={workdir_path}:$PYTHONPATH"
 
 
 class SFTP:
@@ -63,36 +52,43 @@ class SFTP:
     chdir = os.chdir
     get = staticmethod(shutil.copyfile)
     put = staticmethod(shutil.copyfile)
+    getcwd = os.getcwd
 
 
-def exec_command(self, cmd: str) -> tuple:
+def mock_execute(cmd_lines: Sequence[str]) -> tuple:
     """Mock the related command of the ssh client."""
+    cmd = " && ".join(cmd_lines)
     exit_code = os.system(cmd)
     stdout = MagicMock()
     stdout.channel.recv_exit_status = lambda: exit_code
     return None, stdout, MagicMock()
 
 
-# Mock the ssh client.
-ParamikoSSHCLIENT.set_missing_host_key_policy = MagicMock()
-ParamikoSSHCLIENT.load_system_host_keys = MagicMock()
-ParamikoSSHCLIENT.connect = MagicMock()
-ParamikoSSHCLIENT.get_transport = MagicMock()
-ParamikoSSHCLIENT.exec_command = exec_command
-GemseoSSHClient.open_sftp = MagicMock(side_effect=SFTP)
+def create_mock_ssh_client_instance():
+    """Create a mock SSH client instance with proper SFTP and execute behavior."""
+    instance = MagicMock()
+    instance.open_sftp = SFTP
+    instance.execute = mock_execute
+    return instance
 
 
-class RemoteSetup(NamedTuple):
-    """Settings for the remote."""
+MockParamikoSSHCLIENT = MagicMock()
+MockParamikoSSHCLIENT.set_missing_host_key_policy = MagicMock()
+MockParamikoSSHCLIENT.load_system_host_keys = MagicMock()
+MockParamikoSSHCLIENT.connect = MagicMock()
+MockParamikoSSHCLIENT.get_transport = MagicMock()
 
-    workdir_path: Path
-    activation_cmd: str
-    set_python_path_cmd: str
+MockGemseoSSHClient = MagicMock()
+MockGemseoSSHClient.create_connection = MagicMock(
+    side_effect=lambda *args, **kwargs: create_mock_ssh_client_instance()
+)
 
 
+@patch("paramiko.SSHClient", MockParamikoSSHCLIENT)
+@patch("gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHClient", MockGemseoSSHClient)
 def test_helper_discipline(tmp_path):
     """Test execution."""
-    from .discipline import DiscWithFiles
+    from .disc_with_files import DiscWithFiles
 
     disc = DiscWithFiles()
 
@@ -109,44 +105,8 @@ def test_helper_discipline(tmp_path):
     assert Path(out["out_file"]).exists()
 
 
-def create_venv(path: Path):
-    """Create a virtualenv with the same version of GEMSEO.
-
-    Args:
-        path: The path to the virtualenv root directory.
-    """
-    venv.create(path, with_pip=True, symlinks=True)
-
-    gemseo_version = "gemseo[all]@git+https://gitlab.com/gemseo/dev/gemseo.git@develop"
-
-    subprocess.run(
-        f"{path / VENV_REL_PATH_TO_PYTHON} -m pip install {gemseo_version}".split(),
-        check=True,
-        capture_output=True,
-    )
-
-
-@pytest.fixture(scope="session")
-def remote_setup(tmp_path_factory, worker_id):
-    """Create the virtual env for the remote connection on the local host."""
-    workdir_path = tmp_path_factory.mktemp("ssh-remote-workdir")
-    venv_path = workdir_path / "venv"
-
-    # Safely creates the venv when executing the tests in parallel.
-    if worker_id == "master":
-        create_venv(venv_path)
-    else:
-        with FileLock(str(workdir_path / "fixture.lock")):
-            create_venv(venv_path)
-
-    return RemoteSetup(
-        workdir_path,
-        ACTIVATE_CMD.format(venv_path=venv_path),
-        SET_PYTHONPATH_CMD.format(workdir_path=CURRENT_DIR_PATH),
-    )
-
-
 @pytest.mark.parametrize("copy_grammars", [True, False])
+@patch("gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHClient", MockGemseoSSHClient)
 def test_execution(tmp_path, remote_setup, copy_grammars):
     """Test the remote execution."""
     local_disc = create_discipline("SobieskiMission")
@@ -166,6 +126,7 @@ def test_execution(tmp_path, remote_setup, copy_grammars):
     assert compare_dict_of_arrays(data, ref_data)
 
 
+@patch("gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHClient", MockGemseoSSHClient)
 def test_execution_with_transfer(tmp_path, remote_setup, monkeypatch):
     """Test the remote execution with files transfers."""
     # For the pickling to work,
@@ -173,7 +134,7 @@ def test_execution_with_transfer(tmp_path, remote_setup, monkeypatch):
     # remote host, this can be done by importing it absolutely the both
     # on local and remote hosts.
     monkeypatch.syspath_prepend(CURRENT_DIR_PATH)
-    from discipline import DiscWithFiles
+    from disc_with_files import DiscWithFiles
 
     local_disc = DiscWithFiles()
 
@@ -201,7 +162,7 @@ def test_execution_with_transfer(tmp_path, remote_setup, monkeypatch):
     data = remote_disc.execute(
         {
             "in_file": str(in_path),
-            "discipline": str(CURRENT_DIR_PATH / "discipline.py"),
+            "discipline": str(CURRENT_DIR_PATH / "disc_with_files.py"),
         },
     )
 
@@ -210,6 +171,7 @@ def test_execution_with_transfer(tmp_path, remote_setup, monkeypatch):
     assert int(out_file_path.read_text("utf8")) == 1
 
 
+@patch("gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHClient", MockGemseoSSHClient)
 @pytest.mark.parametrize("compute_all_jacobians", [False, True])
 @pytest.mark.parametrize("execute", [False, True])
 def test_linearize(tmp_path, remote_setup, compute_all_jacobians, execute) -> None:
@@ -239,6 +201,7 @@ def test_linearize(tmp_path, remote_setup, compute_all_jacobians, execute) -> No
     assert compare_dict_of_arrays(data, local_disc.jac)
 
 
+@patch("gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHClient", MockGemseoSSHClient)
 def test_linearize_at_exe(tmp_path, remote_setup) -> None:
     """Test the linearization at execute."""
 
@@ -262,6 +225,7 @@ def test_linearize_at_exe(tmp_path, remote_setup) -> None:
     assert compare_dict_of_arrays(data, local_disc.jac)
 
 
+@patch("gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHClient", MockGemseoSSHClient)
 def test_inputs_names_error(tmp_path):
     """Verify the error when the inputs_to_upload is bad."""
     msg = "Invalid input names to upload: bad-name"
@@ -274,6 +238,7 @@ def test_inputs_names_error(tmp_path):
         )
 
 
+@patch("gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHClient", MockGemseoSSHClient)
 def test_outputs_names_error(tmp_path):
     """Verify the error when the outputs_to_upload is bad."""
     msg = "Invalid output names to download: .+-name, .+-name"
@@ -284,6 +249,36 @@ def test_outputs_names_error(tmp_path):
             HOSTNAME,
             outputs_to_download=["bad-name", "ko-name"],
         )
+
+
+@patch("gemseo_ssh.wrappers.ssh.paramiko.SSHClient.get_transport", return_value=None)
+@patch("gemseo_ssh.wrappers.ssh.paramiko.SSHClient.connect")
+@patch("gemseo_ssh.wrappers.ssh.paramiko.SSHClient.load_system_host_keys")
+@patch("gemseo_ssh.wrappers.ssh.paramiko.SSHClient.set_missing_host_key_policy")
+def test_create_connection_no_transport(policy, keys, connect, transport):
+    """Test that create_connection raises RuntimeError when transport is None."""
+    from gemseo_ssh.wrappers.ssh.paramiko import SSHClient
+
+    with pytest.raises(RuntimeError, match="Cannot get the ssh transport"):
+        SSHClient.create_connection("hostname", keep_alive_interval=60)
+
+
+def test_execute_undecodable_output():
+    """Test execute when stdout/stderr readlines raises an exception."""
+    from gemseo_ssh.wrappers.ssh.paramiko import SSHClient
+
+    client = SSHClient()
+
+    stdout = MagicMock()
+    stdout.readlines.side_effect = UnicodeDecodeError("utf-8", b"", 0, 1, "invalid")
+    stdout.channel.recv_exit_status.return_value = 1
+
+    stderr = MagicMock()
+    stderr.readlines.side_effect = UnicodeDecodeError("utf-8", b"", 0, 1, "invalid")
+
+    with patch.object(client, "exec_command", return_value=(None, stdout, stderr)):
+        # Should not raise, but log an error with fallback messages.
+        client.execute(["echo hello"])
 
 
 @pytest.fixture(params=[True, False])
@@ -306,6 +301,7 @@ def discipline_mocked_js(tmp_wd, request) -> Discipline:  # noqa: F811
     return disc
 
 
+@patch("gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHClient", MockGemseoSSHClient)
 @pytest.mark.parametrize("copy_grammars", [True, False])
 @pytest.mark.parametrize("use_namespaces", [True, False])
 def test_job_scheduler_discipline_wrapper(
@@ -344,3 +340,76 @@ def test_job_scheduler_discipline_wrapper(
         assert "ns1:y_4" in data
     else:
         assert "y_4" in data
+
+
+def test_mkdir_converts_windows_path():
+    """Test that SFTPClient.mkdir sends POSIX paths to the underlying SFTP."""
+    from paramiko.sftp_client import SFTPClient as _SFTPClient
+
+    from gemseo_ssh.wrappers.ssh.paramiko import SFTPClient
+
+    sftp = MagicMock(spec=SFTPClient)
+    sftp.stat.side_effect = OSError  # Force mkdir for each parent
+
+    # Mock Path in the paramiko module to simulate Windows (where Path=WindowsPath).
+    with (
+        patch("gemseo_ssh.wrappers.ssh.paramiko.Path", PureWindowsPath),
+        patch.object(_SFTPClient, "mkdir") as parent_mkdir,
+    ):
+        SFTPClient.mkdir(sftp, "C:\\Users\\test\\workdir\\uuid")
+
+    assert parent_mkdir.call_count > 0
+    created_paths = [call[0][0] for call in parent_mkdir.call_args_list]
+    for path_str in created_paths:
+        assert "\\" not in path_str, f"Backslash found in path: {path_str}"
+    assert "C:/Users/test/workdir/uuid" in created_paths
+
+
+def test_chdir_converts_windows_path():
+    """Test that SFTPClient.chdir sends a POSIX path to the underlying SFTP."""
+    from paramiko.sftp_client import SFTPClient as _SFTPClient
+
+    from gemseo_ssh.wrappers.ssh.paramiko import SFTPClient
+
+    sftp = MagicMock(spec=SFTPClient)
+
+    # Mock Path in the paramiko module to simulate Windows (where Path=WindowsPath).
+    with (
+        patch("gemseo_ssh.wrappers.ssh.paramiko.Path", PureWindowsPath),
+        patch.object(_SFTPClient, "chdir") as parent_chdir,
+    ):
+        SFTPClient.chdir(sftp, "C:\\Users\\test\\workdir")
+
+    parent_chdir.assert_called_once()
+    path_str = parent_chdir.call_args[0][0]
+    assert path_str == "C:/Users/test/workdir"
+    assert "\\" not in path_str
+
+
+@patch(
+    "gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper.SSHClient",
+    MockGemseoSSHClient,
+)
+def test_execute_on_remote_uses_posix_paths(tmp_path):
+    """Test that _execute_on_remote builds cd commands with forward slashes."""
+    local_disc = create_discipline("SobieskiMission")
+
+    wrapper = wrap_discipline_with_ssh(
+        local_disc,
+        tmp_path,
+        HOSTNAME,
+        remote_workdir_path="C:/Users/test/workdir",
+    )
+
+    # Simulate a PureWindowsPath for the remote current working directory.
+    wrapper._SSHDisciplineWrapper__remote_cwd_path = PureWindowsPath(
+        "C:\\Users\\test\\workdir\\some-uuid"
+    )
+
+    mock_ssh = MagicMock()
+    wrapper._execute_on_remote(mock_ssh)
+
+    cmd_lines = mock_ssh.execute.call_args[0][0]
+    cd_cmd = cmd_lines[0]
+    assert "C:/Users/test/workdir/some-uuid" in cd_cmd
+    assert "\\" not in cd_cmd
