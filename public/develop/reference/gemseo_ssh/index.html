@@ -21,7 +21,7 @@
       
       
       <link rel="icon" href="../../images/favicon.ico">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.3">
     
     
       
@@ -1132,7 +1132,8 @@ with the discipline grammars.</p>
 <span class="normal">82</span>
 <span class="normal">83</span>
 <span class="normal">84</span>
-<span class="normal">85</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">wrap_discipline_with_ssh</span><span class="p">(</span>
+<span class="normal">85</span>
+<span class="normal">86</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">wrap_discipline_with_ssh</span><span class="p">(</span>
     <span class="n">discipline</span><span class="p">:</span> <span class="n">Discipline</span><span class="p">,</span>
     <span class="n">local_workdir_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">,</span>
     <span class="n">hostname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
@@ -1185,6 +1186,7 @@ with the discipline grammars.</p>
         <span class="n">pre_commands</span><span class="o">=</span><span class="n">pre_commands</span><span class="p">,</span>
         <span class="n">inputs_to_upload</span><span class="o">=</span><span class="n">inputs_to_upload</span><span class="p">,</span>
         <span class="n">outputs_to_download</span><span class="o">=</span><span class="n">outputs_to_download</span><span class="p">,</span>
+        <span class="n">copy_grammars</span><span class="o">=</span><span class="n">copy_grammars</span><span class="p">,</span>
         <span class="o">**</span><span class="n">ssh_client_parameters</span><span class="p">,</span>
     <span class="p">)</span>
 </code></pre></div></td></tr></table></div>
