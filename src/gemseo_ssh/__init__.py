@@ -81,5 +81,6 @@ def wrap_discipline_with_ssh(
         pre_commands=pre_commands,
         inputs_to_upload=inputs_to_upload,
         outputs_to_download=outputs_to_download,
+        copy_grammars=copy_grammars,
         **ssh_client_parameters,
     )

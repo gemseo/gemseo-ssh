@@ -34,6 +34,7 @@ dev = [
     "pytest-xdist >=3",
     "filelock",
     "mock-ssh-server",
+    "testcontainers>=4.0",
     "tomli",
 ]
 doc = [
