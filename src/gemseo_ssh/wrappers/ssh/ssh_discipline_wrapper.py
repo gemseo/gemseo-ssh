@@ -243,7 +243,7 @@ class SSHDisciplineWrapper(Discipline):
         """
         for data_name in self.__outputs_to_download:
             file_name = Path(output_data[data_name]).name
-            local_path = self.__local_root_wd_path / file_name
+            local_path = self.__local_cwd_path / file_name
             output_data[data_name] = local_path.as_posix()
             sftp_client.get(file_name, local_path)
 
