@@ -16,7 +16,30 @@ Commons, PO Box 1866, Mountain View, CA 94042, USA.
 
 ## Overview
 
-SSH plugin for GEMSEO
+**gemseo-ssh** is a GEMSEO plugin that wraps any GEMSEO `Discipline` for remote
+execution over SSH/SFTP using [paramiko](https://www.paramiko.org). It allows you
+to distribute MDO computations across multiple machines and operating systems
+(Linux, Windows, macOS), and can be combined with GEMSEO's job scheduler interface
+to submit disciplines to remote HPC clusters.
+
+## How it works
+
+The plugin serializes a discipline and its inputs, transfers them to a remote
+machine via SFTP, executes the discipline remotely via SSH, then downloads and
+deserializes the outputs.
+
+```mermaid
+sequenceDiagram
+    participant L as Local Machine
+    participant R as Remote Machine
+
+    L->>L: Pickle discipline + inputs
+    L->>R: SFTP upload serialized files
+    L->>R: SSH exec gemseo-deserialize-run
+    R->>R: Unpickle, execute, pickle outputs
+    R->>L: SFTP download serialized outputs
+    L->>L: Unpickle outputs
+```
 
 ## Installation
 
@@ -26,75 +49,84 @@ See [pip](https://pip.pypa.io/en/stable/getting-started/) for more information.
 
 ## Requirements
 
-The same version of GEMSEO must be installed on the remote and local
-machines, but not the GEMSEO-SSH plugin, which is only required on the
-local machine.
+**Local machine:**
 
-## Usage
+- `pip install gemseo-ssh`
 
-This GEMSEO SSH plugin allows to delegate the execution of a discipline
-or any sub-process to a (such as an MDA or MDOScenario, or MDOChain) to
-a remote machine via SSH.
+**Remote machine:**
 
-It allows you to distribute MDO workflows across multiple machines and
-multiple systems (Linux, Windows, MacOS).
+- The **same major version** of GEMSEO as on the local machine (gemseo-ssh itself is
+  **not** needed on the remote).
+- The Python environment that contains GEMSEO must be activated.
+  This can be done using the `pre_commands` keyword argument in the `wrap_discipline_with_ssh` helper function
+  or in the `SSHDisciplineWrapper` constructor,
+  or by configuring the remote machine to activate this environment by default.
+- All Python modules imported by the discipline must be available.
 
-It can be combined with GEMSEO\'s job scheduler interface to send
-disciplines to a remote to a remote HPC and add them to the job
-scheduler queue.
-See the `gemseo.wrap_discipline_in_job_scheduler` method.
+**Network:**
 
-The SSH connection is handled with [paramiko](https://www.paramiko.org).
-The settings for the SSH connections are passed as optional arguments
-via the constructor of `SSHDisciplineWrapper` directly to `paramiko`'s SSH client.
-Please refer to
-[paramiko's `SSHClient` doc](https://docs.paramiko.org/en/latest/api/client.html#paramiko.client.SSHClient.connect)
-for details on the
-connection options.
+- SSH access from the local machine to the remote machine.
 
-## Examples
+## Quick examples
 
-For example, we can submit a discipline to a remote host like this:
+### Minimal example: AnalyticDiscipline with key-based auth
 
-``` python
+```python
 from gemseo import create_discipline
 from gemseo_ssh import wrap_discipline_with_ssh
 from numpy import array
 
-analytic_disc = create_discipline("AnalyticDiscipline", expressions={"y":"2*x+1"})
-remote_discipline = wrap_discipline_with_ssh(
+# Create a local discipline
+analytic_disc = create_discipline(
+    "AnalyticDiscipline", expressions={"y": "2*x+1"}
+)
+
+# Wrap it for remote execution
+remote_disc = wrap_discipline_with_ssh(
     discipline=analytic_disc,
     hostname="remote_hostname",
-    local_workdir_path= ".",
+    local_workdir_path=".",
     remote_workdir_path="~/test_ssh",
-    pkey="C:\\Users\\my_user_name\\.ssh\\id_rsa",
+    key_filename="/home/user/.ssh/id_rsa",
 )
-data = remote_discipline.execute({"x": array([1.0])})
+
+# Execute remotely - same interface as any GEMSEO discipline
+data = remote_disc.execute({"x": array([1.0])})
+print(data["y"])  # array([3.0])
 ```
 
-A more complex process, like a MDA, can also be sent to a remote host:
+### MDA with password auth
 
-``` python
+```python
 from gemseo import create_discipline
 from gemseo import create_mda
 from gemseo_ssh import wrap_discipline_with_ssh
 
-disciplines = create_discipline(["SobieskiPropulsion", "SobieskiAerodynamics",
-                                 "SobieskiMission",  "SobieskiStructure"])
+# Create a multidisciplinary analysis
+disciplines = create_discipline([
+    "SobieskiPropulsion",
+    "SobieskiAerodynamics",
+    "SobieskiMission",
+    "SobieskiStructure",
+])
 mda = create_mda("MDAChain", disciplines)
-remote_discipline = wrap_discipline_with_ssh(
+
+# Wrap the entire MDA for remote execution
+remote_mda = wrap_discipline_with_ssh(
     discipline=mda,
     hostname="remote_hostname",
-    local_workdir_path = ".",
+    local_workdir_path=".",
     remote_workdir_path="~/test_ssh",
     username="my_username",
     password="my_password",
 )
 
-# Note that the default_inputs of the SSH discipline are the same
-# as the default_inputs of the original discipline
-couplings = remote_discipline.execute()
+# Execute - uses default_inputs from the original disciplines
+couplings = remote_mda.execute()
 ```
+
+For more examples and detailed usage, see the
+[user guide](https://gemseo.readthedocs.io/projects/gemseo-ssh/latest/user_guide/).
 
 ## Bugs and questions
 

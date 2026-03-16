@@ -40,7 +40,7 @@ filelock==3.25.0
     # via gemseo-ssh (pyproject.toml:dev)
 fonttools==4.61.1
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@9ca3790cc0014ad20dc47e15f92d23b2ba356d44
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@0215566755ee514f75f2e080f55ebb98dcc93493
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
@@ -154,7 +154,7 @@ python-dotenv==1.2.2
     # via
     #   pydantic-settings
     #   testcontainers
-pytz==2025.2
+pytz==2026.1.post1
     # via pandas
 pyxdsm==2.3.1
     # via gemseo
