@@ -167,6 +167,9 @@ def test_execution_with_transfer(tmp_path, remote_setup, monkeypatch):
     )
 
     out_file_path = Path(data["out_file"])
+    # Verify the file is in a UUID subdirectory, not the root workdir
+    assert out_file_path.parent != tmp_path
+    assert out_file_path.parent.parent == tmp_path
     assert out_file_path.exists()
     assert int(out_file_path.read_text("utf8")) == 1
 
