@@ -1,0 +1,1609 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://gemseo.gitlab.io/gemseo-ssh/latest/user_guide/configuration/">
+      
+      
+        <link rel="prev" href="../../licenses/">
+      
+      
+        <link rel="next" href="../file_transfers/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../images/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.4">
+    
+    
+      
+        <title>Configuration Reference - gemseo-ssh</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_markdown_exec_pyodide.css">
+    
+      <link rel="stylesheet" href="../../assets/_markdown_exec_ansi.css">
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../sg_gallery-binder.css">
+    
+      <link rel="stylesheet" href="../../sg_gallery.css">
+    
+      <link rel="stylesheet" href="../../sg_gallery-rendered-html.css">
+    
+      <link rel="stylesheet" href="../../sg_gallery-dataframe.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#configuration-reference" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="gemseo-ssh" class="md-header__button md-logo" aria-label="gemseo-ssh" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            gemseo-ssh
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Configuration Reference
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7M9 21v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1m3-17a5 5 0 0 0-5 5c0 2.05 1.23 3.81 3 4.58V16h4v-2.42c1.77-.77 3-2.53 3-4.58a5 5 0 0 0-5-5"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://gitlab.com/gemseo/dev/gemseo-ssh" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="m504 204.6-.7-1.8L433.6 21c-1.4-3.6-3.9-6.6-7.2-8.6-2.4-1.6-5.1-2.5-8-2.8s-5.7.1-8.4 1.1-5.1 2.7-7.1 4.8c-1.9 2.1-3.3 4.7-4.1 7.4l-47 144H161.3l-47.1-144c-.8-2.8-2.2-5.3-4.1-7.4-2-2.1-4.4-3.7-7.1-4.8-2.6-1-5.5-1.4-8.4-1.1s-5.6 1.2-8 2.8c-3.2 2-5.8 5.1-7.2 8.6L9.8 202.8l-.8 1.8c-10 26.2-11.3 55-3.5 82 7.7 26.9 24 50.7 46.4 67.6l.3.2.6.4 106 79.5c38.5 29.1 66.7 50.3 84.6 63.9 3.7 1.9 8.3 4.3 13 4.3s9.3-2.4 13-4.3c17.9-13.5 46.1-34.9 84.6-63.9l106.7-79.9.3-.3c22.4-16.9 38.7-40.6 45.6-67.5 8.6-27 7.4-55.8-2.6-82"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gemseo-ssh
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../.." class="md-tabs__link">
+          
+  
+  
+    
+  
+  Home
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  
+    
+  
+  User guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../reference/gemseo_ssh/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  API documentation
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="gemseo-ssh" class="md-nav__button md-logo" aria-label="gemseo-ssh" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    gemseo-ssh
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://gitlab.com/gemseo/dev/gemseo-ssh" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="m504 204.6-.7-1.8L433.6 21c-1.4-3.6-3.9-6.6-7.2-8.6-2.4-1.6-5.1-2.5-8-2.8s-5.7.1-8.4 1.1-5.1 2.7-7.1 4.8c-1.9 2.1-3.3 4.7-4.1 7.4l-47 144H161.3l-47.1-144c-.8-2.8-2.2-5.3-4.1-7.4-2-2.1-4.4-3.7-7.1-4.8-2.6-1-5.5-1.4-8.4-1.1s-5.6 1.2-8 2.8c-3.2 2-5.8 5.1-7.2 8.6L9.8 202.8l-.8 1.8c-10 26.2-11.3 55-3.5 82 7.7 26.9 24 50.7 46.4 67.6l.3.2.6.4 106 79.5c38.5 29.1 66.7 50.3 84.6 63.9 3.7 1.9 8.3 4.3 13 4.3s9.3-2.4 13-4.3c17.9-13.5 46.1-34.9 84.6-63.9l106.7-79.9.3-.3c22.4-16.9 38.7-40.6 45.6-67.5 8.6-27 7.4-55.8-2.6-82"/></svg>
+  </div>
+  <div class="md-source__repository">
+    gemseo-ssh
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../.." class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_1" id="__nav_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Home
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../credits/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Credits
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../licenses/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Licenses
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    User guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    User guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration Reference
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#wrap_discipline_with_ssh-parameter-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        wrap_discipline_with_ssh parameter reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ssh-connection-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SSH connection parameters
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SSH connection parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#password-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Password authentication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-based-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key-based authentication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-port" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom port
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ssh-agent-automatic-key-discovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SSH agent / automatic key discovery
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pre-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre-commands
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pre-commands">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#virtualenv-activation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Virtualenv activation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pythonpath-for-custom-disciplines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PYTHONPATH for custom disciplines
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#environment-modules-hpc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment modules (HPC)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#windows-remote-powershell-activation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Windows remote (PowerShell activation)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#grammar-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Grammar handling
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#remote-requirements-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Remote requirements checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../file_transfers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working with File-Based Disciplines
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../reference/gemseo_ssh/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API documentation
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API documentation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../reference/gemseo_ssh/wrappers/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wrappers
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_1" id="__nav_3_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Wrappers
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_1_1" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../reference/gemseo_ssh/wrappers/ssh/" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ssh
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_3_1_1" id="__nav_3_1_1_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_1_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_1_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Ssh
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/gemseo_ssh/wrappers/ssh/paramiko/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Paramiko
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/gemseo_ssh/wrappers/ssh/ssh_discipline_wrapper/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ssh discipline wrapper
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#wrap_discipline_with_ssh-parameter-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        wrap_discipline_with_ssh parameter reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ssh-connection-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SSH connection parameters
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SSH connection parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#password-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Password authentication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-based-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Key-based authentication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#custom-port" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Custom port
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ssh-agent-automatic-key-discovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SSH agent / automatic key discovery
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pre-commands" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre-commands
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pre-commands">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#virtualenv-activation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Virtualenv activation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pythonpath-for-custom-disciplines" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PYTHONPATH for custom disciplines
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#environment-modules-hpc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Environment modules (HPC)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#windows-remote-powershell-activation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Windows remote (PowerShell activation)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#grammar-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Grammar handling
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#remote-requirements-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Remote requirements checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<!--
+Copyright 2021 IRT Saint Exupéry, https://www.irt-saintexupery.com
+
+This work is licensed under the Creative Commons Attribution-ShareAlike 4.0
+International License. To view a copy of this license, visit
+http://creativecommons.org/licenses/by-sa/4.0/ or send a letter to Creative
+Commons, PO Box 1866, Mountain View, CA 94042, USA.
+-->
+<h1 id="configuration-reference">Configuration Reference<a class="headerlink" href="#configuration-reference" title="Permanent link">&para;</a></h1>
+<h2 id="wrap_discipline_with_ssh-parameter-reference"><code>wrap_discipline_with_ssh</code> parameter reference<a class="headerlink" href="#wrap_discipline_with_ssh-parameter-reference" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>discipline</code></td>
+<td><code>Discipline</code></td>
+<td><em>required</em></td>
+<td>Any picklable GEMSEO <code>Discipline</code> and object inheriting from it: <code>MDA</code>, <code>MDOChain</code>, <code>MDOScenarioAdapter</code>, ...</td>
+</tr>
+<tr>
+<td><code>local_workdir_path</code></td>
+<td><code>str | Path</code></td>
+<td><em>required</em></td>
+<td>Local directory where UUID execution subdirectories are created.</td>
+</tr>
+<tr>
+<td><code>hostname</code></td>
+<td><code>str</code></td>
+<td><em>required</em></td>
+<td>SSH hostname or IP address of the remote machine.</td>
+</tr>
+<tr>
+<td><code>remote_workdir_path</code></td>
+<td><code>str | Path</code></td>
+<td><code>""</code></td>
+<td>Remote base directory. If empty, uses the SSH default directory (usually <code>$HOME</code>).</td>
+</tr>
+<tr>
+<td><code>pre_commands</code></td>
+<td><code>Iterable[str]</code></td>
+<td><code>()</code></td>
+<td>Shell commands run on the remote host before discipline execution, chained with <code>&amp;&amp;</code>.</td>
+</tr>
+<tr>
+<td><code>inputs_to_upload</code></td>
+<td><code>Iterable[str]</code></td>
+<td><code>()</code></td>
+<td>Names of discipline inputs whose values are local file paths to upload.</td>
+</tr>
+<tr>
+<td><code>outputs_to_download</code></td>
+<td><code>Iterable[str]</code></td>
+<td><code>()</code></td>
+<td>Names of discipline outputs whose values are remote file paths to download.</td>
+</tr>
+<tr>
+<td><code>copy_grammars</code></td>
+<td><code>bool</code></td>
+<td><code>False</code></td>
+<td>Copy original grammars (full validation) vs use <code>SimplerGrammar</code> (name-only validation).</td>
+</tr>
+<tr>
+<td><code>**ssh_client_parameters</code></td>
+<td></td>
+<td></td>
+<td>Forwarded to <a href="https://docs.paramiko.org/en/latest/api/client.html#paramiko.client.SSHClient.connect"><code>paramiko.SSHClient.connect()</code></a>.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="ssh-connection-parameters">SSH connection parameters<a class="headerlink" href="#ssh-connection-parameters" title="Permanent link">&para;</a></h2>
+<p>All keyword arguments beyond the ones listed above are forwarded directly to
+paramiko's
+<a href="https://docs.paramiko.org/en/latest/api/client.html#paramiko.client.SSHClient.connect"><code>SSHClient.connect()</code></a>.
+Common options include:</p>
+<h3 id="password-authentication">Password authentication<a class="headerlink" href="#password-authentication" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">wrapper</span> <span class="o">=</span> <span class="n">wrap_discipline_with_ssh</span><span class="p">(</span>
+    <span class="n">discipline</span><span class="o">=</span><span class="n">disc</span><span class="p">,</span>
+    <span class="n">hostname</span><span class="o">=</span><span class="s2">&quot;server.example.com&quot;</span><span class="p">,</span>
+    <span class="n">local_workdir_path</span><span class="o">=</span><span class="s2">&quot;/tmp/workdir&quot;</span><span class="p">,</span>
+    <span class="n">username</span><span class="o">=</span><span class="s2">&quot;jdoe&quot;</span><span class="p">,</span>
+    <span class="n">password</span><span class="o">=</span><span class="s2">&quot;s3cret&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<h3 id="key-based-authentication">Key-based authentication<a class="headerlink" href="#key-based-authentication" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># Using a path to a private key file</span>
+<span class="n">wrapper</span> <span class="o">=</span> <span class="n">wrap_discipline_with_ssh</span><span class="p">(</span>
+    <span class="n">discipline</span><span class="o">=</span><span class="n">disc</span><span class="p">,</span>
+    <span class="n">hostname</span><span class="o">=</span><span class="s2">&quot;server.example.com&quot;</span><span class="p">,</span>
+    <span class="n">local_workdir_path</span><span class="o">=</span><span class="s2">&quot;/tmp/workdir&quot;</span><span class="p">,</span>
+    <span class="n">username</span><span class="o">=</span><span class="s2">&quot;jdoe&quot;</span><span class="p">,</span>
+    <span class="n">key_filename</span><span class="o">=</span><span class="s2">&quot;/home/jdoe/.ssh/id_rsa&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<h3 id="custom-port">Custom port<a class="headerlink" href="#custom-port" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">wrapper</span> <span class="o">=</span> <span class="n">wrap_discipline_with_ssh</span><span class="p">(</span>
+    <span class="n">discipline</span><span class="o">=</span><span class="n">disc</span><span class="p">,</span>
+    <span class="n">hostname</span><span class="o">=</span><span class="s2">&quot;server.example.com&quot;</span><span class="p">,</span>
+    <span class="n">local_workdir_path</span><span class="o">=</span><span class="s2">&quot;/tmp/workdir&quot;</span><span class="p">,</span>
+    <span class="n">username</span><span class="o">=</span><span class="s2">&quot;jdoe&quot;</span><span class="p">,</span>
+    <span class="n">port</span><span class="o">=</span><span class="mi">2222</span><span class="p">,</span>
+    <span class="n">key_filename</span><span class="o">=</span><span class="s2">&quot;/home/jdoe/.ssh/id_rsa&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<h3 id="ssh-agent-automatic-key-discovery">SSH agent / automatic key discovery<a class="headerlink" href="#ssh-agent-automatic-key-discovery" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># Let paramiko use the SSH agent or discover keys in ~/.ssh/</span>
+<span class="n">wrapper</span> <span class="o">=</span> <span class="n">wrap_discipline_with_ssh</span><span class="p">(</span>
+    <span class="n">discipline</span><span class="o">=</span><span class="n">disc</span><span class="p">,</span>
+    <span class="n">hostname</span><span class="o">=</span><span class="s2">&quot;server.example.com&quot;</span><span class="p">,</span>
+    <span class="n">local_workdir_path</span><span class="o">=</span><span class="s2">&quot;/tmp/workdir&quot;</span><span class="p">,</span>
+    <span class="n">username</span><span class="o">=</span><span class="s2">&quot;jdoe&quot;</span><span class="p">,</span>
+    <span class="n">allow_agent</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">look_for_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Using <code>~/.ssh/config</code></p>
+<p>You can also rely on your local <code>~/.ssh/config</code> file for host aliases, custom
+ports, ProxyJump, identity files, and other SSH options. Then simply pass the
+host alias as <code>hostname</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># ~/.ssh/config entry:</span>
+<span class="c1"># Host myserver</span>
+<span class="c1">#     HostName 192.168.1.100</span>
+<span class="c1">#     User jdoe</span>
+<span class="c1">#     Port 2222</span>
+<span class="c1">#     IdentityFile ~/.ssh/id_rsa</span>
+
+<span class="n">wrapper</span> <span class="o">=</span> <span class="n">wrap_discipline_with_ssh</span><span class="p">(</span>
+    <span class="n">discipline</span><span class="o">=</span><span class="n">disc</span><span class="p">,</span>
+    <span class="n">hostname</span><span class="o">=</span><span class="s2">&quot;myserver&quot;</span><span class="p">,</span>
+    <span class="n">local_workdir_path</span><span class="o">=</span><span class="s2">&quot;/tmp/workdir&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+</div>
+<h2 id="pre-commands">Pre-commands<a class="headerlink" href="#pre-commands" title="Permanent link">&para;</a></h2>
+<p>The <code>pre_commands</code> parameter lets you run shell commands on the remote host before
+the discipline is deserialized and executed. Commands are chained with <code>&amp;&amp;</code>, so if
+any command fails, the execution stops.</p>
+<h3 id="virtualenv-activation">Virtualenv activation<a class="headerlink" href="#virtualenv-activation" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">wrapper</span> <span class="o">=</span> <span class="n">wrap_discipline_with_ssh</span><span class="p">(</span>
+    <span class="n">discipline</span><span class="o">=</span><span class="n">disc</span><span class="p">,</span>
+    <span class="n">hostname</span><span class="o">=</span><span class="s2">&quot;server.example.com&quot;</span><span class="p">,</span>
+    <span class="n">local_workdir_path</span><span class="o">=</span><span class="s2">&quot;/tmp/workdir&quot;</span><span class="p">,</span>
+    <span class="n">pre_commands</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;. /opt/venv/bin/activate&quot;</span><span class="p">,),</span>
+<span class="p">)</span>
+</code></pre></div>
+<h3 id="pythonpath-for-custom-disciplines">PYTHONPATH for custom disciplines<a class="headerlink" href="#pythonpath-for-custom-disciplines" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">wrapper</span> <span class="o">=</span> <span class="n">wrap_discipline_with_ssh</span><span class="p">(</span>
+    <span class="n">discipline</span><span class="o">=</span><span class="n">disc</span><span class="p">,</span>
+    <span class="n">hostname</span><span class="o">=</span><span class="s2">&quot;server.example.com&quot;</span><span class="p">,</span>
+    <span class="n">local_workdir_path</span><span class="o">=</span><span class="s2">&quot;/tmp/workdir&quot;</span><span class="p">,</span>
+    <span class="n">pre_commands</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;export PYTHONPATH=/path/to/my/modules:$PYTHONPATH&quot;</span><span class="p">,),</span>
+<span class="p">)</span>
+</code></pre></div>
+<h3 id="environment-modules-hpc">Environment modules (HPC)<a class="headerlink" href="#environment-modules-hpc" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">wrapper</span> <span class="o">=</span> <span class="n">wrap_discipline_with_ssh</span><span class="p">(</span>
+    <span class="n">discipline</span><span class="o">=</span><span class="n">disc</span><span class="p">,</span>
+    <span class="n">hostname</span><span class="o">=</span><span class="s2">&quot;hpc-login.example.com&quot;</span><span class="p">,</span>
+    <span class="n">local_workdir_path</span><span class="o">=</span><span class="s2">&quot;/tmp/workdir&quot;</span><span class="p">,</span>
+    <span class="n">pre_commands</span><span class="o">=</span><span class="p">(</span>
+        <span class="s2">&quot;module load python/3.12&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;. /opt/gemseo-env/bin/activate&quot;</span><span class="p">,</span>
+    <span class="p">),</span>
+<span class="p">)</span>
+</code></pre></div>
+<h3 id="windows-remote-powershell-activation">Windows remote (PowerShell activation)<a class="headerlink" href="#windows-remote-powershell-activation" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">wrapper</span> <span class="o">=</span> <span class="n">wrap_discipline_with_ssh</span><span class="p">(</span>
+    <span class="n">discipline</span><span class="o">=</span><span class="n">disc</span><span class="p">,</span>
+    <span class="n">hostname</span><span class="o">=</span><span class="s2">&quot;windows-server.example.com&quot;</span><span class="p">,</span>
+    <span class="n">local_workdir_path</span><span class="o">=</span><span class="s2">&quot;/tmp/workdir&quot;</span><span class="p">,</span>
+    <span class="n">pre_commands</span><span class="o">=</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;C:\envs\gemseo\Scripts\activate.bat&quot;</span><span class="p">,),</span>
+<span class="p">)</span>
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Pre-commands on Windows SSH servers</p>
+<p>Pre-commands are chained with <code>&amp;&amp;</code> (shell syntax). On a Windows SSH server
+running <code>cmd.exe</code>, <code>&amp;&amp;</code> works natively, but some commands may differ from their
+Unix equivalents. If the remote uses PowerShell, you may need to adapt the
+syntax (e.g., using <code>;</code> as a separator or calling <code>powershell -Command "..."</code>).</p>
+</div>
+<h2 id="grammar-handling">Grammar handling<a class="headerlink" href="#grammar-handling" title="Permanent link">&para;</a></h2>
+<p>By default (<code>copy_grammars=False</code>), the SSH wrapper uses <code>SimplerGrammar</code>, which
+only validates input/output <strong>names</strong> without checking types or shapes. This is
+lightweight and works well in most cases.</p>
+<p>Set <code>copy_grammars=True</code> to copy the original discipline's grammars, preserving
+full type and shape validation:</p>
+<div class="highlight"><pre><span></span><code><span class="n">wrapper</span> <span class="o">=</span> <span class="n">wrap_discipline_with_ssh</span><span class="p">(</span>
+    <span class="n">discipline</span><span class="o">=</span><span class="n">disc</span><span class="p">,</span>
+    <span class="n">hostname</span><span class="o">=</span><span class="s2">&quot;server.example.com&quot;</span><span class="p">,</span>
+    <span class="n">local_workdir_path</span><span class="o">=</span><span class="s2">&quot;/tmp/workdir&quot;</span><span class="p">,</span>
+    <span class="n">copy_grammars</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># Full validation like the original discipline</span>
+<span class="p">)</span>
+</code></pre></div>
+<h2 id="remote-requirements-checklist">Remote requirements checklist<a class="headerlink" href="#remote-requirements-checklist" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p class="admonition-title">Checklist for the remote machine</p>
+<ul>
+<li><strong>Same GEMSEO major version</strong> as on the local machine (e.g., both at version 6).</li>
+<li><strong>Remote GEMSEO environment activated</strong> either using the <code>pre_commands</code> argument
+  or by configuring the remote host to source the GEMSEO environment at
+  the SSH session startup.</li>
+<li><strong>All Python modules</strong> imported by the discipline are installed on the
+  remote.</li>
+<li><strong>Write permissions</strong> on the remote work directory (or <code>$HOME</code> if
+  <code>remote_workdir_path</code> is empty).</li>
+<li><strong>SSH port reachable</strong> from the local machine (default: 22).</li>
+</ul>
+</div>
+<hr />
+<p><strong>Next:</strong> <a href="../file_transfers/">Working with File-Based Disciplines</a></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.instant", "navigation.indexes"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../assets/_markdown_exec_pyodide.js"></script>
+      
+        <script src="../../javascripts/mathjax.js"></script>
+      
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      
+    
+  </body>
+</html>

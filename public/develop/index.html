@@ -19,7 +19,7 @@
       
       
       <link rel="icon" href="images/favicon.ico">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.3">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.4">
     
     
       
@@ -260,17 +260,20 @@
   
   
   
-    <li class="md-tabs__item">
-      <a href="user_guide/" class="md-tabs__link">
-        
+    
+    
+      <li class="md-tabs__item">
+        <a href="user_guide/configuration/" class="md-tabs__link">
+          
   
   
     
   
   User guide
 
-      </a>
-    </li>
+        </a>
+      </li>
+    
   
 
       
@@ -511,9 +514,31 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="user_guide/" class="md-nav__link">
+    
+    
+      
         
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
   
   
   <span class="md-ellipsis">
@@ -527,7 +552,107 @@
   
   
 
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    User guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="user_guide/configuration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration Reference
+  
+
+    
+  </span>
+  
+  
+
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="user_guide/file_transfers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working with File-Based Disciplines
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="user_guide/advanced/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Advanced Usage
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -834,6 +959,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How it works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#installation" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -856,24 +992,41 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
+  <a href="#quick-examples" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Usage
+        Quick examples
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Quick examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#minimal-example-analyticdiscipline-with-key-based-auth" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Minimal example: AnalyticDiscipline with key-based auth
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#examples" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#mda-with-password-auth" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Examples
+        MDA with password auth
       
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -953,68 +1106,100 @@ Commons, PO Box 1866, Mountain View, CA 94042, USA.
 <a href="https://pypi.org/project/gemseo-ssh/"><img alt="PyPI" src="https://img.shields.io/pypi/v/gemseo-ssh" /></a>
 <a href="https://app.codecov.io/gl/gemseo:dev/gemseo-ssh"><img alt="Codecov branch" src="https://img.shields.io/codecov/c/gitlab/gemseo:dev/gemseo-ssh/develop" /></a></p>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
-<p>SSH plugin for GEMSEO</p>
+<p><strong>gemseo-ssh</strong> is a GEMSEO plugin that wraps any GEMSEO <code>Discipline</code> for remote
+execution over SSH/SFTP using <a href="https://www.paramiko.org">paramiko</a>. It allows you
+to distribute MDO computations across multiple machines and operating systems
+(Linux, Windows, macOS), and can be combined with GEMSEO's job scheduler interface
+to submit disciplines to remote HPC clusters.</p>
+<h2 id="how-it-works">How it works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h2>
+<p>The plugin serializes a discipline and its inputs, transfers them to a remote
+machine via SFTP, executes the discipline remotely via SSH, then downloads and
+deserializes the outputs.</p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant L as Local Machine
+    participant R as Remote Machine
+
+    L-&gt;&gt;L: Pickle discipline + inputs
+    L-&gt;&gt;R: SFTP upload serialized files
+    L-&gt;&gt;R: SSH exec gemseo-deserialize-run
+    R-&gt;&gt;R: Unpickle, execute, pickle outputs
+    R-&gt;&gt;L: SFTP download serialized outputs
+    L-&gt;&gt;L: Unpickle outputs</code></pre>
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
 <p>Install the latest version with <code>pip install gemseo-ssh</code>.</p>
 <p>See <a href="https://pip.pypa.io/en/stable/getting-started/">pip</a> for more information.</p>
 <h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h2>
-<p>The same version of GEMSEO must be installed on the remote and local
-machines, but not the GEMSEO-SSH plugin, which is only required on the
-local machine.</p>
-<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
-<p>This GEMSEO SSH plugin allows to delegate the execution of a discipline
-or any sub-process to a (such as an MDA or MDOScenario, or MDOChain) to
-a remote machine via SSH.</p>
-<p>It allows you to distribute MDO workflows across multiple machines and
-multiple systems (Linux, Windows, MacOS).</p>
-<p>It can be combined with GEMSEO\'s job scheduler interface to send
-disciplines to a remote to a remote HPC and add them to the job
-scheduler queue.
-See the <code>gemseo.wrap_discipline_in_job_scheduler</code> method.</p>
-<p>The SSH connection is handled with <a href="https://www.paramiko.org">paramiko</a>.
-The settings for the SSH connections are passed as optional arguments
-via the constructor of <code>SSHDisciplineWrapper</code> directly to <code>paramiko</code>'s SSH client.
-Please refer to
-<a href="https://docs.paramiko.org/en/latest/api/client.html#paramiko.client.SSHClient.connect">paramiko's <code>SSHClient</code> doc</a>
-for details on the
-connection options.</p>
-<h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
-<p>For example, we can submit a discipline to a remote host like this:</p>
+<p><strong>Local machine:</strong></p>
+<ul>
+<li><code>pip install gemseo-ssh</code></li>
+</ul>
+<p><strong>Remote machine:</strong></p>
+<ul>
+<li>The <strong>same major version</strong> of GEMSEO as on the local machine (gemseo-ssh itself is
+  <strong>not</strong> needed on the remote).</li>
+<li>The Python environment that contains GEMSEO must be activated.
+  This can be done using the <code>pre_commands</code> keyword argument in the <code>wrap_discipline_with_ssh</code> helper function
+  or in the <code>SSHDisciplineWrapper</code> constructor,
+  or by configuring the remote machine to activate this environment by default.</li>
+<li>All Python modules imported by the discipline must be available.</li>
+</ul>
+<p><strong>Network:</strong></p>
+<ul>
+<li>SSH access from the local machine to the remote machine.</li>
+</ul>
+<h2 id="quick-examples">Quick examples<a class="headerlink" href="#quick-examples" title="Permanent link">&para;</a></h2>
+<h3 id="minimal-example-analyticdiscipline-with-key-based-auth">Minimal example: AnalyticDiscipline with key-based auth<a class="headerlink" href="#minimal-example-analyticdiscipline-with-key-based-auth" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">gemseo</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_discipline</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">gemseo_ssh</span><span class="w"> </span><span class="kn">import</span> <span class="n">wrap_discipline_with_ssh</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">array</span>
 
-<span class="n">analytic_disc</span> <span class="o">=</span> <span class="n">create_discipline</span><span class="p">(</span><span class="s2">&quot;AnalyticDiscipline&quot;</span><span class="p">,</span> <span class="n">expressions</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;y&quot;</span><span class="p">:</span><span class="s2">&quot;2*x+1&quot;</span><span class="p">})</span>
-<span class="n">remote_discipline</span> <span class="o">=</span> <span class="n">wrap_discipline_with_ssh</span><span class="p">(</span>
+<span class="c1"># Create a local discipline</span>
+<span class="n">analytic_disc</span> <span class="o">=</span> <span class="n">create_discipline</span><span class="p">(</span>
+    <span class="s2">&quot;AnalyticDiscipline&quot;</span><span class="p">,</span> <span class="n">expressions</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="s2">&quot;2*x+1&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+
+<span class="c1"># Wrap it for remote execution</span>
+<span class="n">remote_disc</span> <span class="o">=</span> <span class="n">wrap_discipline_with_ssh</span><span class="p">(</span>
     <span class="n">discipline</span><span class="o">=</span><span class="n">analytic_disc</span><span class="p">,</span>
     <span class="n">hostname</span><span class="o">=</span><span class="s2">&quot;remote_hostname&quot;</span><span class="p">,</span>
-    <span class="n">local_workdir_path</span><span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span>
+    <span class="n">local_workdir_path</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span>
     <span class="n">remote_workdir_path</span><span class="o">=</span><span class="s2">&quot;~/test_ssh&quot;</span><span class="p">,</span>
-    <span class="n">pkey</span><span class="o">=</span><span class="s2">&quot;C:</span><span class="se">\\</span><span class="s2">Users</span><span class="se">\\</span><span class="s2">my_user_name</span><span class="se">\\</span><span class="s2">.ssh</span><span class="se">\\</span><span class="s2">id_rsa&quot;</span><span class="p">,</span>
+    <span class="n">key_filename</span><span class="o">=</span><span class="s2">&quot;/home/user/.ssh/id_rsa&quot;</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">remote_discipline</span><span class="o">.</span><span class="n">execute</span><span class="p">({</span><span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">])})</span>
+
+<span class="c1"># Execute remotely - same interface as any GEMSEO discipline</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">remote_disc</span><span class="o">.</span><span class="n">execute</span><span class="p">({</span><span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">])})</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">])</span>  <span class="c1"># array([3.0])</span>
 </code></pre></div>
-<p>A more complex process, like a MDA, can also be sent to a remote host:</p>
+<h3 id="mda-with-password-auth">MDA with password auth<a class="headerlink" href="#mda-with-password-auth" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">gemseo</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_discipline</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">gemseo</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_mda</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">gemseo_ssh</span><span class="w"> </span><span class="kn">import</span> <span class="n">wrap_discipline_with_ssh</span>
 
-<span class="n">disciplines</span> <span class="o">=</span> <span class="n">create_discipline</span><span class="p">([</span><span class="s2">&quot;SobieskiPropulsion&quot;</span><span class="p">,</span> <span class="s2">&quot;SobieskiAerodynamics&quot;</span><span class="p">,</span>
-                                 <span class="s2">&quot;SobieskiMission&quot;</span><span class="p">,</span>  <span class="s2">&quot;SobieskiStructure&quot;</span><span class="p">])</span>
+<span class="c1"># Create a multidisciplinary analysis</span>
+<span class="n">disciplines</span> <span class="o">=</span> <span class="n">create_discipline</span><span class="p">([</span>
+    <span class="s2">&quot;SobieskiPropulsion&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SobieskiAerodynamics&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SobieskiMission&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SobieskiStructure&quot;</span><span class="p">,</span>
+<span class="p">])</span>
 <span class="n">mda</span> <span class="o">=</span> <span class="n">create_mda</span><span class="p">(</span><span class="s2">&quot;MDAChain&quot;</span><span class="p">,</span> <span class="n">disciplines</span><span class="p">)</span>
-<span class="n">remote_discipline</span> <span class="o">=</span> <span class="n">wrap_discipline_with_ssh</span><span class="p">(</span>
+
+<span class="c1"># Wrap the entire MDA for remote execution</span>
+<span class="n">remote_mda</span> <span class="o">=</span> <span class="n">wrap_discipline_with_ssh</span><span class="p">(</span>
     <span class="n">discipline</span><span class="o">=</span><span class="n">mda</span><span class="p">,</span>
     <span class="n">hostname</span><span class="o">=</span><span class="s2">&quot;remote_hostname&quot;</span><span class="p">,</span>
-    <span class="n">local_workdir_path</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span>
+    <span class="n">local_workdir_path</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">,</span>
     <span class="n">remote_workdir_path</span><span class="o">=</span><span class="s2">&quot;~/test_ssh&quot;</span><span class="p">,</span>
     <span class="n">username</span><span class="o">=</span><span class="s2">&quot;my_username&quot;</span><span class="p">,</span>
     <span class="n">password</span><span class="o">=</span><span class="s2">&quot;my_password&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="c1"># Note that the default_inputs of the SSH discipline are the same</span>
-<span class="c1"># as the default_inputs of the original discipline</span>
-<span class="n">couplings</span> <span class="o">=</span> <span class="n">remote_discipline</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
+<span class="c1"># Execute - uses default_inputs from the original disciplines</span>
+<span class="n">couplings</span> <span class="o">=</span> <span class="n">remote_mda</span><span class="o">.</span><span class="n">execute</span><span class="p">()</span>
 </code></pre></div>
+<p>For more examples and detailed usage, see the
+<a href="https://gemseo.readthedocs.io/projects/gemseo-ssh/latest/user_guide/">user guide</a>.</p>
 <h2 id="bugs-and-questions">Bugs and questions<a class="headerlink" href="#bugs-and-questions" title="Permanent link">&para;</a></h2>
 <p>Please use the <a href="https://gitlab.com/gemseo/dev/gemseo-ssh/-/issues">gitlab issue tracker</a>
 to submit bugs or questions.</p>

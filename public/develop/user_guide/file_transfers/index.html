@@ -8,9 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://gemseo.gitlab.io/gemseo-ssh/latest/reference/SUMMARY/">
+        <link rel="canonical" href="https://gemseo.gitlab.io/gemseo-ssh/latest/user_guide/file_transfers/">
       
       
+        <link rel="prev" href="../configuration/">
+      
+      
+        <link rel="next" href="../advanced/">
       
       
         
@@ -21,7 +25,7 @@
     
     
       
-        <title>SUMMARY - gemseo-ssh</title>
+        <title>Working with File-Based Disciplines - gemseo-ssh</title>
       
     
     
@@ -85,6 +89,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#working-with-file-based-disciplines" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -119,7 +128,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              SUMMARY
+              Working with File-Based Disciplines
             
           </span>
         </div>
@@ -250,11 +259,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../user_guide/configuration/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../configuration/" class="md-tabs__link">
           
   
   
@@ -274,7 +285,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../gemseo_ssh/" class="md-tabs__link">
+      <a href="../../reference/gemseo_ssh/" class="md-tabs__link">
         
   
   
@@ -498,8 +509,10 @@
       
   
   
+    
   
   
+  
     
     
       
@@ -513,17 +526,20 @@
     
     
       
+        
+        
+      
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
             
   
   
@@ -541,7 +557,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -559,7 +575,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user_guide/configuration/" class="md-nav__link">
+      <a href="../configuration/" class="md-nav__link">
         
   
   
@@ -584,10 +600,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../user_guide/file_transfers/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Working with File-Based Disciplines
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -603,6 +646,131 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#when-do-you-need-file-transfers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When do you need file transfers?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#complete-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Complete example
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Complete example">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#discipline-definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Discipline definition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wrapping-with-file-transfers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wrapping with file transfers
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#execution-flow-with-file-transfers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Execution flow with file transfers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-input-file-upload-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How input file upload works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-output-file-download-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How output file download works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#directory-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Directory layout
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pitfalls-and-warnings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pitfalls and warnings
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -615,7 +783,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../user_guide/advanced/" class="md-nav__link">
+      <a href="../advanced/" class="md-nav__link">
         
   
   
@@ -669,7 +837,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../gemseo_ssh/" class="md-nav__link ">
+            <a href="../../reference/gemseo_ssh/" class="md-nav__link ">
               
   
   
@@ -730,7 +898,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../gemseo_ssh/wrappers/" class="md-nav__link ">
+            <a href="../../reference/gemseo_ssh/wrappers/" class="md-nav__link ">
               
   
   
@@ -793,7 +961,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../gemseo_ssh/wrappers/ssh/" class="md-nav__link ">
+            <a href="../../reference/gemseo_ssh/wrappers/ssh/" class="md-nav__link ">
               
   
   
@@ -835,7 +1003,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../gemseo_ssh/wrappers/ssh/paramiko/" class="md-nav__link">
+      <a href="../../reference/gemseo_ssh/wrappers/ssh/paramiko/" class="md-nav__link">
         
   
   
@@ -863,7 +1031,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../gemseo_ssh/wrappers/ssh/ssh_discipline_wrapper/" class="md-nav__link">
+      <a href="../../reference/gemseo_ssh/wrappers/ssh/ssh_discipline_wrapper/" class="md-nav__link">
         
   
   
@@ -924,6 +1092,121 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#when-do-you-need-file-transfers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When do you need file transfers?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#complete-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Complete example
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Complete example">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#discipline-definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Discipline definition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#wrapping-with-file-transfers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wrapping with file transfers
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#execution-flow-with-file-transfers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Execution flow with file transfers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-input-file-upload-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How input file upload works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-output-file-download-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How output file download works
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#directory-layout" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Directory layout
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pitfalls-and-warnings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pitfalls and warnings
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -939,22 +1222,194 @@
                   
 
 
+  
+  
 
-  <h1>SUMMARY</h1>
 
+<!--
+Copyright 2021 IRT Saint Exupéry, https://www.irt-saintexupery.com
+
+This work is licensed under the Creative Commons Attribution-ShareAlike 4.0
+International License. To view a copy of this license, visit
+http://creativecommons.org/licenses/by-sa/4.0/ or send a letter to Creative
+Commons, PO Box 1866, Mountain View, CA 94042, USA.
+-->
+<h1 id="working-with-file-based-disciplines">Working with File-Based Disciplines<a class="headerlink" href="#working-with-file-based-disciplines" title="Permanent link">&para;</a></h1>
+<h2 id="when-do-you-need-file-transfers">When do you need file transfers?<a class="headerlink" href="#when-do-you-need-file-transfers" title="Permanent link">&para;</a></h2>
+<p>By default, all discipline inputs and outputs are serialized via pickle and
+transferred as binary data. No special configuration is needed for numerical
+arrays, strings, or other picklable Python objects.</p>
+<p><strong>File transfers</strong> are needed when a discipline's inputs or outputs are <strong>file
+paths</strong> referencing physical files on disk. For example, a discipline that reads a
+configuration file and writes a results file. In this case, the actual files must
+be uploaded to the remote machine before execution and/or downloaded afterward.</p>
+<h2 id="complete-example">Complete example<a class="headerlink" href="#complete-example" title="Permanent link">&para;</a></h2>
+<p>Consider a discipline that reads an integer from an input file, increments it, and
+writes the result to an output file:</p>
+<h3 id="discipline-definition">Discipline definition<a class="headerlink" href="#discipline-definition" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">gemseo.core.discipline.discipline</span><span class="w"> </span><span class="kn">import</span> <span class="n">Discipline</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">DiscWithFiles</span><span class="p">(</span><span class="n">Discipline</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A discipline that reads an input file and writes an output file.&quot;&quot;&quot;</span>
+
+    <span class="n">default_grammar_type</span> <span class="o">=</span> <span class="n">Discipline</span><span class="o">.</span><span class="n">GrammarType</span><span class="o">.</span><span class="n">SIMPLE</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_grammar</span><span class="o">.</span><span class="n">update_from_types</span><span class="p">({</span><span class="s2">&quot;in_file&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">output_grammar</span><span class="o">.</span><span class="n">update_from_types</span><span class="p">({</span><span class="s2">&quot;out_file&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="s2">&quot;out_val&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">})</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_data</span><span class="p">):</span>
+        <span class="n">in_file_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">input_data</span><span class="p">[</span><span class="s2">&quot;in_file&quot;</span><span class="p">])</span>
+        <span class="n">out_val</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">in_file_path</span><span class="o">.</span><span class="n">read_text</span><span class="p">())</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">out_path</span> <span class="o">=</span> <span class="n">in_file_path</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">&quot;out_file.txt&quot;</span>
+        <span class="n">out_path</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">out_val</span><span class="p">),</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;out_val&quot;</span><span class="p">:</span> <span class="n">out_val</span><span class="p">,</span>
+                <span class="s2">&quot;out_file&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">out_path</span><span class="p">)}</span>
+</code></pre></div>
+<h3 id="wrapping-with-file-transfers">Wrapping with file transfers<a class="headerlink" href="#wrapping-with-file-transfers" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">gemseo_ssh</span><span class="w"> </span><span class="kn">import</span> <span class="n">wrap_discipline_with_ssh</span>
+
+<span class="n">disc</span> <span class="o">=</span> <span class="n">DiscWithFiles</span><span class="p">()</span>
+
+<span class="n">wrapper</span> <span class="o">=</span> <span class="n">wrap_discipline_with_ssh</span><span class="p">(</span>
+    <span class="n">discipline</span><span class="o">=</span><span class="n">disc</span><span class="p">,</span>
+    <span class="n">hostname</span><span class="o">=</span><span class="s2">&quot;remote_host&quot;</span><span class="p">,</span>
+    <span class="n">local_workdir_path</span><span class="o">=</span><span class="s2">&quot;/tmp/workdir&quot;</span><span class="p">,</span>
+    <span class="n">remote_workdir_path</span><span class="o">=</span><span class="s2">&quot;~/workdir&quot;</span><span class="p">,</span>
+    <span class="n">inputs_to_upload</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;in_file&quot;</span><span class="p">,),</span>      <span class="c1"># Upload the input file before execution</span>
+    <span class="n">outputs_to_download</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;out_file&quot;</span><span class="p">,),</span>  <span class="c1"># Download the output file after execution</span>
+    <span class="n">username</span><span class="o">=</span><span class="s2">&quot;jdoe&quot;</span><span class="p">,</span>
+    <span class="n">key_filename</span><span class="o">=</span><span class="s2">&quot;/home/jdoe/.ssh/id_rsa&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Create an input file locally</span>
+<span class="n">Path</span><span class="p">(</span><span class="s2">&quot;/tmp/my_input.txt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">write_text</span><span class="p">(</span><span class="s2">&quot;42&quot;</span><span class="p">)</span>
+
+<span class="c1"># Execute - the file is uploaded, discipline runs remotely, output file downloaded</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">wrapper</span><span class="o">.</span><span class="n">execute</span><span class="p">({</span>
+    <span class="s2">&quot;in_file&quot;</span><span class="p">:</span> <span class="s2">&quot;/tmp/my_input.txt&quot;</span><span class="p">,</span>
+<span class="p">})</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;out_val&quot;</span><span class="p">])</span>   <span class="c1"># 43</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;out_file&quot;</span><span class="p">])</span>  <span class="c1"># /tmp/workdir/out_file.txt (local path)</span>
+</code></pre></div>
+<h2 id="execution-flow-with-file-transfers">Execution flow with file transfers<a class="headerlink" href="#execution-flow-with-file-transfers" title="Permanent link">&para;</a></h2>
+<p>The following diagram shows the complete execution flow when file transfers are
+involved:</p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant L as Local Machine
+    participant R as Remote Machine
+
+    L-&gt;&gt;L: 1. Create local UUID directory
+    L-&gt;&gt;R: 2. Create remote UUID directory (SFTP mkdir)
+    L-&gt;&gt;L: 3. Pickle discipline to local UUID dir
+    L-&gt;&gt;L: 4. Pickle inputs (rewrite file paths to remote)
+    L-&gt;&gt;R: 5. SFTP chdir to remote UUID dir
+    L-&gt;&gt;R: 6. Upload discipline.pckl + input_data.pckl
+    L-&gt;&gt;R: 7. Upload input files (inputs_to_upload)
+    L-&gt;&gt;R: 8. SSH exec: cd remote_dir &amp;&amp; pre_commands &amp;&amp; gemseo-deserialize-run
+    R-&gt;&gt;R: 9. Unpickle, execute discipline, pickle outputs
+    R-&gt;&gt;L: 10. Download output_data.pckl (SFTP get)
+    L-&gt;&gt;L: 11. Unpickle outputs, re-raise remote errors
+    R-&gt;&gt;L: 12. Download output files (outputs_to_download)</code></pre>
+<h2 id="how-input-file-upload-works">How input file upload works<a class="headerlink" href="#how-input-file-upload-works" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Each name in <code>inputs_to_upload</code> must exist in the discipline's input grammar,
+   otherwise a <code>ValueError</code> is raised.</li>
+<li>At execution time, the value of each input is read from <code>io.data</code> and treated
+   as a <strong>local file path</strong>.</li>
+<li>Only the <strong>filename</strong> (not the full path) is used for the remote destination:
+   <code>sftp.put(local_path, local_path.name)</code>.</li>
+<li>The serialized input data is updated to store the <strong>remote path</strong>:
+   <code>remote_cwd_path / filename</code> (POSIX format).</li>
+</ol>
+<h2 id="how-output-file-download-works">How output file download works<a class="headerlink" href="#how-output-file-download-works" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Each name in <code>outputs_to_download</code> must exist in the discipline's output grammar,
+   otherwise a <code>ValueError</code> is raised.</li>
+<li>After remote execution, the output value is read and only the <strong>filename</strong> is
+   extracted using <code>Path(output_value).name</code>.</li>
+<li>The file is downloaded to <code>local_workdir_path / filename</code> (the <strong>root</strong> work
+   directory, not the per-execution UUID subdirectory).</li>
+<li>The output value is rewritten to the local POSIX path.</li>
+</ol>
+<h2 id="directory-layout">Directory layout<a class="headerlink" href="#directory-layout" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>graph TB
+    subgraph "Local Machine"
+        LR[local_workdir_path/]
+        LU1[UUID-1/]
+        LU2[UUID-2/]
+        LD1[discipline.pckl]
+        LI1[input_data.pckl]
+        LO1[output_data.pckl]
+        LOF["out_file.txt&lt;br/&gt;(downloaded here!)"]
+
+        LR --&gt; LU1
+        LR --&gt; LU2
+        LR --&gt; LOF
+        LU1 --&gt; LD1
+        LU1 --&gt; LI1
+        LU1 --&gt; LO1
+    end
+
+    subgraph "Remote Machine"
+        RR[remote_workdir_path/]
+        RU1[UUID-1/]
+        RU2[UUID-2/]
+        RD1[discipline.pckl]
+        RI1[input_data.pckl]
+        RO1[output_data.pckl]
+        RIF[in_file.txt]
+        ROF[out_file.txt]
+
+        RR --&gt; RU1
+        RR --&gt; RU2
+        RU1 --&gt; RD1
+        RU1 --&gt; RI1
+        RU1 --&gt; RO1
+        RU1 --&gt; RIF
+        RU1 --&gt; ROF
+    end</code></pre>
+<p>Note that downloaded output files land in <code>local_workdir_path/</code> directly, <strong>not</strong>
+inside the UUID subdirectory.</p>
+<h2 id="pitfalls-and-warnings">Pitfalls and warnings<a class="headerlink" href="#pitfalls-and-warnings" title="Permanent link">&para;</a></h2>
+<div class="admonition danger">
+<p class="admonition-title">Filename collisions on upload</p>
+<p>If two inputs reference files with <strong>the same filename</strong> from different
+directories (e.g., <code>/path/a/config.txt</code> and <code>/path/b/config.txt</code>), the second
+upload overwrites the first on the remote machine. <strong>Workaround:</strong> ensure all
+input files have unique filenames.</p>
+</div>
+<!--- TODO: To be removed as this is a bug under correction. --->
+<div class="admonition warning">
+<p class="admonition-title">Output files go to root workdir, not UUID dir</p>
+<p>Downloaded output files are saved to <code>local_workdir_path/</code>, not the
+per-execution UUID subdirectory. If you run multiple executions concurrently
+with the same output filenames, they will <strong>overwrite each other</strong>.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">No automatic cleanup</p>
+<p>Neither local nor remote UUID directories are cleaned up automatically. Remote
+directories accumulate over time. Implement your own cleanup strategy (e.g.,
+cron job, post-processing script).</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Pickling requirements</p>
+<p>The discipline must be <strong>picklable</strong>. Common issues:</p>
 <ul>
-<li><a href="../gemseo_ssh/">gemseo_ssh</a><ul>
-<li><a href="../gemseo_ssh/wrappers/">wrappers</a><ul>
-<li><a href="../gemseo_ssh/wrappers/ssh/">ssh</a><ul>
-<li><a href="../gemseo_ssh/wrappers/ssh/paramiko/">paramiko</a></li>
-<li><a href="../gemseo_ssh/wrappers/ssh/ssh_discipline_wrapper/">ssh_discipline_wrapper</a></li>
+<li>Custom disciplines need a proper <code>__module__</code> attribute.</li>
+<li>All modules imported by the discipline must be installed on the remote.</li>
+<li>Use <code>pre_commands</code> to set <code>PYTHONPATH</code> if needed.</li>
+<li><strong>Tip:</strong> test pickling locally first with <code>pickle.dumps(discipline)</code> before
+  attempting remote execution.</li>
 </ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
+</div>
+<hr />
+<p><strong>Next:</strong> <a href="../advanced/">Advanced Usage</a></p>
 
 
 
