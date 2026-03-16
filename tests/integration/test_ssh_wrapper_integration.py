@@ -220,8 +220,10 @@ def test_execution_with_file_download(
         "discipline": str(disc_file),
     })
 
-    # Verify the downloaded file path is local
+    # Verify the downloaded file is in a UUID subdirectory, not the root workdir
     out_path = Path(result["out_file"])
+    assert out_path.parent != tmp_path
+    assert out_path.parent.parent == tmp_path
     assert out_path.exists()
     assert str(tmp_path) in str(out_path)
 
@@ -254,9 +256,11 @@ def test_download_numeric_output(
         "discipline": str(disc_file),
     })
 
-    # Verify output path is local and exists
+    # Verify output path is in a UUID subdirectory, not the root workdir
     out_path = Path(result["out_file"])
     assert out_path.is_absolute()
+    assert out_path.parent != tmp_path
+    assert out_path.parent.parent == tmp_path
     assert str(tmp_path) in str(out_path)
     assert out_path.exists()
     assert out_path.read_text() == "1"
