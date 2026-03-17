@@ -122,8 +122,7 @@ sequenceDiagram
    otherwise a `ValueError` is raised.
 2. After remote execution, the output value is read and only the **filename** is
    extracted using `Path(output_value).name`.
-3. The file is downloaded to `__local_cwd_path / filename` (the per-execution
-   UUID subdirectory).
+3. The file is downloaded to the per-execution UUID subdirectory.
 4. The output value is rewritten to the local POSIX path.
 
 ## Directory layout
