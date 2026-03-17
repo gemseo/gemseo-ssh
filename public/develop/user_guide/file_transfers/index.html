@@ -1295,7 +1295,7 @@ writes the result to an output file:</p>
 <span class="p">})</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;out_val&quot;</span><span class="p">])</span>   <span class="c1"># 43</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;out_file&quot;</span><span class="p">])</span>  <span class="c1"># /tmp/workdir/out_file.txt (local path)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;out_file&quot;</span><span class="p">])</span>  <span class="c1"># /tmp/workdir/&lt;UUID&gt;/out_file.txt (local path)</span>
 </code></pre></div>
 <h2 id="execution-flow-with-file-transfers">Execution flow with file transfers<a class="headerlink" href="#execution-flow-with-file-transfers" title="Permanent link">&para;</a></h2>
 <p>The following diagram shows the complete execution flow when file transfers are
@@ -1333,8 +1333,7 @@ involved:</p>
    otherwise a <code>ValueError</code> is raised.</li>
 <li>After remote execution, the output value is read and only the <strong>filename</strong> is
    extracted using <code>Path(output_value).name</code>.</li>
-<li>The file is downloaded to <code>local_workdir_path / filename</code> (the <strong>root</strong> work
-   directory, not the per-execution UUID subdirectory).</li>
+<li>The file is downloaded to the per-execution UUID subdirectory.</li>
 <li>The output value is rewritten to the local POSIX path.</li>
 </ol>
 <h2 id="directory-layout">Directory layout<a class="headerlink" href="#directory-layout" title="Permanent link">&para;</a></h2>
@@ -1350,10 +1349,10 @@ involved:</p>
 
         LR --&gt; LU1
         LR --&gt; LU2
-        LR --&gt; LOF
         LU1 --&gt; LD1
         LU1 --&gt; LI1
         LU1 --&gt; LO1
+        LU1 --&gt; LOF
     end
 
     subgraph "Remote Machine"
@@ -1374,8 +1373,6 @@ involved:</p>
         RU1 --&gt; RIF
         RU1 --&gt; ROF
     end</code></pre>
-<p>Note that downloaded output files land in <code>local_workdir_path/</code> directly, <strong>not</strong>
-inside the UUID subdirectory.</p>
 <h2 id="pitfalls-and-warnings">Pitfalls and warnings<a class="headerlink" href="#pitfalls-and-warnings" title="Permanent link">&para;</a></h2>
 <div class="admonition danger">
 <p class="admonition-title">Filename collisions on upload</p>
@@ -1383,13 +1380,6 @@ inside the UUID subdirectory.</p>
 directories (e.g., <code>/path/a/config.txt</code> and <code>/path/b/config.txt</code>), the second
 upload overwrites the first on the remote machine. <strong>Workaround:</strong> ensure all
 input files have unique filenames.</p>
-</div>
-<!--- TODO: To be removed as this is a bug under correction. --->
-<div class="admonition warning">
-<p class="admonition-title">Output files go to root workdir, not UUID dir</p>
-<p>Downloaded output files are saved to <code>local_workdir_path/</code>, not the
-per-execution UUID subdirectory. If you run multiple executions concurrently
-with the same output filenames, they will <strong>overwrite each other</strong>.</p>
 </div>
 <div class="admonition warning">
 <p class="admonition-title">No automatic cleanup</p>
