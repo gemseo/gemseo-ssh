@@ -78,7 +78,7 @@ result = wrapper.execute({
 })
 
 print(result["out_val"])   # 43
-print(result["out_file"])  # /tmp/workdir/out_file.txt (local path)
+print(result["out_file"])  # /tmp/workdir/<UUID>/out_file.txt (local path)
 ```
 
 ## Execution flow with file transfers
@@ -122,8 +122,7 @@ sequenceDiagram
    otherwise a `ValueError` is raised.
 2. After remote execution, the output value is read and only the **filename** is
    extracted using `Path(output_value).name`.
-3. The file is downloaded to `local_workdir_path / filename` (the **root** work
-   directory, not the per-execution UUID subdirectory).
+3. The file is downloaded to the per-execution UUID subdirectory.
 4. The output value is rewritten to the local POSIX path.
 
 ## Directory layout
@@ -141,10 +140,10 @@ graph TB
 
         LR --> LU1
         LR --> LU2
-        LR --> LOF
         LU1 --> LD1
         LU1 --> LI1
         LU1 --> LO1
+        LU1 --> LOF
     end
 
     subgraph "Remote Machine"
@@ -167,9 +166,6 @@ graph TB
     end
 ```
 
-Note that downloaded output files land in `local_workdir_path/` directly, **not**
-inside the UUID subdirectory.
-
 ## Pitfalls and warnings
 
 !!! danger "Filename collisions on upload"
@@ -179,12 +175,6 @@ inside the UUID subdirectory.
     upload overwrites the first on the remote machine. **Workaround:** ensure all
     input files have unique filenames.
 
-<!--- TODO: To be removed as this is a bug under correction. --->
-!!! warning "Output files go to root workdir, not UUID dir"
-
-    Downloaded output files are saved to `local_workdir_path/`, not the
-    per-execution UUID subdirectory. If you run multiple executions concurrently
-    with the same output filenames, they will **overwrite each other**.
 
 !!! warning "No automatic cleanup"
 
