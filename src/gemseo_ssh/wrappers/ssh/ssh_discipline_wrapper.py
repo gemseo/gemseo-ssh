@@ -207,14 +207,20 @@ class SSHDisciplineWrapper(Discipline):
         sftp_client.put(discipline_path, self.SERIALIZED_DISC_FILE_NAME)
         sftp_client.put(input_path, self.SERIALIZED_INPUTS_FILE_NAME)
 
-    def _upload_inputs(self, sftp_client: SFTPClient) -> None:
+    def _upload_inputs(
+        self,
+        sftp_client: SFTPClient,
+        input_data: StrKeyMapping | None = None,
+    ) -> None:
         """Send the input files to the remote host.
 
         Args:
             sftp_client: The FTP client.
+            input_data: The input data. If ``None``, falls back to ``self.io.data``.
         """
+        data = input_data if input_data is not None else self.io.data
         for data_name in self.__inputs_to_upload:
-            local_path = Path(self.io.data[data_name])
+            local_path = Path(data[data_name])
             sftp_client.put(local_path, local_path.name)
 
     def _download_serialized_files(
@@ -324,6 +330,7 @@ class SSHDisciplineWrapper(Discipline):
         self,
         differentiated_inputs: Iterable[str] = (),
         differentiated_outputs: Iterable[str] = (),
+        input_data: StrKeyMapping | None = None,
     ) -> tuple[Path, Path]:
         """Serialize the files needed for the remote execution.
 
@@ -332,22 +339,24 @@ class SSHDisciplineWrapper(Discipline):
                 inputs that define the rows of the jacobian.
             differentiated_outputs: If the linearization is performed, the
                 outputs that define the columns of the jacobian.
+            input_data: The input data. If ``None``, falls back to ``self.io.data``.
 
         Returns:
             The path to the serialized discipline and the path to the serialized inputs.
         """
+        data = input_data if input_data is not None else self.io.data
         discipline_path = self.__local_cwd_path / self.SERIALIZED_DISC_FILE_NAME
         discipline_path.write_bytes(pickle.dumps(self.__discipline))
 
         if self.__inputs_to_upload:
-            local_data = self.io.data.copy()
+            local_data = data.copy()
             for data_name in self.__inputs_to_upload:
-                local_path = Path(self.io.data[data_name])
+                local_path = Path(data[data_name])
                 local_data[data_name] = (
                     self.__remote_cwd_path / local_path.name
                 ).as_posix()
         else:
-            local_data = self.io.data
+            local_data = data
 
         inputs_path = self.__local_cwd_path / self.SERIALIZED_INPUTS_FILE_NAME
         inputs_path.write_bytes(
@@ -357,7 +366,7 @@ class SSHDisciplineWrapper(Discipline):
         return discipline_path, inputs_path
 
     def _run(self, input_data: StrKeyMapping) -> StrKeyMapping:
-        return self._run_or_compute_jac(False)
+        return self._run_or_compute_jac(False, input_data=input_data)
 
     def linearize(  # noqa: D102
         self,
@@ -386,6 +395,7 @@ class SSHDisciplineWrapper(Discipline):
         linearize: bool,
         differentiated_inputs: Iterable[str] = (),
         differentiated_outputs: Iterable[str] = (),
+        input_data: StrKeyMapping | None = None,
     ) -> None:
         """Executes or linearizes the discipline.
 
@@ -395,6 +405,7 @@ class SSHDisciplineWrapper(Discipline):
                 inputs that define the rows of the jacobian.
             differentiated_outputs: If the linearization is performed, the
                 outputs that define the columns of the jacobian.
+            input_data: The input data. If ``None``, falls back to ``self.io.data``.
         """
         ssh_client = SSHClient.create_connection(
             self.__hostname,
@@ -404,13 +415,13 @@ class SSHDisciplineWrapper(Discipline):
         sftp_client = ssh_client.open_sftp()
         self._create_local_and_remote_directories(sftp_client)
         serialized_disc_path, serialized_inputs_path = self._write_serialized_files(
-            differentiated_inputs, differentiated_outputs
+            differentiated_inputs, differentiated_outputs, input_data=input_data
         )
         sftp_client.chdir(self.__remote_cwd_path)
         self._upload_serialized_files(
             sftp_client, serialized_disc_path, serialized_inputs_path
         )
-        self._upload_inputs(sftp_client)
+        self._upload_inputs(sftp_client, input_data=input_data)
         self._execute_on_remote(ssh_client, linearize)
         self._download_serialized_files(sftp_client)
         output_data = self._handle_outputs()
