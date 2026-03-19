@@ -19,7 +19,7 @@
       
       
       <link rel="icon" href="../../../../../images/favicon.ico">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.4">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
@@ -1362,6 +1362,7 @@ launched, it will setup the environment, deserialize the discipline and its inpu
 execute it and serialize the outputs. Finally, the deserialized outputs are returned
 by the wrapper.</p>
 
+        <p>Initialize self.  See help(type(self)) for accurate signature.</p>
 
 
 <p><span class="doc-section-title">Parameters:</span></p>
@@ -1743,8 +1744,7 @@ are inconsistent with the discipline grammars.</p>
           –
           <div class="doc-md-description">
             <p>The input data.
-If empty, use the
-[default_input_data][gemseo.core.discipline.discipline.Discipline.default_input_data].</p>
+If empty, use the :attr:<code>.</code>default_input_data`.</p>
           </div>
         </li>
         <li class="doc-section-item field-body">
@@ -1758,11 +1758,9 @@ If empty, use the
 all the outputs with respect to all the inputs.
 Otherwise,
 set the output variables to differentiate
-with
-[add_differentiated_outputs()][gemseo.core.discipline.discipline.Discipline.add_differentiated_outputs]
+with :meth:<code>.add_differentiated_outputs</code>
 and the input variables with respect to which to differentiate them
-with
-[add_differentiated_inputs()][gemseo.core.discipline.discipline.Discipline.add_differentiated_inputs].</p>
+with :meth:<code>.add_differentiated_inputs</code>.</p>
           </div>
         </li>
         <li class="doc-section-item field-body">
@@ -1776,8 +1774,7 @@ with
 to ensure that the discipline was executed
 with the right input data;
 it can be almost free if the corresponding output data
-have been stored in the
-[cache][gemseo.core.discipline.discipline.Discipline.cache].</p>
+have been stored in the :attr:<code>.cache</code>.</p>
           </div>
         </li>
     </ul>
