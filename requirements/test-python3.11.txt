@@ -10,13 +10,13 @@ cffi==2.0.0
     # via
     #   cryptography
     #   pynacl
-charset-normalizer==3.4.4
+charset-normalizer==3.4.6
     # via requests
 contourpy==1.3.3
     # via matplotlib
 covdefaults==2.3.0
     # via gemseo-ssh (pyproject.toml:dev)
-coverage==7.13.4
+coverage==7.13.5
     # via
     #   covdefaults
     #   pytest-cov
@@ -28,7 +28,7 @@ dill==0.4.1
     # via openturns
 docker==7.1.0
     # via testcontainers
-docstring-inheritance==3.0.0
+docstring-inheritance==2.2.2
     # via gemseo
 et-xmlfile==2.0.0
     # via openpyxl
@@ -36,11 +36,11 @@ execnet==2.1.2
     # via pytest-xdist
 fastjsonschema==2.21.2
     # via gemseo
-filelock==3.25.0
+filelock==3.25.2
     # via gemseo-ssh (pyproject.toml:dev)
-fonttools==4.61.1
+fonttools==4.62.1
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@0215566755ee514f75f2e080f55ebb98dcc93493
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@5b7cbc088faa0e07c964c70e5b9c7a389ea4efe5
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
@@ -48,35 +48,37 @@ genson==1.3.0
     # via gemseo
 graphviz==0.21
     # via gemseo
-h5py==3.15.1
+h5py==3.14.0
     # via gemseo
 idna==3.11
     # via requests
 iniconfig==2.3.0
     # via pytest
+invoke==2.2.1
+    # via paramiko
 jinja2==3.1.6
     # via gemseo
 joblib==1.5.3
     # via scikit-learn
-kiwisolver==1.4.9
+kiwisolver==1.5.0
     # via matplotlib
 markupsafe==3.0.3
     # via jinja2
-matplotlib==3.10.8
+matplotlib==3.10.6
     # via gemseo
-minisom==2.3.5
+minisom==2.3.6
     # via gemseo
 mock-ssh-server==0.9.1
     # via gemseo-ssh (pyproject.toml:dev)
 mpmath==1.3.0
     # via sympy
-narwhals==2.17.0
+narwhals==2.18.0
     # via plotly
-networkx==3.6.1
+networkx==3.5
     # via gemseo
-nlopt==2.10.0
+nlopt==2.9.1
     # via gemseo
-numpy==2.4.2
+numpy==2.3.3
     # via
     #   contourpy
     #   gemseo
@@ -91,45 +93,45 @@ numpy==2.4.2
     #   spgl1
 openpyxl==3.1.5
     # via gemseo
-openturns==1.26
+openturns==1.25
     # via gemseo
-packaging==26.0
+packaging==25.0
     # via
     #   gemseo
     #   matplotlib
     #   plotly
     #   pytest
-pandas==2.3.3
+pandas==2.3.2
     # via gemseo
-paramiko==3.2.0
+paramiko==4.0.0
     # via
     #   gemseo-ssh (pyproject.toml)
     #   mock-ssh-server
-pillow==12.1.1
+pillow==11.3.0
     # via
     #   gemseo
     #   matplotlib
-plotly==6.5.2
+plotly==6.3.0
     # via gemseo
 pluggy==1.6.0
     # via
     #   pytest
     #   pytest-cov
-prettytable==3.17.0
+prettytable==3.16.0
     # via gemseo
 psutil==7.2.2
     # via openturns
 pycparser==3.0
     # via cffi
-pydantic==2.12.5
+pydantic==2.11.9
     # via
     #   gemseo
     #   pydantic-settings
-pydantic-core==2.41.5
+pydantic-core==2.33.2
     # via pydantic
-pydantic-settings==2.12.0
+pydantic-settings==2.11.0
     # via gemseo
-pydoe3==1.6.2
+pydoe3==1.4.0
     # via gemseo
 pygments==2.19.2
     # via pytest
@@ -162,9 +164,9 @@ requests==2.32.5
     # via
     #   docker
     #   gemseo
-scikit-learn==1.8.0
+scikit-learn==1.7.2
     # via gemseo
-scipy==1.17.0
+scipy==1.15.2
     # via
     #   gemseo
     #   pydoe3
@@ -178,7 +180,7 @@ strenum==0.4.15
     # via gemseo
 sympy==1.14.0
     # via gemseo
-testcontainers==4.14.1
+testcontainers==4.14.2
     # via gemseo-ssh (pyproject.toml:dev)
 threadpoolctl==3.6.0
     # via scikit-learn
@@ -186,11 +188,10 @@ tomli==2.4.0
     # via
     #   gemseo-ssh (pyproject.toml:dev)
     #   coverage
-tqdm==4.67.3
+tqdm==4.67.1
     # via gemseo
 typing-extensions==4.15.0
     # via
-    #   docstring-inheritance
     #   gemseo
     #   pydantic
     #   pydantic-core
@@ -209,9 +210,9 @@ urllib3==2.6.3
     #   testcontainers
 wcwidth==0.6.0
     # via prettytable
-wrapt==2.1.1
+wrapt==2.1.2
     # via testcontainers
 xdsmjs==2.0.0
     # via gemseo
-xxhash==3.6.0
+xxhash==3.5.0
     # via gemseo
