@@ -45,8 +45,10 @@ def timing(logging_prefix: str) -> Iterator[None]:
         logging_prefix: The prefix for the logging message.
     """
     t1 = perf_counter()
-    yield
-    LOGGER.debug("%s in %s seconds", logging_prefix, perf_counter() - t1)
+    try:
+        yield
+    finally:
+        LOGGER.debug("%s in %s seconds", logging_prefix, perf_counter() - t1)
 
 
 class SFTPClient(_SFTPClient):

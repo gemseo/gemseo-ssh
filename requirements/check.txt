@@ -4,7 +4,7 @@ cfgv==3.5.0
     # via pre-commit
 distlib==0.4.3
     # via virtualenv
-filelock==3.31.1
+filelock==3.31.2
     # via
     #   python-discovery
     #   virtualenv

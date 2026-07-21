@@ -38,11 +38,11 @@ execnet==2.1.2
     # via pytest-xdist
 fastjsonschema==2.21.2
     # via gemseo
-filelock==3.31.1
+filelock==3.31.2
     # via gemseo-ssh (pyproject.toml:dev)
 fonttools==4.63.0
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@c7eebc52d25eba93acf406a72a6d7e83dc7c78c0
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@175f4d9c3e96130711b1e3e5afacbcbd653b88a9
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)

@@ -10,7 +10,7 @@ bcrypt==5.0.0
     # via paramiko
 black==26.5.1
     # via gemseo-ssh (pyproject.toml:doc)
-bracex==3.0
+bracex==3.0.1
     # via wcmatch
 certifi==2026.6.17
     # via requests
@@ -45,7 +45,7 @@ fieldz==0.2.0
     # via griffe-fieldz
 fonttools==4.63.0
     # via matplotlib
-gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@c7eebc52d25eba93acf406a72a6d7e83dc7c78c0
+gemseo @ git+https://gitlab.com/gemseo/dev/gemseo.git@175f4d9c3e96130711b1e3e5afacbcbd653b88a9
     # via
     #   -c requirements/test-constraints.in
     #   gemseo-ssh (pyproject.toml)
