@@ -103,7 +103,7 @@ packaging==25.0
     #   pytest
 pandas==2.3.2
     # via gemseo
-paramiko==4.0.0
+paramiko==5.0.0
     # via
     #   gemseo-ssh (pyproject.toml)
     #   mock-ssh-server
@@ -139,7 +139,7 @@ pynacl==1.6.2
     # via paramiko
 pyparsing==3.3.2
     # via matplotlib
-pytest==8.4.2
+pytest==9.1.1
     # via
     #   gemseo-ssh (pyproject.toml:dev)
     #   pytest-cov

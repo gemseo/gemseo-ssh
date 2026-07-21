@@ -195,7 +195,7 @@ paginate==0.5.7
     # via mkdocs-material
 pandas==2.3.2
     # via gemseo
-paramiko==4.0.0
+paramiko==5.0.0
     # via gemseo-ssh (pyproject.toml)
 pathspec==1.1.1
     # via
