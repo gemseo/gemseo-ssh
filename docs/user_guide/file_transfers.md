@@ -28,7 +28,7 @@ writes the result to an output file:
 
 ```python
 from pathlib import Path
-from gemseo.core.discipline.discipline import Discipline
+from gemseo.discipline import Discipline
 
 
 class DiscWithFiles(Discipline):

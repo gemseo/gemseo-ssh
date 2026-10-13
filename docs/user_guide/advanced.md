@@ -48,7 +48,7 @@ jac = wrapper.linearize(input_data, execute=False)
 ## Job scheduler integration
 
 You can combine gemseo-ssh with GEMSEO's job scheduler interface to submit
-disciplines to an HPC cluster. Wrap the `JobSchedulerDisciplineWrapper` inside the
+disciplines to an HPC cluster. Wrap the `JobSchedulerDiscipline` inside the
 SSH wrapper: the entire job scheduler wrapper is pickled and sent to the login node,
 which then submits to compute nodes.
 
