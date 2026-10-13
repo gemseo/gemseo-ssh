@@ -16,6 +16,13 @@ variables:
   DOCKER_DRIVER: overlay2
   # Use gemseo-ssh image for tests, with docker client installed.
   TEST_IMAGE: registry.gitlab.com/gemseo/dev/gemseo-ssh/multi-python:latest
+  # GEMSEO 7 requires Python >= 3.11.
+  __PY_VERSION_MIN: 311
+
+.test-all-py-versions:
+  - 311
+  - 312
+  - 313
 
 ####################################################################################################
 # Common settings for the test jobs.

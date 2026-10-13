@@ -31,8 +31,7 @@ from paramiko.sftp_client import SFTPClient as _SFTPClient
 if TYPE_CHECKING:
     from collections.abc import Iterator
     from collections.abc import Sequence
-
-    from typing_extensions import Self
+    from typing import Self
 
 LOGGER = getLogger(__name__)
 
