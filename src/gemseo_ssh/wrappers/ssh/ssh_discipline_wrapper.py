@@ -23,10 +23,10 @@ from typing import TYPE_CHECKING
 from typing import Any
 from typing import ClassVar
 
-from gemseo.core.discipline.discipline import Discipline
-from gemseo.utils.constants import READ_ONLY_EMPTY_DICT
-from gemseo.utils.directory_creator import DirectoryCreator
-from gemseo.utils.directory_creator import DirectoryNamingMethod
+from gemseo.discipline import Discipline
+from gemseo.util.constant import read_only_empty_dict
+from gemseo.util.directory_creator import DirectoryCreator
+from gemseo.util.directory_creator import Naming
 
 from gemseo_ssh.wrappers.ssh.paramiko import SSHClient
 
@@ -34,8 +34,8 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
     from collections.abc import MutableMapping
 
-    from gemseo.typing import JacobianData
-    from gemseo.typing import StrKeyMapping
+    from gemseo.util.typing import JacobianData
+    from gemseo.util.typing import StrKeyMapping
 
     from gemseo_ssh.wrappers.ssh.paramiko import SFTPClient
 
@@ -159,9 +159,8 @@ class SSHDisciplineWrapper(Discipline):
         self.__ssh_client_parameters = ssh_client_parameters
         self.__execute_at_linearize = False
         self.__directory_creator = DirectoryCreator(
-            directory_naming_method=DirectoryNamingMethod.UUID,
-            root_directory=Path(local_workdir_path),
-        )
+            naming=Naming.UUID,
+            root_directory=Path(local_workdir_path))
 
     def __set_io_to_transfer(
         self,
@@ -218,6 +217,7 @@ class SSHDisciplineWrapper(Discipline):
             sftp_client: The FTP client.
             input_data: The input data. If ``None``, falls back to ``self.io.data``.
         """
+        # TODO(bump-gemseo): IO.data is deprecated and returns a copy of the input and output data, so setting, updating or removing an item through it has no effect, and an output that _run produces through it is missing, even when produced by changing an input in place; return the outputs from _run or write them to output_data (or update_output_data(data)), write the inputs to input_data, and read input_data, output_data or get_merged_data()  # noqa: E501
         data = input_data if input_data is not None else self.io.data
         for data_name in self.__inputs_to_upload:
             local_path = Path(data[data_name])
@@ -344,6 +344,7 @@ class SSHDisciplineWrapper(Discipline):
         Returns:
             The path to the serialized discipline and the path to the serialized inputs.
         """
+        # TODO(bump-gemseo): IO.data is deprecated and returns a copy of the input and output data, so setting, updating or removing an item through it has no effect, and an output that _run produces through it is missing, even when produced by changing an input in place; return the outputs from _run or write them to output_data (or update_output_data(data)), write the inputs to input_data, and read input_data, output_data or get_merged_data()  # noqa: E501
         data = input_data if input_data is not None else self.io.data
         discipline_path = self.__local_cwd_path / self.SERIALIZED_DISC_FILE_NAME
         discipline_path.write_bytes(pickle.dumps(self.__discipline))
@@ -370,7 +371,7 @@ class SSHDisciplineWrapper(Discipline):
 
     def linearize(  # noqa: D102
         self,
-        input_data: StrKeyMapping = READ_ONLY_EMPTY_DICT,
+        input_data: StrKeyMapping = read_only_empty_dict,
         compute_all_jacobians: bool = False,
         execute: bool = True,
     ) -> JacobianData:

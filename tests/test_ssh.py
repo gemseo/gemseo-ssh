@@ -24,19 +24,19 @@ from unittest.mock import patch
 
 import pytest
 from gemseo import create_discipline
-from gemseo.disciplines.wrappers.job_schedulers.discipline_wrapper import (
-    JobSchedulerDisciplineWrapper,
-)
-from gemseo.problems.topology_optimization.volume_fraction_disc import VolumeFraction
-from gemseo.utils.comparisons import compare_dict_of_arrays
-from gemseo.utils.testing.pytest_conftest import tmp_wd  # noqa: F401
+from gemseo.discipline.wrapper.job_scheduler.discipline import (
+    JobSchedulerDiscipline)
+from gemseo.problem.topology_optimization.volume_fraction_disc import VolumeFraction
+from gemseo.util.comparison import compare_dict_of_arrays
+# TODO(bump-gemseo): gemseo.utils.testing.pytest_conftest: add syrupy to the test dependencies of the project, as gemseo.util.testing.pytest_conftest imports it  # noqa: E501
+from gemseo.util.testing.pytest_conftest import tmp_wd  # noqa: F401
 
 from gemseo_ssh import wrap_discipline_with_ssh
 
 if TYPE_CHECKING:
     from collections.abc import Sequence
 
-    from gemseo.core.discipline.discipline import Discipline
+    from gemseo.discipline import Discipline
 
 
 CURRENT_DIR_PATH = Path(__file__).parent
@@ -294,7 +294,7 @@ def discipline_mocked_js(tmp_wd, request) -> Discipline:  # noqa: F811
     """
     disc = create_discipline("SobieskiMission")
     if request.param:
-        return JobSchedulerDisciplineWrapper(
+        return JobSchedulerDiscipline(
             discipline=disc,
             job_template_path=CURRENT_DIR_PATH / "mock_job_scheduler.py",
             workdir_path=tmp_wd,

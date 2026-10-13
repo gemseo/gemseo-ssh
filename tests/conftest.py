@@ -30,7 +30,7 @@ from typing import NamedTuple
 
 import pytest
 from filelock import FileLock
-from gemseo.utils.platform import PLATFORM_IS_WINDOWS
+from gemseo.util.platform import platform_is_windows
 from testcontainers.core.container import DockerContainer
 
 if TYPE_CHECKING:
@@ -43,7 +43,7 @@ LOGGER = logging.getLogger(__name__)
 
 CURRENT_DIR_PATH = Path(__file__).parent
 
-if PLATFORM_IS_WINDOWS:
+if platform_is_windows:
     VENV_REL_PATH_TO_PYTHON = "Scripts/python.exe"
     ACTIVATE_CMD = r"{venv_path}\Scripts\activate"
     SET_PYTHONPATH_CMD = "for /f \"delims=\" %a in ('cd') do @set PYTHONPATH=%a"

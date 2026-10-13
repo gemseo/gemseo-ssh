@@ -22,7 +22,7 @@ from unittest.mock import patch
 
 import pytest
 from gemseo import create_discipline
-from gemseo.core.grammars.simpler_grammar import SimplerGrammar
+from gemseo.core.grammar.simpler import SimplerGrammar
 
 from gemseo_ssh import wrap_discipline_with_ssh
 from gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper import SSHDisciplineWrapper

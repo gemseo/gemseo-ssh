@@ -23,7 +23,7 @@ if TYPE_CHECKING:
     from collections.abc import Iterable
     from pathlib import Path
 
-    from gemseo.core.discipline.discipline import Discipline
+    from gemseo.discipline import Discipline
 
     from gemseo_ssh.wrappers.ssh.ssh_discipline_wrapper import SSHDisciplineWrapper
 
