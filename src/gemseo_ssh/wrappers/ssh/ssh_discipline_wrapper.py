@@ -160,7 +160,8 @@ class SSHDisciplineWrapper(Discipline):
         self.__execute_at_linearize = False
         self.__directory_creator = DirectoryCreator(
             naming=Naming.UUID,
-            root_directory=Path(local_workdir_path))
+            root_directory=Path(local_workdir_path),
+        )
 
     def __set_io_to_transfer(
         self,
@@ -215,10 +216,10 @@ class SSHDisciplineWrapper(Discipline):
 
         Args:
             sftp_client: The FTP client.
-            input_data: The input data. If ``None``, falls back to ``self.io.data``.
+            input_data: The input data. If ``None``,
+                falls back to the merged input and output data.
         """
-        # TODO(bump-gemseo): IO.data is deprecated and returns a copy of the input and output data, so setting, updating or removing an item through it has no effect, and an output that _run produces through it is missing, even when produced by changing an input in place; return the outputs from _run or write them to output_data (or update_output_data(data)), write the inputs to input_data, and read input_data, output_data or get_merged_data()  # noqa: E501
-        data = input_data if input_data is not None else self.io.data
+        data = input_data if input_data is not None else self.io.get_merged_data()
         for data_name in self.__inputs_to_upload:
             local_path = Path(data[data_name])
             sftp_client.put(local_path, local_path.name)
@@ -339,13 +340,13 @@ class SSHDisciplineWrapper(Discipline):
                 inputs that define the rows of the jacobian.
             differentiated_outputs: If the linearization is performed, the
                 outputs that define the columns of the jacobian.
-            input_data: The input data. If ``None``, falls back to ``self.io.data``.
+            input_data: The input data. If ``None``,
+                falls back to the merged input and output data.
 
         Returns:
             The path to the serialized discipline and the path to the serialized inputs.
         """
-        # TODO(bump-gemseo): IO.data is deprecated and returns a copy of the input and output data, so setting, updating or removing an item through it has no effect, and an output that _run produces through it is missing, even when produced by changing an input in place; return the outputs from _run or write them to output_data (or update_output_data(data)), write the inputs to input_data, and read input_data, output_data or get_merged_data()  # noqa: E501
-        data = input_data if input_data is not None else self.io.data
+        data = input_data if input_data is not None else self.io.get_merged_data()
         discipline_path = self.__local_cwd_path / self.SERIALIZED_DISC_FILE_NAME
         discipline_path.write_bytes(pickle.dumps(self.__discipline))
 
@@ -406,7 +407,8 @@ class SSHDisciplineWrapper(Discipline):
                 inputs that define the rows of the jacobian.
             differentiated_outputs: If the linearization is performed, the
                 outputs that define the columns of the jacobian.
-            input_data: The input data. If ``None``, falls back to ``self.io.data``.
+            input_data: The input data. If ``None``,
+                falls back to the merged input and output data.
         """
         ssh_client = SSHClient.create_connection(
             self.__hostname,
