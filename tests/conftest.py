@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import logging
 import os
+import shutil
 import socket
 import subprocess
 import time
@@ -57,12 +58,11 @@ SSH_PASSWORD = "testpassword"
 SSH_USER = "root"
 SSH_PORT = 22
 
-# Get GEMSEO_PACKAGE_SPEC from environment variable
-# This is either set in tox.ini or by the CI pipeline
-GEMSEO_PACKAGE_SPEC = os.environ.get("GEMSEO_PACKAGE_SPEC")
-if not GEMSEO_PACKAGE_SPEC:
-    msg = "GEMSEO_PACKAGE_SPEC environment variable is not set"
-    raise ValueError(msg)
+# The pip requirement specifier of the GEMSEO installed on the remote side.
+GEMSEO_PACKAGE_SPEC = os.environ.get(
+    "GEMSEO_PACKAGE_SPEC",
+    "gemseo[all]@git+https://gitlab.com/gemseo/dev/gemseo.git@develop",
+)
 
 
 class RemoteSetup(NamedTuple):
@@ -133,6 +133,11 @@ def docker_image_built() -> str:
     # because discipline.py is in tests/
     build_context = Path(__file__).parent.parent  # tests/
     image_tag = "gemseo-ssh-test:latest"
+
+    if shutil.which("docker") is None or (
+        subprocess.run(["docker", "info"], capture_output=True, check=False).returncode
+    ):
+        pytest.skip("Docker is not available.")
 
     subprocess.run(
         [

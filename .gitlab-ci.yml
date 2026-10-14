@@ -1,38 +1,41 @@
-# DinD service is required for Testcontainers
 include:
-  - remote: "https://gitlab.com/gemseo/dev/ci-includes/-/raw/5/main.yml"
+  - component: gitlab.com/gemseo/dev/ci/pipeline@1.1.0
 
-services:
-  - name: docker:dind
-    # explicitly disable tls to avoid docker startup interruption
-    command: ["--tls=false"]
-
-variables:
-  # Instruct Testcontainers to use the daemon of DinD, use port 2375 for non-tls connections.
-  DOCKER_HOST: tcp://docker:2375
-  # Instruct Docker not to start over TLS.
-  DOCKER_TLS_CERTDIR: ""
-  # Improve performance with overlayfs.
-  DOCKER_DRIVER: overlay2
-  # Use gemseo-ssh image for tests, with docker client installed.
-  TEST_IMAGE: registry.gitlab.com/gemseo/dev/gemseo-ssh/multi-python:latest
-  # GEMSEO 7 requires Python >= 3.11.
-  __PY_VERSION_MIN: 311
-
-.test-all-py-versions:
-  - 311
-  - 312
-  - 313
-
-####################################################################################################
-# Common settings for the test jobs.
-####################################################################################################
-.test-base:
-  before_script:
-    - docker info
-    - echo "GEMSEO server installation is $GEMSEO_PACKAGE_SPEC"
+# The tests of the SSH wrappers need an SSH server run in a Docker container.
+# The test jobs of the component have no Docker, so these tests are skipped there,
+# this job runs the whole test suite with a Docker daemon.
+test-docker:
+  stage: pipeline
+  needs: []
+  image: registry.gitlab.com/gemseo/dev/gemseo-ssh/multi-python:latest
+  services:
+    - name: docker:dind
+      # Disable TLS to avoid the interruption of the startup of Docker.
+      command: ["--tls=false"]
+  variables:
+    # Use the daemon of the service, on the port of the non-TLS connections.
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+    DOCKER_DRIVER: overlay2
+    UV_NO_EDITABLE: "1"
+    REPORT_FILE: report.xml
   rules:
-    - if: $CI_COMMIT_REF_NAME =~ '/^(master|release-[0-9]+\.[0-9]+\.[0-9]+\w*)$/'
+    # A release is tested with the GEMSEO of PyPI on both sides.
+    - if: $CI_COMMIT_REF_NAME =~ /^(master|release-[0-9]+\.[0-9]+\.[0-9]+\w*)$/
       variables:
-          GEMSEO_PACKAGE_SPEC: gemseo[all]
-    - when: always
+        GEMSEO_PACKAGE_SPEC: gemseo[all]
+        UV_NO_SOURCES: "1"
+    - changes:
+        - src/**/*.*
+        - tests/**/*.*
+        - uv.lock
+        - pyproject.toml
+        - .justfile
+        - .gitlab-ci.yml
+        - .pytest.ini
+  script:
+    - docker info
+    - just coverage --junitxml=$REPORT_FILE --cov-report=term:skip-covered --numprocesses 2 --verbose
+  artifacts:
+    reports:
+      junit: $REPORT_FILE

@@ -185,6 +185,7 @@ Common SSH errors and their causes:
     man-in-the-middle attacks if the first connection is compromised. In sensitive
     environments, pre-populate `~/.ssh/known_hosts` with verified host keys
     (e.g., via `ssh-keyscan`) before using gemseo-ssh.
+
 - **Connection lifecycle:** A new SSH connection is opened and closed for **each
   execution** call. There is no connection pooling.
 

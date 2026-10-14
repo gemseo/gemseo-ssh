@@ -175,7 +175,6 @@ graph TB
     upload overwrites the first on the remote machine. **Workaround:** ensure all
     input files have unique filenames.
 
-
 !!! warning "No automatic cleanup"
 
     Neither local nor remote UUID directories are cleaned up automatically. Remote
