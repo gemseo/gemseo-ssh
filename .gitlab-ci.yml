@@ -7,7 +7,7 @@ include:
 test-docker:
   stage: pipeline
   needs: []
-  image: registry.gitlab.com/gemseo/dev/gemseo-ssh/multi-python:latest
+  image: registry.gitlab.com/gemseo/dev/gemseo-ssh/multi-python:8
   services:
     - name: docker:dind
       # Disable TLS to avoid the interruption of the startup of Docker.
