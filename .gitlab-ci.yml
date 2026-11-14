@@ -3,7 +3,7 @@ include:
   - remote: "https://gitlab.com/gemseo/dev/ci-includes/-/raw/5/main.yml"
 
 services:
-  - name: docker:dind
+  - name: docker:dind@sha256:7bf70dcb85c822e3fa6f2d332143e474b99147b9d7b39102b0cfe8b04a7dd61b
     # explicitly disable tls to avoid docker startup interruption
     command: ["--tls=false"]
 
